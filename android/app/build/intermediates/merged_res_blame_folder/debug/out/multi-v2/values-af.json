@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobile.app-mergeDebugResources-20:/values-af/values-af.xml",
+            "outputFile": "com.mobile.app-mergeDebugResources-28:/values-af/values-af.xml",
             "map": [
                 {
                     "source": "/home/andrii/.gradle/caches/transforms-3/08e1174eef2c209ea18090f1084adbcb/transformed/core-1.7.0/res/values-af/values-af.xml",

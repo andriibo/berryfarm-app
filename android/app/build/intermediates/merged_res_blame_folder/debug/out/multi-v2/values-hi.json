@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobile.app-mergeDebugResources-20:/values-hi/values-hi.xml",
+            "outputFile": "com.mobile.app-mergeDebugResources-28:/values-hi/values-hi.xml",
             "map": [
                 {
                     "source": "/home/andrii/.gradle/caches/transforms-3/be9a285d7d94d789380b4b7ef5365ae2/transformed/appcompat-1.4.1/res/values-hi/values-hi.xml",
