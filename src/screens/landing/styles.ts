@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {Colors} from '../../styles';
 
 export default StyleSheet.create({
@@ -10,7 +10,7 @@ export default StyleSheet.create({
     paddingRight: 30,
   },
   image: {
-    width: '100%',
+    width: '90%',
     height: '50%',
   },
   subheading: {
@@ -31,8 +31,12 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     textAlign: 'center',
-    width: 250,
+    width: Dimensions.get('window').width - 100,
     marginBottom: 25,
+  },
+  btnSelected: {
+    color: Colors.black,
+    backgroundColor: '#C4C0C0FF',
   },
   continue: {
     color: Colors.white,
