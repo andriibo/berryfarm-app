@@ -4,15 +4,16 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
 import {strings} from 'src/locales/locales';
+import {FarmsEnum} from 'src/enums/farms.enum';
 
 const farms = [
-  {label: strings.lyubotin, value: 'lyubotin'},
-  {label: strings.seredynka, value: 'seredynka'},
-  {label: strings.testServer, value: 'test'},
+  {label: strings.lyubotin, value: FarmsEnum.lyubotin},
+  {label: strings.seredynka, value: FarmsEnum.seredynka},
+  {label: strings.testServer, value: FarmsEnum.testServer},
 ];
 
 const LandingPage = () => {
-  const [selectedFarm, handleClick] = useState('');
+  const [selectedFarm, handleClick] = useState<FarmsEnum>();
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -23,8 +24,10 @@ const LandingPage = () => {
           resizeMode="contain"
         />
         <Text style={styles.subheading}>{strings.selectFarm}</Text>
-        {farms.map((farm, key) => (
-          <TouchableOpacity key={key} onPress={() => handleClick(farm.value)}>
+        {farms.map(farm => (
+          <TouchableOpacity
+            key={farm.value}
+            onPress={() => handleClick(farm.value)}>
             <Text
               style={[
                 styles.btn,

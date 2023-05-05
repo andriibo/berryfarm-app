@@ -4,7 +4,7 @@ import {
   Provider as PaperProvider,
 } from 'react-native-paper';
 import React from 'react';
-import {Wrapper} from './src/screens/wrapper';
+import {Wrapper} from 'src/screens/wrapper';
 import {NavigationContainer} from '@react-navigation/native';
 
 const theme = {
