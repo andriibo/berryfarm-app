@@ -3,15 +3,15 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
-import {FarmsEnum} from '../../enums/farms.enum';
+import {strings} from '../../locales/locales';
+
+const farms = [
+  {label: strings.lyubotin, value: 'lyubotin'},
+  {label: strings.seredynka, value: 'seredynka'},
+  {label: strings.testServer, value: 'test'},
+];
 
 const LandingPage = () => {
-  const farms = [
-    {label: FarmsEnum.lyubotin, value: 'lyubotin'},
-    {label: FarmsEnum.seredynka, value: 'seredynka'},
-    {label: FarmsEnum.test, value: 'test'},
-  ];
-
   const [selectedFarm, handleClick] = useState('');
 
   return (
@@ -22,9 +22,9 @@ const LandingPage = () => {
           style={styles.image}
           resizeMode="contain"
         />
-        <Text style={styles.subheading}>Выберите ферму, чтобы продолжить</Text>
-        {farms.map(farm => (
-          <TouchableOpacity onPress={() => handleClick(farm.value)}>
+        <Text style={styles.subheading}>{strings.selectFarm}</Text>
+        {farms.map((farm, key) => (
+          <TouchableOpacity key={key} onPress={() => handleClick(farm.value)}>
             <Text
               style={[
                 styles.btn,
@@ -35,7 +35,7 @@ const LandingPage = () => {
           </TouchableOpacity>
         ))}
         <TouchableOpacity disabled={!selectedFarm}>
-          <Text style={[styles.btn, styles.continue]}>Продолжить</Text>
+          <Text style={[styles.btn, styles.continue]}>{strings.continue}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

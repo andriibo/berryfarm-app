@@ -11,9 +11,13 @@ const LandingStackComponent =
 
 export const LandingStack = () => {
   return (
-    <LandingStackComponent.Navigator initialRouteName="Landing">
+    <LandingStackComponent.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Landing">
       <LandingStackComponent.Screen
-        component={Screens.Landing.screen}
+        component={Screens.Landing}
         name="Landing"
       />
     </LandingStackComponent.Navigator>
