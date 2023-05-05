@@ -1,4 +1,4 @@
-import Landing from '../screens/landing/Landing';
+import Landing from 'src/screens/landing/Landing';
 
 export const Screens = {
   Landing,

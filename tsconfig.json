@@ -5,6 +5,10 @@
     "jsx": "react-native",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
 }

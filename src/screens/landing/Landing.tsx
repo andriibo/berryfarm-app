@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
-import {strings} from '../../locales/locales';
+import {strings} from 'src/locales/locales';
 
 const farms = [
   {label: strings.lyubotin, value: 'lyubotin'},
@@ -18,7 +18,7 @@ const LandingPage = () => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <FastImage
-          source={require('../../assets/images/logo-white.png')}
+          source={require('src/assets/images/logo-white.png')}
           style={styles.image}
           resizeMode="contain"
         />
