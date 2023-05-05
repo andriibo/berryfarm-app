@@ -1,20 +1,17 @@
 module.exports = {
   root: true,
   extends: '@react-native-community',
-  plugins: [
-    '@typescript-eslint',
-    'react',
-  ],
+  plugins: ['@typescript-eslint', 'react'],
   parser: '@typescript-eslint/parser',
   rules: {
     '@typescript-eslint/no-shadow': 'error',
     'react-native/no-inline-styles': 0,
-    'eqeqeq': [
+    eqeqeq: [
       'error',
       'always',
       {
-        'null': 'ignore'
-      }
+        null: 'ignore',
+      },
     ],
     'jest/no-identical-title': 'off',
     'no-else-return': 'error',
@@ -22,49 +19,32 @@ module.exports = {
     'no-undef': 'error',
     'no-useless-rename': 'error',
     'object-shorthand': 'error',
-    'one-var': [
-      'error',
-      'never'
-    ],
+    'one-var': ['error', 'never'],
     'no-extra-semi': 'off',
-    'semi': 'off',
+    semi: 'off',
     'padding-line-between-statements': [
       'error',
       {
-        'blankLine': 'always',
-        'next': 'return',
-        'prev': '*'
+        blankLine: 'always',
+        next: 'return',
+        prev: '*',
       },
       {
-        'blankLine': 'always',
-        'next': '*',
-        'prev': [
-          'const',
-          'let',
-          'var',
-          'block',
-          'block-like'
-        ]
+        blankLine: 'always',
+        next: '*',
+        prev: ['const', 'let', 'var', 'block', 'block-like'],
       },
       {
-        'blankLine': 'any',
-        'next': [
-          'const',
-          'let',
-          'var'
-        ],
-        'prev': [
-          'const',
-          'let',
-          'var'
-        ]
-      }
+        blankLine: 'any',
+        next: ['const', 'let', 'var'],
+        prev: ['const', 'let', 'var'],
+      },
     ],
     'prefer-const': [
       'error',
       {
-        'ignoreReadBeforeAssign': false
-      }
+        ignoreReadBeforeAssign: false,
+      },
     ],
     'react-hooks/exhaustive-deps': 1,
     'react-hooks/rules-of-hooks': 1,
@@ -72,17 +52,10 @@ module.exports = {
     'react/jsx-filename-extension': [
       1,
       {
-        'extensions': [
-          '.js',
-          '.jsx',
-          '.tsx'
-        ]
-      }
+        extensions: ['.js', '.jsx', '.tsx'],
+      },
     ],
-    'react/jsx-fragments': [
-      'error',
-      'syntax'
-    ],
+    'react/jsx-fragments': ['error', 'syntax'],
     'react/jsx-key': 1,
     'react/jsx-no-target-blank': 'error',
     'react/jsx-no-undef': 1,
@@ -93,25 +66,25 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/self-closing-comp': 'error',
   },
-  'globals': {
-    'JSX': 'readonly'
+  globals: {
+    JSX: 'readonly',
   },
-  'overrides': [
+  overrides: [
     {
-      'files': 'server/**/*.js',
-      'rules': {
+      files: 'server/**/*.js',
+      rules: {
         'import/order': [
           'error',
           {
-            'newlines-between': 'always'
-          }
-        ]
-      }
-    }
+            'newlines-between': 'always',
+          },
+        ],
+      },
+    },
   ],
-  'env': {
-    'jasmine': true,
-    'jest': true,
-    'browser': true
-  }
+  env: {
+    jasmine: true,
+    jest: true,
+    browser: true,
+  },
 };
