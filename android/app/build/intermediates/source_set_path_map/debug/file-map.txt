@@ -32,8 +32,11 @@ com.mobile.app-merged_res-30 /home/andrii/projects/farm/berryfarm-app/android/ap
 com.mobile.app-debug-31 /home/andrii/projects/farm/berryfarm-app/android/app/src/debug/res
 com.mobile.app-main-32 /home/andrii/projects/farm/berryfarm-app/android/app/src/main/res
 com.mobile.app-packaged_res-33 /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-community/masked-view/android/build/intermediates/packaged_res/debug
-com.mobile.app-packaged_res-34 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-fast-image/android/build/intermediates/packaged_res/debug
-com.mobile.app-packaged_res-35 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-gesture-handler/android/build/intermediates/packaged_res/debug
-com.mobile.app-packaged_res-36 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-reanimated/android/build/intermediates/packaged_res/debug
-com.mobile.app-packaged_res-37 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-safe-area-context/android/build/intermediates/packaged_res/debug
-com.mobile.app-packaged_res-38 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-screens/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-34 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-avoid-softinput/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-35 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-fast-image/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-36 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-gesture-handler/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-37 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-localization/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-38 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-reanimated/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-39 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-safe-area-context/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-40 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-screens/android/build/intermediates/packaged_res/debug
+com.mobile.app-packaged_res-41 /home/andrii/projects/farm/berryfarm-app/node_modules/react-native-vector-icons/android/build/intermediates/packaged_res/debug
