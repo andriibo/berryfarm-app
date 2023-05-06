@@ -30,7 +30,9 @@ const LandingPage = () => {
         </Text>
         {farms.map(farm => (
           <Button
-            mode={selectedFarm === farm.value ? 'outlined' : 'contained-tonal'}
+            compact={false}
+            key={farm.value}
+            mode={selectedFarm === farm.value ? 'elevated' : 'contained-tonal'}
             onPress={() => handleClick(farm.value)}
             style={[
               styles.btn,
