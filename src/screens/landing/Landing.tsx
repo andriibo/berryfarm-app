@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
@@ -24,7 +25,9 @@ const LandingPage = () => {
           source={require('src/assets/images/logo.png')}
           style={styles.image}
         />
-        <Text style={styles.subheading}>{strings.selectFarm}</Text>
+        <Text style={styles.subheading} variant="bodyLarge">
+          {strings.selectFarm}
+        </Text>
         {farms.map(farm => (
           <Button
             mode={selectedFarm === farm.value ? 'outlined' : 'contained-tonal'}

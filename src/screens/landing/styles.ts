@@ -14,10 +14,6 @@ export default StyleSheet.create({
     height: '50%',
   },
   subheading: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.black,
-    textAlign: 'center',
     marginBottom: 40,
     marginTop: -30,
   },
