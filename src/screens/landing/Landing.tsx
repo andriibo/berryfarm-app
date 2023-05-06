@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {FarmsEnum} from 'src/enums/farms.enum';
+import {Button} from 'react-native-paper';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -19,27 +20,28 @@ const LandingPage = () => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <FastImage
-          source={require('src/assets/images/logo-white.png')}
-          style={styles.image}
           resizeMode="contain"
+          source={require('src/assets/images/logo.png')}
+          style={styles.image}
         />
         <Text style={styles.subheading}>{strings.selectFarm}</Text>
         {farms.map(farm => (
-          <TouchableOpacity
-            key={farm.value}
-            onPress={() => handleClick(farm.value)}>
-            <Text
-              style={[
-                styles.btn,
-                selectedFarm === farm.value ? styles.btnSelected : {},
-              ]}>
-              {farm.label}
-            </Text>
-          </TouchableOpacity>
+          <Button
+            mode={selectedFarm === farm.value ? 'outlined' : 'contained-tonal'}
+            onPress={() => handleClick(farm.value)}
+            style={[
+              styles.btn,
+              selectedFarm === farm.value ? styles.btnSelected : {},
+            ]}>
+            {farm.label}
+          </Button>
         ))}
-        <TouchableOpacity disabled={!selectedFarm}>
-          <Text style={[styles.btn, styles.continue]}>{strings.continue}</Text>
-        </TouchableOpacity>
+        <Button
+          disabled={!selectedFarm}
+          mode="contained"
+          style={[styles.btn, styles.continue]}>
+          {strings.continue}
+        </Button>
       </View>
     </SafeAreaView>
   );
