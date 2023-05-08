@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Text, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {FarmsEnum} from 'src/enums/farms.enum';
-import {Button} from 'react-native-paper';
 import {colors} from 'src/styles/colors';
 
 const farms = [
