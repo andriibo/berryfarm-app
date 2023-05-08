@@ -1,5 +1,5 @@
 import styles from './styles';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Button, TextInput} from 'react-native-paper';
@@ -7,11 +7,10 @@ import {strings} from 'src/locales/locales';
 import React from 'react';
 
 const Login = () => {
-  const insets = useSafeAreaInsets();
   const [text, setText] = React.useState('');
 
   return (
-    <SafeAreaView style={{flex: 1, paddingTop: -insets.top}}>
+    <SafeAreaView edges={['bottom']} style={{flex: 1}}>
       <View style={styles.container}>
         <FastImage
           resizeMode="contain"
@@ -21,7 +20,7 @@ const Login = () => {
         <TextInput
           label="Email or Username"
           mode="outlined"
-          onChangeText={text => setText(text)}
+          onChangeText={setText}
           style={{width: '90%'}}
           testID="loginEmail"
           value={text}

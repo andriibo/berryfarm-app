@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {Text, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -21,6 +21,7 @@ const ChooseFarm = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
+  const login = useCallback(() => navigation.navigate('Login'), [navigation]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -52,7 +53,7 @@ const ChooseFarm = () => {
         <Button
           disabled={!selectedFarm}
           mode="contained"
-          onPress={() => navigation.navigate('Login')}
+          onPress={login}
           style={[styles.btn, styles.continue]}>
           {strings.continue}
         </Button>
