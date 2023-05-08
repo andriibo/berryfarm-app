@@ -4,7 +4,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react'],
   parser: '@typescript-eslint/parser',
   rules: {
-    '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-shadow': 'warn',
     'react-native/no-inline-styles': 0,
     eqeqeq: [
       'error',
