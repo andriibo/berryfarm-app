@@ -157,7 +157,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/andri
 	android:name
 		ADDED from /home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:6:7-38
 		ADDED from /home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:6:7-38
-activity#com.mobile.MainActivity
+activity#com.berryfarm.MainActivity
 ADDED from /home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:12:7-23:18
 	android:label
 		ADDED from /home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:14:9-41

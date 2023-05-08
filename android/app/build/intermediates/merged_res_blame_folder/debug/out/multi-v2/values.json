@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobile.app-mergeDebugResources-28:/values/values.xml",
+            "outputFile": "com.berryfarm.app-mergeDebugResources-28:/values/values.xml",
             "map": [
                 {
                     "source": "/home/andrii/.gradle/caches/transforms-3/bf6ce4dff9b9f08dcd11fa6d11e1b111/transformed/recyclerview-1.1.0/res/values/values.xml",

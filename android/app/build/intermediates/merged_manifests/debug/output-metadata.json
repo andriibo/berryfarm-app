@@ -4,7 +4,7 @@
     "type": "MERGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.mobile",
+  "applicationId": "com.berryfarm",
   "variantName": "debug",
   "elements": [
     {

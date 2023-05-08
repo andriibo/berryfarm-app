@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobile.app-mergeDebugResources-28:/values-large-v4/values-large-v4.xml",
+            "outputFile": "com.berryfarm.app-mergeDebugResources-28:/values-large-v4/values-large-v4.xml",
             "map": [
                 {
                     "source": "/home/andrii/.gradle/caches/transforms-3/4af7f0d23266db3f5bdb15fc939a61bd/transformed/material-1.1.0/res/values-large-v4/values-large-v4.xml",
