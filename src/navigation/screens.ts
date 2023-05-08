@@ -1,5 +1,7 @@
-import Landing from 'src/screens/landing/Landing';
+import {Login} from 'src/screens/auth/login';
+import {ChooseFarm} from 'src/screens/auth/choose-farm';
 
 export const Screens = {
-  Landing,
+  ChooseFarm,
+  Login,
 };

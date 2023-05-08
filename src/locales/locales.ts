@@ -7,5 +7,6 @@ export const strings = new LocalizedStrings({
     seredynka: 'Серединка',
     testServer: 'Тестовый сервер',
     continue: 'Продолжить',
+    logIn: 'Войти',
   },
 });
