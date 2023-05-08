@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
+import {Text, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {FarmsEnum} from 'src/enums/farms.enum';
+import {colors} from 'src/styles/colors';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -19,27 +21,35 @@ const LandingPage = () => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <FastImage
-          source={require('src/assets/images/logo-white.png')}
-          style={styles.image}
           resizeMode="contain"
+          source={require('src/assets/images/logo.png')}
+          style={styles.image}
         />
-        <Text style={styles.subheading}>{strings.selectFarm}</Text>
+        <Text style={styles.subheading} variant="bodyLarge">
+          {strings.selectFarm}
+        </Text>
         {farms.map(farm => (
-          <TouchableOpacity
+          <Button
+            compact={false}
             key={farm.value}
-            onPress={() => handleClick(farm.value)}>
-            <Text
-              style={[
-                styles.btn,
-                selectedFarm === farm.value ? styles.btnSelected : {},
-              ]}>
-              {farm.label}
-            </Text>
-          </TouchableOpacity>
+            labelStyle={{
+              color: selectedFarm === farm.value ? colors.white : colors.black,
+            }}
+            mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
+            onPress={() => handleClick(farm.value)}
+            style={[
+              styles.btn,
+              selectedFarm === farm.value && styles.btnSelected,
+            ]}>
+            {farm.label}
+          </Button>
         ))}
-        <TouchableOpacity disabled={!selectedFarm}>
-          <Text style={[styles.btn, styles.continue]}>{strings.continue}</Text>
-        </TouchableOpacity>
+        <Button
+          disabled={!selectedFarm}
+          mode="contained"
+          style={[styles.btn, styles.continue]}>
+          {strings.continue}
+        </Button>
       </View>
     </SafeAreaView>
   );

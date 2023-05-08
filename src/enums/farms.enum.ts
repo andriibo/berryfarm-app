@@ -1,5 +1,5 @@
 export enum FarmsEnum {
-  lyubotin,
-  seredynka,
-  testServer,
+  lyubotin = 'lyubotin',
+  seredynka = 'seredynka',
+  testServer = 'testServer',
 }

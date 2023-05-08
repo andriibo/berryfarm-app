@@ -6,14 +6,11 @@ import {
 import React from 'react';
 import {Wrapper} from 'src/screens/wrapper';
 import {NavigationContainer} from '@react-navigation/native';
+import {colors} from 'src/styles/colors';
 
 const theme = {
   ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: 'tomato',
-    secondary: 'yellow',
-  },
+  colors,
 };
 
 function App() {
