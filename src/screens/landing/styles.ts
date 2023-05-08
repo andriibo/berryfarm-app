@@ -22,7 +22,9 @@ export default StyleSheet.create({
     marginBottom: 25,
   },
   btnSelected: {
-    backgroundColor: colors.primaryContainer,
+    backgroundColor: 'rgba(100,166,68,255)',
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   continue: {
     marginTop: 50,

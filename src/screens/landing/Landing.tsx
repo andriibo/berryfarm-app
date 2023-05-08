@@ -7,6 +7,7 @@ import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {Button} from 'react-native-paper';
+import {colors} from 'src/styles/colors';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -32,11 +33,14 @@ const LandingPage = () => {
           <Button
             compact={false}
             key={farm.value}
-            mode={selectedFarm === farm.value ? 'elevated' : 'contained-tonal'}
+            labelStyle={{
+              color: selectedFarm === farm.value ? colors.white : colors.black,
+            }}
+            mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
             onPress={() => handleClick(farm.value)}
             style={[
               styles.btn,
-              selectedFarm === farm.value ? styles.btnSelected : {},
+              selectedFarm === farm.value && styles.btnSelected,
             ]}>
             {farm.label}
           </Button>
