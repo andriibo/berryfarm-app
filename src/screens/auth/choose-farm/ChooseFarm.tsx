@@ -7,6 +7,9 @@ import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {colors} from 'src/styles/colors';
+import {AuthStackParamList} from 'src/navigation/auth.stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -14,7 +17,9 @@ const farms = [
   {label: strings.testServer, value: FarmsEnum.testServer},
 ];
 
-const LandingPage = () => {
+const ChooseFarm = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
 
   return (
@@ -47,6 +52,7 @@ const LandingPage = () => {
         <Button
           disabled={!selectedFarm}
           mode="contained"
+          onPress={() => navigation.navigate('Login')}
           style={[styles.btn, styles.continue]}>
           {strings.continue}
         </Button>
@@ -55,4 +61,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export {ChooseFarm};
