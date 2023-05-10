@@ -1,29 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.berryfarm.app-mergeDebugResources-28:/values-v23/values-v23.xml",
+            "outputFile": "com.berryfarm.app-mergeDebugResources-33:/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/b618d334ebbce8811572224b8cbc3caa/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "200"
-                    },
-                    "to": {
-                        "startLines": "50",
-                        "startColumns": "4",
-                        "startOffsets": "3232",
-                        "endLines": "52",
-                        "endColumns": "12",
-                        "endOffsets": "3377"
-                    }
-                },
-                {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/be9a285d7d94d789380b4b7ef5365ae2/transformed/appcompat-1.4.1/res/values-v23/values-v23.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/23ccb3179e1aa6cb99336697cc8099e2/transformed/appcompat-1.4.1/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,20,34,35,36,39,43,44,45,46",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -42,7 +23,26 @@
                     }
                 },
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/4af7f0d23266db3f5bdb15fc939a61bd/transformed/material-1.1.0/res/values-v23/values-v23.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/f9d322792e48e828b0a48a5fdaeecda1/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "200"
+                    },
+                    "to": {
+                        "startLines": "50",
+                        "startColumns": "4",
+                        "startOffsets": "3232",
+                        "endLines": "52",
+                        "endColumns": "12",
+                        "endOffsets": "3377"
+                    }
+                },
+                {
+                    "source": "/home/andrii/.gradle/caches/transforms-3/089e4fcf3172187d7ae460886ee691b3/transformed/material-1.1.0/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2,6",
                         "startColumns": "4,4",

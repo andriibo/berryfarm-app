@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.berryfarm.app-mergeDebugResources-28:/values-port/values-port.xml",
+            "outputFile": "com.berryfarm.app-mergeDebugResources-33:/values-port/values-port.xml",
             "map": [
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/be9a285d7d94d789380b4b7ef5365ae2/transformed/appcompat-1.4.1/res/values-port/values-port.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/23ccb3179e1aa6cb99336697cc8099e2/transformed/appcompat-1.4.1/res/values-port/values-port.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

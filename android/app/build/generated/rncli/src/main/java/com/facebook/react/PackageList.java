@@ -13,6 +13,10 @@ import java.util.ArrayList;
 
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
+// @react-native-firebase/app
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/firestore
+import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 // react-native-avoid-softinput
 import com.reactnativeavoidsoftinput.AvoidSoftInputPackage;
 // react-native-fast-image
@@ -75,6 +79,8 @@ public class PackageList {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
       new RNCMaskedViewPackage(),
+      new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseFirestorePackage(),
       new AvoidSoftInputPackage(),
       new FastImageViewPackage(),
       new RNGestureHandlerPackage(),
