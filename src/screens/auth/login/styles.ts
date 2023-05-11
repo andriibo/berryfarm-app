@@ -19,4 +19,10 @@ export default StyleSheet.create({
     marginBottom: 25,
     marginTop: 50,
   },
+  wrapper: {
+    flex: 1,
+    justifyContent: 'space-around',
+    width: '90%',
+    textAlign: 'center',
+  },
 });

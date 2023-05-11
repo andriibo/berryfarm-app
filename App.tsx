@@ -7,6 +7,8 @@ import React from 'react';
 import {Wrapper} from 'src/screens/wrapper';
 import {NavigationContainer} from '@react-navigation/native';
 import {colors} from 'src/styles/colors';
+import {persistor} from 'src/stores/store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const theme = {
   ...DefaultTheme,
@@ -16,11 +18,13 @@ const theme = {
 function App() {
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <SafeAreaProvider>
-          <Wrapper />
-        </SafeAreaProvider>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <SafeAreaProvider>
+            <Wrapper />
+          </SafeAreaProvider>
+        </NavigationContainer>
+      </PersistGate>
     </PaperProvider>
   );
 }

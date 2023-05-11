@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "7361597505",
+    "project_id": "farm-abnk",
+    "storage_bucket": "farm-abnk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7361597505:android:1a3ef0eb3040e0e74e76c0",
+        "android_client_info": {
+          "package_name": "com.berryfarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7361597505-a0s3291f6kb07034cphtm0hkgkn5ttps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.berryfarm",
+            "certificate_hash": "5612274007f1723273e38bbf81a14e0d51461b32"
+          }
+        },
+        {
+          "client_id": "7361597505-4r7na8qe0836ilv5gn91k3o75qe95k5e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRpeImQ8jDyje_o7wBqTd6XizJCKXLxAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7361597505-4r7na8qe0836ilv5gn91k3o75qe95k5e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

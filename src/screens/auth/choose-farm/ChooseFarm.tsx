@@ -10,6 +10,11 @@ import {colors} from 'src/styles/colors';
 import {AuthStackParamList} from 'src/navigation/auth.stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
+import {getFarm} from 'src/stores/services/firestore.service';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {setFarm} from 'src/stores/slices/auth.slice';
+import {Toast} from 'src/components/toast';
+import {FirestoreServiceError} from 'src/stores/errors';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -18,14 +23,29 @@ const farms = [
 ];
 
 const ChooseFarm = () => {
+  const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
-  const login = useCallback(() => navigation.navigate('Login'), [navigation]);
+  const [errorMessage, setError] = useState('');
+
+  const login = useCallback(async () => {
+    try {
+      const data = await getFarm(selectedFarm as FarmsEnum);
+
+      dispatch(setFarm(data));
+      navigation.navigate('Login');
+    } catch (error: any) {
+      if (error instanceof FirestoreServiceError) {
+        setError(error.message);
+      }
+    }
+  }, [selectedFarm, navigation, dispatch]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
+        {errorMessage && <Toast error={errorMessage} />}
         <FastImage
           resizeMode="contain"
           source={require('src/assets/images/logo.png')}
