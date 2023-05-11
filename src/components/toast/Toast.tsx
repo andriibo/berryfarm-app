@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Snackbar} from 'react-native-paper';
 import {colors} from 'src/styles/colors';
 import styles from 'src/components/toast/styles';
+import {useFocusEffect} from '@react-navigation/native';
 
 export type ToastProps = {
   error: string;
@@ -13,11 +14,13 @@ const Toast = ({error}: ToastProps) => {
     setVisible(false);
   };
 
-  useEffect(() => {
-    if (error) {
-      setVisible(!visible);
-    }
-  }, [error, visible]);
+  useFocusEffect(
+    useCallback(() => {
+      if (error) {
+        setVisible(true);
+      }
+    }, [error]),
+  );
 
   return (
     <Snackbar

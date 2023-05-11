@@ -37,165 +37,164 @@
 23-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:7:7-39
 24        android:roundIcon="@mipmap/ic_launcher_round"
 24-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:9:7-52
-25        android:testOnly="true"
-26        android:theme="@style/AppTheme"
-26-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:11:7-38
-27        android:usesCleartextTraffic="true" >
-27-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:8:9-44
-28        <activity
-28-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:9-111
-29            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-29-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:19-83
-30            android:exported="false" />
-30-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:84-108
-31        <activity
-31-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:12:7-23:18
-32            android:name="com.berryfarm.MainActivity"
-32-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:13:9-37
-33            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-33-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:15:9-118
-34            android:exported="true"
-34-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:18:9-32
-35            android:label="@string/app_name"
-35-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:14:9-41
-36            android:launchMode="singleTask"
-36-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:16:9-40
-37            android:windowSoftInputMode="adjustResize" >
-37-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:17:9-51
-38            <intent-filter>
-38-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:19:9-22:25
-39                <action android:name="android.intent.action.MAIN" />
-39-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:20:13-65
-39-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:20:21-62
-40
-41                <category android:name="android.intent.category.LAUNCHER" />
-41-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:21:13-73
-41-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:21:23-70
-42            </intent-filter>
-43        </activity>
-44
-45        <meta-data
-45-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-13:36
-46            android:name="app_data_collection_default_enabled"
-46-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-63
-47            android:value="true" />
-47-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-33
-48
-49        <service
-49-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:19
-50            android:name="com.google.firebase.components.ComponentDiscoveryService"
-50-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-84
-51            android:directBootAware="true"
-51-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-43
-52            android:exported="false" >
-52-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
-53            <meta-data
-53-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:85
-54                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
-54-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-120
-55                android:value="com.google.firebase.components.ComponentRegistrar" />
-55-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-82
-56            <meta-data
-56-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:19:13-21:85
-57                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
-57-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:20:17-111
-58                android:value="com.google.firebase.components.ComponentRegistrar" />
-58-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:21:17-82
-59        </service>
-60
-61        <provider
-61-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-29:38
-62            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
-62-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-88
-63            android:authorities="com.berryfarm.reactnativefirebaseappinitprovider"
-63-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-86
-64            android:exported="false"
-64-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-37
-65            android:initOrder="99" />
-65-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-35
-66
-67        <activity
-67-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:23:9-27:75
-68            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-68-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:24:13-93
-69            android:excludeFromRecents="true"
-69-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:25:13-46
-70            android:exported="false"
-70-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:26:13-37
-71            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-71-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:27:13-72
-72        <!--
-73            Service handling Google Sign-In user revocation. For apps that do not integrate with
-74            Google Sign-In, this service will never be started.
-75        -->
-76        <service
-76-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:33:9-37:51
-77            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-77-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:34:13-89
-78            android:exported="true"
-78-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:35:13-36
-79            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-79-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:36:13-107
-80            android:visibleToInstantApps="true" />
-80-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:37:13-48
-81
-82        <meta-data
-82-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:11:9-13:43
-83            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-83-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:12:13-84
-84            android:value="GlideModule" />
-84-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:13:13-40
-85
-86        <activity
-86-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
-87            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-87-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
-88            android:exported="false"
-88-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
-89            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-89-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
-90
-91        <provider
-91-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:25:9-30:39
-92            android:name="com.google.firebase.provider.FirebaseInitProvider"
-92-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:26:13-77
-93            android:authorities="com.berryfarm.firebaseinitprovider"
-93-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:27:13-72
-94            android:directBootAware="true"
-94-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:28:13-43
-95            android:exported="false"
-95-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:29:13-37
-96            android:initOrder="100" />
-96-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:30:13-36
-97
-98        <meta-data
-98-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
-99            android:name="com.google.android.gms.version"
-99-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
-100            android:value="@integer/google_play_services_version" />
-100-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
-101
-102        <provider
-102-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:26:9-34:20
-103            android:name="androidx.startup.InitializationProvider"
-103-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:27:13-67
-104            android:authorities="com.berryfarm.androidx-startup"
-104-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:28:13-68
-105            android:exported="false" >
-105-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:29:13-37
-106            <meta-data
-106-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:31:13-33:52
-107                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-107-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:32:17-75
-108                android:value="androidx.startup" />
-108-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:33:17-49
-109            <meta-data
-109-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:31:13-33:52
-110                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-110-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:32:17-78
-111                android:value="androidx.startup" />
-111-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:33:17-49
-112        </provider>
-113    </application>
-114
-115</manifest>
+25        android:theme="@style/AppTheme"
+25-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:11:7-38
+26        android:usesCleartextTraffic="true" >
+26-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:8:9-44
+27        <activity
+27-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:9-111
+28            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+28-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:19-83
+29            android:exported="false" />
+29-->/home/andrii/projects/farm/berryfarm-app/android/app/src/debug/AndroidManifest.xml:11:84-108
+30        <activity
+30-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:12:7-23:18
+31            android:name="com.berryfarm.MainActivity"
+31-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:13:9-37
+32            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+32-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:15:9-118
+33            android:exported="true"
+33-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:18:9-32
+34            android:label="@string/app_name"
+34-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:14:9-41
+35            android:launchMode="singleTask"
+35-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:16:9-40
+36            android:windowSoftInputMode="adjustResize" >
+36-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:17:9-51
+37            <intent-filter>
+37-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:19:9-22:25
+38                <action android:name="android.intent.action.MAIN" />
+38-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:20:13-65
+38-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:20:21-62
+39
+40                <category android:name="android.intent.category.LAUNCHER" />
+40-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:21:13-73
+40-->/home/andrii/projects/farm/berryfarm-app/android/app/src/main/AndroidManifest.xml:21:23-70
+41            </intent-filter>
+42        </activity>
+43
+44        <meta-data
+44-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-13:36
+45            android:name="app_data_collection_default_enabled"
+45-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-63
+46            android:value="true" />
+46-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-33
+47
+48        <service
+48-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:19
+49            android:name="com.google.firebase.components.ComponentDiscoveryService"
+49-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-84
+50            android:directBootAware="true"
+50-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-43
+51            android:exported="false" >
+51-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
+52            <meta-data
+52-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:85
+53                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+53-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-120
+54                android:value="com.google.firebase.components.ComponentRegistrar" />
+54-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-82
+55            <meta-data
+55-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:19:13-21:85
+56                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+56-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:20:17-111
+57                android:value="com.google.firebase.components.ComponentRegistrar" />
+57-->[com.google.firebase:firebase-firestore:24.4.5] /home/andrii/.gradle/caches/transforms-3/8ada388af1af88e46c48e2415ade05db/transformed/jetified-firebase-firestore-24.4.5/AndroidManifest.xml:21:17-82
+58        </service>
+59
+60        <provider
+60-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-29:38
+61            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+61-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-88
+62            android:authorities="com.berryfarm.reactnativefirebaseappinitprovider"
+62-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-86
+63            android:exported="false"
+63-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-37
+64            android:initOrder="99" />
+64-->[:react-native-firebase_app] /home/andrii/projects/farm/berryfarm-app/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-35
+65
+66        <activity
+66-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:23:9-27:75
+67            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+67-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:24:13-93
+68            android:excludeFromRecents="true"
+68-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:25:13-46
+69            android:exported="false"
+69-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:26:13-37
+70            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+70-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:27:13-72
+71        <!--
+72            Service handling Google Sign-In user revocation. For apps that do not integrate with
+73            Google Sign-In, this service will never be started.
+74        -->
+75        <service
+75-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:33:9-37:51
+76            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+76-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:34:13-89
+77            android:exported="true"
+77-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:35:13-36
+78            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+78-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:36:13-107
+79            android:visibleToInstantApps="true" />
+79-->[com.google.android.gms:play-services-auth:20.3.0] /home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:37:13-48
+80
+81        <meta-data
+81-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:11:9-13:43
+82            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+82-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:12:13-84
+83            android:value="GlideModule" />
+83-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /home/andrii/.gradle/caches/transforms-3/efd8f21c668fc834d310b16af4f0a20b/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:13:13-40
+84
+85        <activity
+85-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+86            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+86-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+87            android:exported="false"
+87-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+88            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+88-->[com.google.android.gms:play-services-base:18.0.1] /home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+89
+90        <provider
+90-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:25:9-30:39
+91            android:name="com.google.firebase.provider.FirebaseInitProvider"
+91-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:26:13-77
+92            android:authorities="com.berryfarm.firebaseinitprovider"
+92-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:27:13-72
+93            android:directBootAware="true"
+93-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:28:13-43
+94            android:exported="false"
+94-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:29:13-37
+95            android:initOrder="100" />
+95-->[com.google.firebase:firebase-common:20.3.2] /home/andrii/.gradle/caches/transforms-3/d501d11b51b9b45c2628fe2147cac516/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:30:13-36
+96
+97        <meta-data
+97-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+98            android:name="com.google.android.gms.version"
+98-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+99            android:value="@integer/google_play_services_version" />
+99-->[com.google.android.gms:play-services-basement:18.1.0] /home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+100
+101        <provider
+101-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:26:9-34:20
+102            android:name="androidx.startup.InitializationProvider"
+102-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:27:13-67
+103            android:authorities="com.berryfarm.androidx-startup"
+103-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:28:13-68
+104            android:exported="false" >
+104-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:29:13-37
+105            <meta-data
+105-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:31:13-33:52
+106                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+106-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:32:17-75
+107                android:value="androidx.startup" />
+107-->[androidx.emoji2:emoji2:1.0.0] /home/andrii/.gradle/caches/transforms-3/9aaa1b590eb2f3bcac6c49d3fc8b84cf/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:33:17-49
+108            <meta-data
+108-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:31:13-33:52
+109                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+109-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:32:17-78
+110                android:value="androidx.startup" />
+110-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/andrii/.gradle/caches/transforms-3/a4ee5ae2a9f6a2d028dd8e6b11840bc8/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:33:17-49
+111        </provider>
+112    </application>
+113
+114</manifest>
