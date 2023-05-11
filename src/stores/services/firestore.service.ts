@@ -22,7 +22,7 @@ export const getFarm = async (farm: FarmsEnum) => {
 
 export const login = async (username: string, prefix: string) => {
   const snapshot = await firestore()
-    .collection(`${prefix}_users`)
+    .collection(`${prefix}users`)
     .where('username', '==', username.trim())
     .get()
     .catch(err => {

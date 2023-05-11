@@ -61,22 +61,21 @@ const Login = () => {
             control={control}
             name="username"
             render={({field: {onChange}}) => (
-              <TextInput
-                error={Boolean(errors.username)}
-                label="Email or Username"
-                mode="outlined"
-                onChangeText={onChange}
-                style={{width: '100%'}}
-                testID="loginEmail"
-              />
+              <View>
+                <TextInput
+                  error={Boolean(errors.username)}
+                  label="Email or Username"
+                  mode="outlined"
+                  onChangeText={onChange}
+                  style={{width: '100%'}}
+                  testID="loginEmail"
+                />
+                <HelperText type="error" visible={Boolean(errors.username)}>
+                  {errors.username?.message}
+                </HelperText>
+              </View>
             )}
           />
-          <HelperText
-            style={styles.helperText}
-            type="error"
-            visible={Boolean(errors.username)}>
-            {errors.username?.message}
-          </HelperText>
         </AvoidSoftInputView>
         <Button
           disabled={!isDirty || !isValid}
