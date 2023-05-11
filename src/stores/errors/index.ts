@@ -1,3 +1,3 @@
-import {FirestoreServiceError} from './FirestoreServiceError';
+import {FirestoreServiceError} from './firestore-service.error';
 
 export {FirestoreServiceError};

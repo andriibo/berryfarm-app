@@ -25,4 +25,8 @@ export default StyleSheet.create({
     width: '90%',
     textAlign: 'center',
   },
+  helperText: {
+    position: 'absolute',
+    marginTop: 65,
+  },
 });
