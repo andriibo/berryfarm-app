@@ -8,5 +8,6 @@ export const strings = new LocalizedStrings({
     testServer: 'Тестовый сервер',
     continue: 'Продолжить',
     logIn: 'Войти',
+    templates: 'Шаблоны',
   },
 });
