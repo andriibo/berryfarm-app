@@ -63,8 +63,11 @@ const authSlice = createSlice({
   },
 });
 
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.user.username !== '';
 export const selectFarm = (state: RootState) => state.auth.farm;
 export const selectUser = (state: RootState) => state.auth.user;
+export const useIsAuthenticated = () => useAppSelector(selectIsAuthenticated);
 export const useFarm = () => useAppSelector(selectFarm);
 export const useUser = () => useAppSelector(selectUser);
 

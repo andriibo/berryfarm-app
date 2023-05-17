@@ -1,15 +1,23 @@
 [
     {
+        "merged": "com.berryfarm.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.berryfarm.app-main-37:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.berryfarm.app-merged_res-35:/drawable_logo.png.flat",
+        "source": "com.berryfarm.app-main-37:/drawable/logo.png"
+    },
+    {
+        "merged": "com.berryfarm.app-merged_res-35:/drawable_logo_white.png.flat",
+        "source": "com.berryfarm.app-main-37:/drawable/logo_white.png"
+    },
+    {
         "merged": "com.berryfarm.app-merged_res-35:/mipmap-mdpi_ic_launcher_round.png.flat",
         "source": "com.berryfarm.app-main-37:/mipmap-mdpi/ic_launcher_round.png"
     },
     {
         "merged": "com.berryfarm.app-merged_res-35:/drawable_rn_edit_text_material.xml.flat",
         "source": "com.berryfarm.app-main-37:/drawable/rn_edit_text_material.xml"
-    },
-    {
-        "merged": "com.berryfarm.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.berryfarm.app-main-37:/mipmap-xhdpi/ic_launcher.png"
     },
     {
         "merged": "com.berryfarm.app-merged_res-35:/mipmap-mdpi_ic_launcher.png.flat",

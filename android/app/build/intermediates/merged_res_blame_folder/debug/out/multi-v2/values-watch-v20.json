@@ -4,7 +4,7 @@
             "outputFile": "com.berryfarm.app-mergeDebugResources-33:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/23ccb3179e1aa6cb99336697cc8099e2/transformed/appcompat-1.4.1/res/values-watch-v20/values-watch-v20.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/bafeaf4d74b24fbc5d071838f4ee1c46/transformed/appcompat-1.4.1/res/values-watch-v20/values-watch-v20.xml",
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/2c72d4c775f629c439aaa1d0c0739c8c/transformed/jetified-play-services-auth-20.3.0/res/values-watch-v20/values.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/bfbd718947a4fa1a4078b25a16920cc1/transformed/jetified-play-services-auth-20.3.0/res/values-watch-v20/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11",
                         "startColumns": "0,0,0,0,0,0,0,0",

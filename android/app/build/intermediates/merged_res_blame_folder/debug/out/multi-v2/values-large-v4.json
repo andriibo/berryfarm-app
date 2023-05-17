@@ -4,7 +4,7 @@
             "outputFile": "com.berryfarm.app-mergeDebugResources-33:/values-large-v4/values-large-v4.xml",
             "map": [
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/23ccb3179e1aa6cb99336697cc8099e2/transformed/appcompat-1.4.1/res/values-large-v4/values-large-v4.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/bafeaf4d74b24fbc5d071838f4ee1c46/transformed/appcompat-1.4.1/res/values-large-v4/values-large-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/089e4fcf3172187d7ae460886ee691b3/transformed/material-1.1.0/res/values-large-v4/values-large-v4.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/7e75f23b37f26a65575a71fea5ab200e/transformed/material-1.1.0/res/values-large-v4/values-large-v4.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

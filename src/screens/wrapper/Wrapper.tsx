@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {AvoidSoftInput} from 'react-native-avoid-softinput';
 
-import {Loader} from 'src/components/loader';
 import AuthStack from 'src/navigation/auth.stack';
+import DrawerStack from 'src/navigation/drawer.stack';
+import {useIsAuthenticated} from 'src/stores/slices/auth.slice';
 
 const Wrapper = () => {
-  const isAuth = false;
+  const isAuth = useIsAuthenticated();
 
   useEffect(() => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
@@ -15,7 +16,7 @@ const Wrapper = () => {
     return <AuthStack />;
   }
 
-  return <Loader />;
+  return <DrawerStack />;
 };
 
 export {Wrapper};

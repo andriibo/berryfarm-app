@@ -4,24 +4,7 @@
             "outputFile": "com.berryfarm.app-mergeDebugResources-33:/values-zh-rCN/values-zh-rCN.xml",
             "map": [
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/5c85eefd62ee9cacecdf09834619c6ef/transformed/core-1.7.0/res/values-zh-rCN/values-zh-rCN.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "48",
-                        "startColumns": "4",
-                        "startOffsets": "4555",
-                        "endColumns": "100",
-                        "endOffsets": "4651"
-                    }
-                },
-                {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/23ccb3179e1aa6cb99336697cc8099e2/transformed/appcompat-1.4.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/bafeaf4d74b24fbc5d071838f4ee1c46/transformed/appcompat-1.4.1/res/values-zh-rCN/values-zh-rCN.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -38,24 +21,7 @@
                     }
                 },
                 {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/14534f11995b76409b349d353840fdfc/transformed/jetified-play-services-base-18.0.1/res/values-zh-rCN/values.xml",
-                    "from": {
-                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
-                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-                        "startOffsets": "197,294,419,530,628,729,841,939,1027,1131,1228,1354,1465,1565,1669,1721,1774",
-                        "endColumns": "96,124,110,97,100,111,97,87,103,96,125,110,99,103,51,52,69",
-                        "endOffsets": "293,418,529,627,728,840,938,1026,1130,1227,1353,1464,1564,1668,1720,1773,1843"
-                    },
-                    "to": {
-                        "startLines": "29,30,31,32,33,34,35,36,38,39,40,41,42,43,44,45,46",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2662,2763,2892,3007,3109,3214,3330,3432,3623,3731,3832,3962,4077,4181,4289,4345,4402",
-                        "endColumns": "100,128,114,101,104,115,101,91,107,100,129,114,103,107,55,56,73",
-                        "endOffsets": "2758,2887,3002,3104,3209,3325,3427,3519,3726,3827,3957,4072,4176,4284,4340,4397,4471"
-                    }
-                },
-                {
-                    "source": "/home/andrii/.gradle/caches/transforms-3/b8b032a9f011549aa4242ce10998c5f2/transformed/jetified-play-services-basement-18.1.0/res/values-zh-rCN/values.xml",
+                    "source": "/home/andrii/.gradle/caches/transforms-3/6ebfe84b5eef36b9339c323a6e5f2a17/transformed/jetified-play-services-basement-18.1.0/res/values-zh-rCN/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -69,6 +35,40 @@
                         "startOffsets": "3524",
                         "endColumns": "98",
                         "endOffsets": "3618"
+                    }
+                },
+                {
+                    "source": "/home/andrii/.gradle/caches/transforms-3/9f958e7e364e11d0de792bdb9af4784b/transformed/core-1.7.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "48",
+                        "startColumns": "4",
+                        "startOffsets": "4555",
+                        "endColumns": "100",
+                        "endOffsets": "4651"
+                    }
+                },
+                {
+                    "source": "/home/andrii/.gradle/caches/transforms-3/f9c793245c95ea736b7d97b3879631e1/transformed/jetified-play-services-base-18.0.1/res/values-zh-rCN/values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "197,294,419,530,628,729,841,939,1027,1131,1228,1354,1465,1565,1669,1721,1774",
+                        "endColumns": "96,124,110,97,100,111,97,87,103,96,125,110,99,103,51,52,69",
+                        "endOffsets": "293,418,529,627,728,840,938,1026,1130,1227,1353,1464,1564,1668,1720,1773,1843"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32,33,34,35,36,38,39,40,41,42,43,44,45,46",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2662,2763,2892,3007,3109,3214,3330,3432,3623,3731,3832,3962,4077,4181,4289,4345,4402",
+                        "endColumns": "100,128,114,101,104,115,101,91,107,100,129,114,103,107,55,56,73",
+                        "endOffsets": "2758,2887,3002,3104,3209,3325,3427,3519,3726,3827,3957,4072,4176,4284,4340,4397,4471"
                     }
                 }
             ]
