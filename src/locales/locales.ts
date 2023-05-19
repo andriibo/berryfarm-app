@@ -9,5 +9,8 @@ export const strings = new LocalizedStrings({
     continue: 'Продолжить',
     logIn: 'Войти',
     templates: 'Шаблоны',
+    registration: 'Регистрация',
+    giveQrCode: 'Выдать QR код',
+    logout: 'Выйти из приложения',
   },
 });

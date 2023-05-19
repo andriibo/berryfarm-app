@@ -73,5 +73,5 @@ export const useUser = () => useAppSelector(selectUser);
 
 export const {
   reducer: authReducer,
-  actions: {setUser, setFarm},
+  actions: {setUser, setFarm, cleanUser, cleanFarm},
 } = authSlice;
