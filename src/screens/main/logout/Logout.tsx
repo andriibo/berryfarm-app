@@ -19,10 +19,8 @@ const Logout = (props: any) => {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <TouchableOpacity>
-        <Text onPress={handleSignOut} style={styles.button}>
-          {strings.logout}
-        </Text>
+      <TouchableOpacity onPress={handleSignOut}>
+        <Text style={styles.button}>{strings.logout}</Text>
       </TouchableOpacity>
     </View>
   );
