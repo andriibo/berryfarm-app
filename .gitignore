@@ -24,20 +24,15 @@ ios/.xcode.env.local
 
 # Android/IntelliJ
 #
+build/
 .idea
 .gradle
-android/local.properties
+local.properties
 *.iml
-android/app/src/main/assets/index.android.bundle
-index.android.bundle
-android/app/release/
-android/app/src/main/res/raw/
-*.bundle
-
-# CocoaPods
-/ios/Pods/
-/android/app/debug/app-debug.apk
-/android/app/debug/output-metadata.json
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
@@ -61,6 +56,7 @@ yarn-error.log
 *.jsbundle
 
 # Ruby / CocoaPods
+/ios/Pods/
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
