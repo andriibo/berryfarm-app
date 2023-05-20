@@ -4,7 +4,7 @@ import {setupListeners} from '@reduxjs/toolkit/query';
 import {persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-import {authReducer} from './slices/auth.slice';
+import {authReducer, cleanUser} from './slices/auth.slice';
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +25,13 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 setupListeners(store.dispatch);
+
+export const callLogOut = async () => {
+  console.log(22);
+  await persistor.purge();
+  await persistConfig.storage.clear();
+  store.dispatch(cleanUser());
+};
 
 /** Infers the `RootState` types from the store itself */
 export type RootState = ReturnType<typeof store.getState>;
