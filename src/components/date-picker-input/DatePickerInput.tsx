@@ -1,9 +1,9 @@
-import {faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
+import {IconButton} from 'react-native-paper';
 import React, {memo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {strings} from 'src/locales/locales';
-import {IconButton} from '../icon-button';
 import {styles} from './styles';
+import {colors} from 'src/styles/colors';
 
 const DatePickerInput = memo(
   ({value, onPress}: {value: string; onPress: () => void}) => {
@@ -17,9 +17,10 @@ const DatePickerInput = memo(
         </Text>
         <View style={styles.iconStyle} testID="calendarIconView">
           <IconButton
-            icon={faCalendarAlt}
+            icon="calendar"
+            iconColor={colors.primary}
             onPress={onPress}
-            size={25}
+            size={30}
             testID="calendarIcon"
           />
         </View>

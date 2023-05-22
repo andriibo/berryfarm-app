@@ -42,48 +42,66 @@ const CreateWorker = () => {
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <AvoidSoftInputView avoidOffset={50} style={styles.wrapper}>
-          <Controller
-            control={control}
-            name="firstname"
-            render={({field: {onChange}}) => (
-              <View>
-                <Text variant="bodyLarge">{strings.worker}</Text>
-                <TextInput
-                  error={Boolean(errors.firstname)}
-                  label={strings.firstname}
-                  mode="outlined"
-                  onChangeText={onChange}
-                  style={{width: '100%'}}
-                  testID="createWorkerFirstname"
-                />
-                <HelperText type="error" visible={Boolean(errors.firstname)}>
-                  {errors.firstname?.message}
-                </HelperText>
-                <TextInput
-                  error={Boolean(errors.lastname)}
-                  label={strings.lastname}
-                  mode="outlined"
-                  onChangeText={onChange}
-                  style={{width: '100%'}}
-                  testID="createWorkerLastname"
-                />
-                <HelperText type="error" visible={Boolean(errors.lastname)}>
-                  {errors.lastname?.message}
-                </HelperText>
-                <TextInput
-                  error={Boolean(errors.surname)}
-                  label={strings.surname}
-                  mode="outlined"
-                  onChangeText={onChange}
-                  style={{width: '100%'}}
-                  testID="createWorkerSurname"
-                />
-                <HelperText type="error" visible={Boolean(errors.surname)}>
-                  {errors.surname?.message}
-                </HelperText>
-              </View>
-            )}
-          />
+          <View>
+            <Text variant="bodyLarge">{strings.worker}</Text>
+            <Controller
+              control={control}
+              name="firstname"
+              render={({field: {onChange}}) => (
+                <View>
+                  <TextInput
+                    error={Boolean(errors.firstname)}
+                    label={strings.firstname}
+                    mode="outlined"
+                    onChangeText={onChange}
+                    style={{width: '100%'}}
+                    testID="createWorkerFirstname"
+                  />
+                  <HelperText type="error" visible={Boolean(errors.firstname)}>
+                    {errors.firstname?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+            <Controller
+              control={control}
+              name="lastname"
+              render={({field: {onChange}}) => (
+                <View>
+                  <TextInput
+                    error={Boolean(errors.lastname)}
+                    label={strings.lastname}
+                    mode="outlined"
+                    onChangeText={onChange}
+                    style={{width: '100%'}}
+                    testID="createWorkerLastname"
+                  />
+                  <HelperText type="error" visible={Boolean(errors.lastname)}>
+                    {errors.lastname?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+            <Controller
+              control={control}
+              name="surname"
+              render={({field: {onChange}}) => (
+                <View>
+                  <TextInput
+                    error={Boolean(errors.surname)}
+                    label={strings.surname}
+                    mode="outlined"
+                    onChangeText={onChange}
+                    style={{width: '100%'}}
+                    testID="createWorkerSurname"
+                  />
+                  <HelperText type="error" visible={Boolean(errors.surname)}>
+                    {errors.surname?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          </View>
           <View>
             <Text variant="bodyLarge">{strings.birthDate}</Text>
             <Controller

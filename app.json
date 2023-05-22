@@ -1,7 +1,4 @@
 {
   "name": "mobile",
-  "displayName": "mobile",
-  "expo": {
-    "userInterfaceStyle": "automatic"
-  }
+  "displayName": "mobile"
 }

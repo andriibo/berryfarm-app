@@ -9,7 +9,7 @@ export default StyleSheet.create({
     backgroundColor: colors.background,
     paddingLeft: 30,
     paddingRight: 30,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   wrapper: {
     flex: 1,
