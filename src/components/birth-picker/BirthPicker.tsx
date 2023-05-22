@@ -5,13 +5,12 @@ import {Stack} from 'react-native-spacing-system';
 
 import {showByFormat} from 'src/helpers/date-helper';
 import {DatePickerInput} from '../date-picker-input';
+import {maxDATE} from 'src/constants/constants';
 
 type BirthPickerProps = {
   value: Date;
   onChange: (value: string) => void;
 };
-
-const MAX_DATE = dayjs().subtract(1, 'day').toDate();
 
 const BirthPicker = ({value, onChange}: BirthPickerProps) => {
   const [isDatePickerVisible, setIsDatePickerVisibility] = useState(false);
@@ -34,7 +33,7 @@ const BirthPicker = ({value, onChange}: BirthPickerProps) => {
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           locale="en_GB"
-          maximumDate={MAX_DATE}
+          maximumDate={maxDATE}
           mode="date"
           onCancel={handlePicker}
           onConfirm={handleConfirm}
