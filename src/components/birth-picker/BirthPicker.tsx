@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Stack} from 'react-native-spacing-system';
 
@@ -15,7 +15,9 @@ type BirthPickerProps = {
 const BirthPicker = ({value, onChange}: BirthPickerProps) => {
   const [isDatePickerVisible, setIsDatePickerVisibility] = useState(false);
 
-  const handlePicker = () => setIsDatePickerVisibility(prev => !prev);
+  const handlePicker = useCallback(() => {
+    setIsDatePickerVisibility(prev => !prev);
+  }, []);
 
   const handleConfirm = (date: Date) => {
     onChange(dayjs(date).toISOString());
