@@ -29,7 +29,7 @@ const Home = () => {
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Templates')}
         style={styles.container}>
         <View style={styles.titleWrapper}>
           <Text style={styles.titleText}>{strings.templates}</Text>
