@@ -64,11 +64,11 @@ const Login = () => {
               <View>
                 <TextInput
                   error={Boolean(errors.username)}
-                  label="Email or Username"
+                  label={strings.username}
                   mode="outlined"
                   onChangeText={onChange}
                   style={{width: '100%'}}
-                  testID="loginEmail"
+                  testID="loginUsername"
                 />
                 <HelperText type="error" visible={Boolean(errors.username)}>
                   {errors.username?.message}
