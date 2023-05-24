@@ -37,7 +37,7 @@ const Templates = () => {
       setTemplates(data);
     }
 
-    getData();
+    getData().then();
   }, [firestorePrefix]);
 
   return (
