@@ -3,13 +3,20 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
-import {CreateWorkerRequest} from 'src/stores/types/CreateWorkerRequest';
+import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
 import {Worker} from 'src/stores/types/worker.type';
 import {v4 as uuid} from 'uuid';
+import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
+import {sprintf} from 'sprintf-js';
+
+const farmsCollection = 'farms';
+const usersCollection = '%susers';
+const workersCollection = '%sworkers';
+const harvestTemplatesCollection = '%sharvest_templates';
 
 export const getFarm = async (farm: FarmsEnum) => {
   const doc = await firestore()
-    .collection('farms')
+    .collection(farmsCollection)
     .doc(farm)
     .get()
     .catch(err => {
@@ -23,9 +30,34 @@ export const getFarm = async (farm: FarmsEnum) => {
   return doc.data() as Farm;
 };
 
-export const login = async (username: string, prefix: string) => {
+export const getTemplates = async (prefix: string) => {
+  const collection = sprintf(harvestTemplatesCollection, prefix);
   const snapshot = await firestore()
-    .collection(`${prefix}users`)
+    .collection(collection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  if (!snapshot.docs.length) {
+    throw new FirestoreServiceError('Templates not found.');
+  }
+
+  const templates: HarvestTemplate[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      templates.push(doc.data() as HarvestTemplate);
+    }
+  });
+
+  return templates;
+};
+
+export const login = async (username: string, prefix: string) => {
+  const collection = sprintf(usersCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
     .where('username', '==', username.trim())
     .get()
     .catch(err => {
@@ -44,9 +76,10 @@ export const createWorker = async (
   prefix: string,
 ) => {
   const worker = {...data, uuid: uuid()};
+  const collection = sprintf(workersCollection, prefix);
 
   await firestore()
-    .collection(`${prefix}workers`)
+    .collection(collection)
     .doc(uuid())
     .set(worker)
     .catch(err => {
@@ -57,8 +90,9 @@ export const createWorker = async (
 };
 
 export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
-    .collection(`${prefix}workers`)
+    .collection(collection)
     .where('firstName', '==', data.firstName)
     .where('lastName', '==', data.lastName)
     .where('middleName', '==', data.middleName)

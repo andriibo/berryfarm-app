@@ -8,7 +8,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {AvoidSoftInputView} from 'react-native-avoid-softinput';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {CreateWorkerRequest} from 'src/stores/types/CreateWorkerRequest';
+import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
 import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
