@@ -50,6 +50,7 @@ const CreateWorker = () => {
           await createWorker(data, firestorePrefix);
         }
       } catch (error: any) {
+        console.log(error);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
         }

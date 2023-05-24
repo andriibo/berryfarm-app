@@ -5,7 +5,7 @@ import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
 import {CreateWorkerRequest} from 'src/stores/types/CreateWorkerRequest';
 import {Worker} from 'src/stores/types/worker.type';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 export const getFarm = async (farm: FarmsEnum) => {
   const doc = await firestore()
@@ -43,11 +43,11 @@ export const createWorker = async (
   data: CreateWorkerRequest,
   prefix: string,
 ) => {
-  const worker = {...data, uuid: uuidv4()};
+  const worker = {...data, uuid: uuid()};
 
   await firestore()
     .collection(`${prefix}workers`)
-    .doc(uuidv4())
+    .doc(uuid())
     .set(worker)
     .catch(err => {
       throw new FirestoreServiceError(err);
