@@ -29,5 +29,6 @@ export const strings = new LocalizedStrings({
     scanCode: 'Сканировать код',
     workerRegistered: 'Этот работник уже зарегистрирован в системе.',
     goToGiveQrCode: 'Перейти к выдаче QR кода',
+    items: 'шт.',
   },
 });

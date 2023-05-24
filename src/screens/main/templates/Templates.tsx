@@ -6,6 +6,7 @@ import styles from 'src/screens/main/templates/styles';
 import {getTemplates} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
+import {strings} from 'src/locales/locales';
 
 const Item = ({template}: {template: HarvestTemplate}) => (
   <TouchableOpacity onPress={() => {}} style={styles.container}>
@@ -18,7 +19,9 @@ const Item = ({template}: {template: HarvestTemplate}) => (
     </View>
     <View style={styles.titleWrapper}>
       <Text variant="titleLarge">{template.harvestPackage.title}</Text>
-      <Text variant="titleLarge">{template.qty} штук</Text>
+      <Text variant="titleLarge">
+        {template.qty} {strings.items}
+      </Text>
     </View>
   </TouchableOpacity>
 );
