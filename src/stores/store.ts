@@ -27,7 +27,6 @@ export const persistor = persistStore(store);
 setupListeners(store.dispatch);
 
 export const callLogOut = async () => {
-  console.log(22);
   await persistor.purge();
   await persistConfig.storage.clear();
   store.dispatch(cleanUser());
