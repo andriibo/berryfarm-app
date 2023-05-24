@@ -13,22 +13,22 @@ export const validation = {
     .required(),
   createWorker: yup
     .object({
-      firstname: yup
+      firstName: yup
         .string()
         .required(errorMessages.required)
         .min(1)
-        .max(20, errorMessages.firstname),
-      lastname: yup
+        .max(20, errorMessages.firstName),
+      lastName: yup
         .string()
         .required(errorMessages.required)
         .min(1)
-        .max(20, errorMessages.lastname),
-      surname: yup
+        .max(20, errorMessages.lastName),
+      middleName: yup
         .string()
         .required(errorMessages.required)
         .min(1)
-        .max(20, errorMessages.surname),
-      dob: yup.string().required(errorMessages.required),
+        .max(20, errorMessages.middleName),
+      birthDate: yup.string().required(errorMessages.required),
     })
     .required(),
 };
