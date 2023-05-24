@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import {HelperText, Button, TextInput} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
-import {PostSignInRequest} from 'src/stores/types/PostSignInRequest';
+import {SignInRequest} from 'src/stores/requests/sign-in.request';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
@@ -25,7 +25,7 @@ const Login = () => {
     control,
     handleSubmit,
     formState: {errors, isDirty, isValid},
-  } = useForm<PostSignInRequest>({
+  } = useForm<SignInRequest>({
     defaultValues: {...user},
     mode: 'onChange',
     resolver: yupResolver(validation.login),

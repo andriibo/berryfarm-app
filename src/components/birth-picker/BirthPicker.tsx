@@ -33,6 +33,7 @@ const BirthPicker = ({value, onChange}: BirthPickerProps) => {
       />
       {isDatePickerVisible && (
         <DateTimePickerModal
+          display="inline"
           isVisible={isDatePickerVisible}
           locale="en_GB"
           maximumDate={maxDATE}
