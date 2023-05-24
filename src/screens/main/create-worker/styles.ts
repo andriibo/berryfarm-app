@@ -17,4 +17,12 @@ export default StyleSheet.create({
     width: '90%',
     textAlign: 'center',
   },
+  btn: {
+    width: '70%',
+    marginBottom: 25,
+  },
+  link: {
+    textDecorationLine: 'underline',
+    marginBottom: 15,
+  },
 });

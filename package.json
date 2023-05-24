@@ -30,6 +30,7 @@
     "react-native-avoid-softinput": "^3.1.5",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-get-random-values": "^1.9.0",
     "react-native-localization": "^2.3.1",
     "react-native-modal-datetime-picker": "^15.0.1",
     "react-native-paper": "^5.7.2",
@@ -42,6 +43,7 @@
     "react-router-dom": "^6.11.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.10",
+    "uuid": "^9.0.0",
     "yup": "^1.1.1"
   },
   "devDependencies": {

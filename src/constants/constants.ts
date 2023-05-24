@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 export const errorMessages = {
   required: strings.fieldIsRequired,
   username: strings.maxUsernameCharacters,
-  firstname: strings.maxFirstnameCharacters,
-  lastname: strings.maxLastnameCharacters,
-  surname: strings.maxSurnameCharacters,
+  firstName: strings.maxFirstNameCharacters,
+  lastName: strings.maxLastNameCharacters,
+  middleName: strings.maxMiddleNameCharacters,
 } as const;
 
 export const isIOS = Platform.OS === 'ios';
