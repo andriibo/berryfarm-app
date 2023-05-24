@@ -7,7 +7,8 @@ export default StyleSheet.create({
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
   titleWrapper: {
     margin: 10,
