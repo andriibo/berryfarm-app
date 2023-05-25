@@ -10,6 +10,7 @@ export type DrawerStackParamList = {
   Home: undefined;
   CreateWorker: undefined;
   GiveQrCode: undefined;
+  Templates: undefined;
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
@@ -40,7 +41,11 @@ const DrawerStack = () => {
       <DrawerComponent.Screen
         component={Screens.Home}
         name="Home"
-        options={{...options, drawerLabel: strings.templates, title: farmName}}
+        options={{
+          ...options,
+          drawerItemStyle: {display: 'none'},
+          title: farmName,
+        }}
       />
       <DrawerComponent.Screen
         component={Screens.CreateWorker}
@@ -51,6 +56,11 @@ const DrawerStack = () => {
         component={Screens.GiveQrCode}
         name="GiveQrCode"
         options={{...options, title: strings.giveQrCode}}
+      />
+      <DrawerComponent.Screen
+        component={Screens.Templates}
+        name="Templates"
+        options={{...options, title: strings.templates}}
       />
     </DrawerComponent.Navigator>
   );

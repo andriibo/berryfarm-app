@@ -3,6 +3,7 @@ import {ChooseFarm} from 'src/screens/auth/choose-farm';
 import {Home} from 'src/screens/main/home';
 import {CreateWorker} from 'src/screens/main/create-worker';
 import {GiveQrCode} from 'src/screens/main/give-qr-code';
+import {Templates} from 'src/screens/main/templates';
 
 export const Screens = {
   ChooseFarm,
@@ -10,4 +11,5 @@ export const Screens = {
   Home,
   CreateWorker,
   GiveQrCode,
+  Templates,
 };
