@@ -15,6 +15,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A9F5D225E82964809323813 /* libPods-mobile-mobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AA0FEFC7E8D1AB51CFBAD4C /* libPods-mobile-mobileTests.a */; };
 		CCD152604FA3468AAE6CCBF8 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9856A474AA7F4BA09917157D /* logo.png */; };
+		E6476D232A1F4AE9003F7B70 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = E6476D222A1F4AE9003F7B70 /* Fonts */; };
 		E6B901042A194302005B89C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6B901032A194302005B89C1 /* GoogleService-Info.plist */; };
 		F6EEDFAC61D241BB8D95E31E /* logo_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D9EC74F6D6374FE2AE5661FC /* logo_white.png */; };
 /* End PBXBuildFile section */
@@ -48,6 +49,7 @@
 		CA17D35E2EF185163B96864D /* libPods-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A8934E2A8F4831FBA50843 /* Pods-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobile.release.xcconfig"; path = "Target Support Files/Pods-mobile/Pods-mobile.release.xcconfig"; sourceTree = "<group>"; };
 		D9EC74F6D6374FE2AE5661FC /* logo_white.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = logo_white.png; path = ../src/assets/images/logo_white.png; sourceTree = "<group>"; };
+		E6476D222A1F4AE9003F7B70 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
 		E6B901032A194302005B89C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -92,6 +94,7 @@
 		13B07FAE1A68108700A75B9A /* mobile */ = {
 			isa = PBXGroup;
 			children = (
+				E6476D222A1F4AE9003F7B70 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -263,6 +266,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E6B901042A194302005B89C1 /* GoogleService-Info.plist in Resources */,
+				E6476D232A1F4AE9003F7B70 /* Fonts in Resources */,
 				F6EEDFAC61D241BB8D95E31E /* logo_white.png in Resources */,
 				CCD152604FA3468AAE6CCBF8 /* logo.png in Resources */,
 			);
