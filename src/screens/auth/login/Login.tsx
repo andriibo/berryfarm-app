@@ -10,7 +10,6 @@ import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {login} from 'src/stores/services/firestore.service';
-import {AvoidSoftInputView} from 'react-native-avoid-softinput';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {setUser, useFarm, useUser} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
@@ -57,27 +56,25 @@ const Login = () => {
           source={require('src/assets/images/logo.png')}
           style={styles.image}
         />
-        <AvoidSoftInputView avoidOffset={50} style={styles.wrapper}>
-          <Controller
-            control={control}
-            name="username"
-            render={({field: {onChange}}) => (
-              <View>
-                <TextInput
-                  error={Boolean(errors.username)}
-                  label={strings.username}
-                  mode="outlined"
-                  onChangeText={onChange}
-                  style={{width: '100%'}}
-                  testID="loginUsername"
-                />
-                <HelperText type="error" visible={Boolean(errors.username)}>
-                  {errors.username?.message}
-                </HelperText>
-              </View>
-            )}
-          />
-        </AvoidSoftInputView>
+        <Controller
+          control={control}
+          name="username"
+          render={({field: {onChange}}) => (
+            <View style={styles.input}>
+              <TextInput
+                error={Boolean(errors.username)}
+                label={strings.username}
+                mode="outlined"
+                onChangeText={onChange}
+                style={{width: '100%'}}
+                testID="loginUsername"
+              />
+              <HelperText type="error" visible={Boolean(errors.username)}>
+                {errors.username?.message}
+              </HelperText>
+            </View>
+          )}
+        />
         <Button
           disabled={!isDirty || !isValid}
           mode="contained"

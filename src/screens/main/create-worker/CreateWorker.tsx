@@ -5,7 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import styles from 'src/screens/main/create-worker/styles';
 import {Controller, useForm} from 'react-hook-form';
-import {AvoidSoftInputView} from 'react-native-avoid-softinput';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
@@ -77,7 +76,7 @@ const CreateWorker = () => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
-        <AvoidSoftInputView avoidOffset={50} style={styles.wrapper}>
+        <View style={styles.wrapper}>
           <View>
             <Text variant="titleMedium">{strings.worker}</Text>
             <Controller
@@ -186,7 +185,7 @@ const CreateWorker = () => {
               {strings.scanQrCode}
             </Button>
           </View>
-        </AvoidSoftInputView>
+        </View>
       </View>
     </SafeAreaView>
   );
