@@ -71,6 +71,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-    <string>Your message to user when the camera is accessed for the first time</string>
+    <string>We need to use the camera to scan QR-code</string>
 </dict>
 </plist>
