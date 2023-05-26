@@ -27,7 +27,6 @@ export const strings = new LocalizedStrings({
     maxMiddleNameCharacters:
       'Максимальное количество символов для отчества 20.',
     scanQrCode: 'Сканировать код',
-    workerRegistered: 'Этот работник уже зарегистрирован в системе.',
     goToGiveQrCode: 'Перейти к выдаче QR кода',
     items: 'шт.',
   },
