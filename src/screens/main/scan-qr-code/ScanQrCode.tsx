@@ -15,7 +15,7 @@ const ScanQrCode = () => {
     <QRCodeScanner
       bottomContent={
         <TouchableOpacity style={styles.buttonTouchable}>
-          <Text style={styles.buttonText}>OK. Got it!</Text>
+          <Text style={styles.buttonText}>OK!</Text>
         </TouchableOpacity>
       }
       flashMode={RNCamera.Constants.FlashMode.torch}
