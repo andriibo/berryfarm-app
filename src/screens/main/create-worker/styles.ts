@@ -21,8 +21,4 @@ export default StyleSheet.create({
     width: '70%',
     marginBottom: 25,
   },
-  link: {
-    textDecorationLine: 'underline',
-    marginBottom: 15,
-  },
 });

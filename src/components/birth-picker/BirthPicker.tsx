@@ -20,7 +20,7 @@ const BirthPicker = ({value, onChange}: BirthPickerProps) => {
   }, []);
 
   const handleConfirm = (date: Date) => {
-    onChange(dayjs(date).toISOString());
+    onChange(dayjs(date).format('YYYY-MM-DD'));
 
     setIsDatePickerVisibility(false);
   };

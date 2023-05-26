@@ -24,7 +24,7 @@ export const AuthStack = () => {
       <AuthStackComponent.Screen
         component={Screens.ChooseFarm}
         name="ChooseFarm"
-        options={{...options, header: () => null}}
+        options={{...options, headerShown: false}}
       />
       <AuthStackComponent.Screen
         component={Screens.Login}

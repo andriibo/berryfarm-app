@@ -22,10 +22,10 @@ const CreateWorker = () => {
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [errorMessage, setError] = useState('');
-  const [workerExist, setWorkerExist] = useState(false);
   const {
     control,
     handleSubmit,
+    reset,
     formState: {errors, isDirty, isValid},
   } = useForm<CreateWorkerRequest>({
     defaultValues: {
@@ -44,10 +44,12 @@ const CreateWorker = () => {
       try {
         const result = await findWorker(data, firestorePrefix);
 
-        setWorkerExist(!!result);
         if (!result) {
           await createWorker(data, firestorePrefix);
         }
+
+        reset();
+        navigation.navigate('ScanQrCode');
       } catch (error: any) {
         console.log(error);
         if (error instanceof FirestoreServiceError) {
@@ -55,7 +57,7 @@ const CreateWorker = () => {
         }
       }
     },
-    [firestorePrefix],
+    [firestorePrefix, navigation, reset],
   );
 
   return (
@@ -68,7 +70,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="firstName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.firstName)}
@@ -77,6 +79,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerFirstName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.firstName)}>
                     {errors.firstName?.message}
@@ -87,7 +90,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="lastName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.lastName)}
@@ -96,6 +99,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerLastName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.lastName)}>
                     {errors.lastName?.message}
@@ -106,7 +110,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="middleName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.middleName)}
@@ -115,6 +119,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerMiddleName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.middleName)}>
                     {errors.middleName?.message}
@@ -134,26 +139,13 @@ const CreateWorker = () => {
             />
           </View>
           <View style={{alignItems: 'center'}}>
-            {workerExist && (
-              <Text style={{marginBottom: 15}} variant="titleMedium">
-                {strings.workerRegistered}
-              </Text>
-            )}
-            {workerExist && (
-              <Text
-                onPress={() => navigation.navigate('GiveQrCode')}
-                style={styles.link}
-                variant="titleMedium">
-                {strings.goToGiveQrCode}
-              </Text>
-            )}
             <Button
               disabled={!isDirty || !isValid}
               icon="qrcode"
               mode="contained"
               onPress={handleSubmit(handleCreateWorker)}
               style={[styles.btn]}>
-              {strings.scanCode}
+              {strings.scanQrCode}
             </Button>
           </View>
         </View>

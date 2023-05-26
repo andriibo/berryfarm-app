@@ -11,6 +11,7 @@ export type DrawerStackParamList = {
   CreateWorker: undefined;
   GiveQrCode: undefined;
   Templates: undefined;
+  ScanQrCode: undefined;
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
@@ -45,6 +46,15 @@ const DrawerStack = () => {
           ...options,
           drawerItemStyle: {display: 'none'},
           title: farmName,
+        }}
+      />
+      <DrawerComponent.Screen
+        component={Screens.ScanQrCode}
+        name="ScanQrCode"
+        options={{
+          ...options,
+          drawerItemStyle: {display: 'none'},
+          title: '',
         }}
       />
       <DrawerComponent.Screen
