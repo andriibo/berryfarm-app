@@ -70,7 +70,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="firstName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.firstName)}
@@ -79,6 +79,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerFirstName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.firstName)}>
                     {errors.firstName?.message}
@@ -89,7 +90,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="lastName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.lastName)}
@@ -98,6 +99,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerLastName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.lastName)}>
                     {errors.lastName?.message}
@@ -108,7 +110,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="middleName"
-              render={({field: {onChange}}) => (
+              render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
                     error={Boolean(errors.middleName)}
@@ -117,6 +119,7 @@ const CreateWorker = () => {
                     onChangeText={onChange}
                     style={{width: '100%'}}
                     testID="createWorkerMiddleName"
+                    value={value}
                   />
                   <HelperText type="error" visible={Boolean(errors.middleName)}>
                     {errors.middleName?.message}
