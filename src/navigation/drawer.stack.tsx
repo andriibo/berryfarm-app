@@ -54,7 +54,7 @@ const DrawerStack = () => {
         options={{
           ...options,
           drawerItemStyle: {display: 'none'},
-          title: strings.scanQrCode,
+          title: '',
         }}
       />
       <DrawerComponent.Screen
