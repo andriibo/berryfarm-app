@@ -3,7 +3,7 @@ import {isIOS, systemAlert} from 'src/constants/constants';
 import {PermissionsAndroid} from 'react-native';
 
 const message =
-  'To connect to a medical device, we need access to your Bluetooth. Go to settings to enable the Bluetooth permission.';
+  'To connect to a scales, we need access to your Bluetooth. Go to settings to enable the Bluetooth permission.';
 
 export async function requestBluetoothPermission() {
   try {
