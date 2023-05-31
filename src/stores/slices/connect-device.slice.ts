@@ -5,8 +5,6 @@ import {RootState} from '../store';
 import {useAppSelector} from 'src/stores/hooks/hooks';
 
 interface IConnectDevice {
-  isInternetConnected: boolean;
-  isEnabledScreens: boolean;
   isSearching?: boolean;
   isDeviceConnected?: boolean;
   activeDeviceId?: string | null;
@@ -15,8 +13,6 @@ interface IConnectDevice {
 }
 
 const initialState: IConnectDevice = {
-  isInternetConnected: true,
-  isEnabledScreens: false,
   isSearching: true,
   isDeviceConnected: false,
   activeDeviceId: null,
@@ -28,9 +24,6 @@ const connectDeviceSlice = createSlice({
   name: 'ConnectDevice',
   initialState,
   reducers: {
-    setIsInternetConnection: (state, action: PayloadAction<boolean>) => {
-      state.isInternetConnected = action.payload;
-    },
     setIsSearching: (state, {payload}: PayloadAction<boolean>) => {
       state.isSearching = payload;
     },
@@ -49,8 +42,6 @@ const connectDeviceSlice = createSlice({
   },
 });
 
-export const selectIsInternetConnection = (state: RootState) =>
-  state.connectDevice.isInternetConnected;
 export const selectIsSearching = (state: RootState) =>
   state.connectDevice.isSearching;
 export const selectIsDeviceConnected = (state: RootState) =>
@@ -60,8 +51,6 @@ export const selectActiveDeviceId = (state: RootState) =>
 export const selectDevices = (state: RootState) => state.connectDevice.devices;
 export const selectConnectedDevices = (state: RootState) =>
   state.connectDevice.connectedDevices;
-export const useIsInternetConnected = () =>
-  useAppSelector(selectIsInternetConnection);
 export const useIsSearching = () => useAppSelector(selectIsSearching);
 export const useIsDeviceConnected = () =>
   useAppSelector(selectIsDeviceConnected);
@@ -77,6 +66,5 @@ export const {
     setActiveDeviceId,
     setDevices,
     setConnectedDevices,
-    setIsInternetConnection,
   },
 } = connectDeviceSlice;
