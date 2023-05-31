@@ -34,7 +34,7 @@ const Login = () => {
     async ({username}: FieldValues) => {
       setError('');
       try {
-        const data = await login(username, firestorePrefix);
+        const data = await login(username.toLowerCase(), firestorePrefix);
 
         dispatch(setUser(data));
       } catch (error: any) {

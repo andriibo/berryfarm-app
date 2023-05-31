@@ -89,7 +89,10 @@ export const createWorker = async (
   return worker as Worker;
 };
 
-export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
+export const getWorkerByParams = async (
+  data: CreateWorkerRequest,
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
@@ -107,4 +110,31 @@ export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
   }
 
   return null;
+};
+
+export const getWorkersByName = async (name: string, prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  const workers: Worker[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      workers.push(doc.data() as Worker);
+    }
+  });
+
+  return workers.filter(worker => {
+    return (
+      worker.firstName?.toLowerCase().includes(name) ||
+      worker.lastName?.toLowerCase().includes(name) ||
+      worker.middleName?.toLowerCase().includes(name)
+    );
+  });
 };

@@ -13,7 +13,10 @@ import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
-import {createWorker, findWorker} from 'src/stores/services/firestore.service';
+import {
+  createWorker,
+  getWorkerByParams,
+} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 
@@ -42,7 +45,7 @@ const CreateWorker = () => {
     async (data: CreateWorkerRequest) => {
       setError('');
       try {
-        const result = await findWorker(data, firestorePrefix);
+        const result = await getWorkerByParams(data, firestorePrefix);
 
         if (!result) {
           await createWorker(data, firestorePrefix);
