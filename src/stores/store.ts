@@ -5,6 +5,7 @@ import {persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import {authReducer, cleanUser} from './slices/auth.slice';
+import {connectDeviceReducer} from 'src/stores/slices/connect-device.slice';
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
+  connectDevice: connectDeviceReducer,
 });
 
 export const store = configureStore({

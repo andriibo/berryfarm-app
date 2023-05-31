@@ -33,6 +33,8 @@
     "react-hook-form": "^7.43.9",
     "react-native": "0.71.8",
     "react-native-avoid-softinput": "^3.1.5",
+    "react-native-ble-manager": "^10.0.2",
+    "react-native-ble-plx": "^2.0.3",
     "react-native-camera": "^4.2.1",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
