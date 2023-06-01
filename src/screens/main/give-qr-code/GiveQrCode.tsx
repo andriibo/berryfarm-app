@@ -57,7 +57,7 @@ const GiveQrCode = () => {
     }, []),
   );
 
-  const handleFindWorker = useCallback(
+  const handleGetWorker = useCallback(
     async (name: string) => {
       setError('');
       setSearchQuery(name);
@@ -93,10 +93,10 @@ const GiveQrCode = () => {
           <Text variant="headlineSmall">{strings.worker}</Text>
           <View style={styles.wrapper}>
             <Searchbar
-              onChangeText={handleFindWorker}
+              onChangeText={handleGetWorker}
               placeholder={strings.firstName}
               style={styles.searchBar}
-              testID="findName"
+              testID="getName"
               value={searchQuery}
             />
             <Divider />
@@ -109,7 +109,7 @@ const GiveQrCode = () => {
             />
             {!workers.length && searchQuery && !canScanQrCode && (
               <Text style={styles.workerNotFound} variant="titleMedium">
-                Работник не найден
+                {strings.workerNotFound}
               </Text>
             )}
 
@@ -118,7 +118,7 @@ const GiveQrCode = () => {
                 onPress={() => navigation.navigate('CreateWorker')}
                 style={styles.linkCreateWorker}
                 variant="titleMedium">
-                + Зарегистрировать работника
+                + {strings.registerWorker}
               </Text>
             )}
           </View>

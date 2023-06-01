@@ -15,8 +15,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {
   createWorker,
-  findWorkerByParams,
-  findWorkerByUuid,
+  getWorkerByParams,
+  getWorkerByUuid,
 } from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
@@ -47,7 +47,7 @@ const CreateWorker = () => {
     async (data: CreateWorkerRequest) => {
       setError('');
       try {
-        const result = await findWorkerByParams(
+        const result = await getWorkerByParams(
           data.firstName,
           data.lastName,
           data.middleName,
@@ -59,7 +59,7 @@ const CreateWorker = () => {
           const workerUuid = uuid();
 
           await createWorker(workerUuid, data, firestorePrefix);
-          const worker = await findWorkerByUuid(workerUuid, firestorePrefix);
+          const worker = await getWorkerByUuid(workerUuid, firestorePrefix);
 
           console.log(worker);
         }

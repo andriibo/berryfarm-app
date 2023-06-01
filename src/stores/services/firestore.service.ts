@@ -1,4 +1,4 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
@@ -88,7 +88,7 @@ export const createWorker = async (uuid: string, data: any, prefix: string) => {
     });
 };
 
-export const findWorkerByParams = async (
+export const getWorkerByParams = async (
   firstName: string,
   lastName: string,
   middleName: string,
@@ -114,7 +114,7 @@ export const findWorkerByParams = async (
   return null;
 };
 
-export const findWorkerByUuid = async (uuid: string, prefix: string) => {
+export const getWorkerByUuid = async (uuid: string, prefix: string) => {
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
