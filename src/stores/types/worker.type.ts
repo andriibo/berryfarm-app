@@ -4,4 +4,6 @@ export type Worker = {
   lastName: string;
   middleName: string;
   birthDate: Date;
+  createdTimestamp: Date;
+  syncTimestamp: Date;
 };
