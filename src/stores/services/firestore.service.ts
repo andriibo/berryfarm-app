@@ -1,11 +1,9 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
-import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
 import {Worker} from 'src/stores/types/worker.type';
-import {v4 as uuid} from 'uuid';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 
@@ -71,32 +69,39 @@ export const login = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (
-  data: CreateWorkerRequest,
-  prefix: string,
-) => {
-  const worker = {...data, uuid: uuid()};
+export const createWorker = async (uuid: string, data: any, prefix: string) => {
+  const worker = {
+    ...data,
+    uuid,
+    syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    createdTimestamp: firebase.firestore.Timestamp.now(),
+  };
+
   const collection = sprintf(workersCollection, prefix);
 
   await firestore()
     .collection(collection)
-    .doc(uuid())
+    .doc(uuid)
     .set(worker)
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
-
-  return worker as Worker;
 };
 
-export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
+export const findWorker = async (
+  firstName: string,
+  lastName: string,
+  middleName: string,
+  birthDate: Date,
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
-    .where('firstName', '==', data.firstName)
-    .where('lastName', '==', data.lastName)
-    .where('middleName', '==', data.middleName)
-    .where('birthDate', '==', data.birthDate)
+    .where('firstName', '==', firstName)
+    .where('lastName', '==', lastName)
+    .where('middleName', '==', middleName)
+    .where('birthDate', '==', birthDate)
     .get()
     .catch(err => {
       throw new FirestoreServiceError(err);
@@ -107,4 +112,17 @@ export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
   }
 
   return null;
+};
+
+export const findWorkerByUuid = async (uuid: string, prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .doc(uuid)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  return snapshot.data() as Worker;
 };

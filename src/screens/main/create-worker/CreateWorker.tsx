@@ -13,9 +13,14 @@ import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
-import {createWorker, findWorker} from 'src/stores/services/firestore.service';
+import {
+  createWorker,
+  findWorker,
+  findWorkerByUuid,
+} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
+import {v4 as uuid} from 'uuid';
 
 const CreateWorker = () => {
   const navigation =
@@ -42,10 +47,21 @@ const CreateWorker = () => {
     async (data: CreateWorkerRequest) => {
       setError('');
       try {
-        const result = await findWorker(data, firestorePrefix);
+        const result = await findWorker(
+          data.firstName,
+          data.lastName,
+          data.middleName,
+          data.birthDate,
+          firestorePrefix,
+        );
 
         if (!result) {
-          await createWorker(data, firestorePrefix);
+          const workerUuid = uuid();
+
+          await createWorker(workerUuid, data, firestorePrefix);
+          const worker = await findWorkerByUuid(workerUuid, firestorePrefix);
+
+          console.log(worker);
         }
 
         reset();
