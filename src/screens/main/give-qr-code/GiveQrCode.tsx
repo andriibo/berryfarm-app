@@ -9,7 +9,7 @@ import {useFarm} from 'src/stores/slices/auth.slice';
 import {getWorkersByName} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/nativdee-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {Worker} from 'src/stores/types/worker.type';
 
