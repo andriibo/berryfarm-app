@@ -88,7 +88,7 @@ export const createWorker = async (uuid: string, data: any, prefix: string) => {
     });
 };
 
-export const findWorker = async (
+export const getWorkerByParams = async (
   firstName: string,
   lastName: string,
   middleName: string,
@@ -114,7 +114,7 @@ export const findWorker = async (
   return null;
 };
 
-export const findWorkerByUuid = async (uuid: string, prefix: string) => {
+export const getWorkerByUuid = async (uuid: string, prefix: string) => {
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
@@ -125,4 +125,31 @@ export const findWorkerByUuid = async (uuid: string, prefix: string) => {
     });
 
   return snapshot.data() as Worker;
+};
+
+export const getWorkersByName = async (name: string, prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  const workers: Worker[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      workers.push(doc.data() as Worker);
+    }
+  });
+
+  return workers.filter(worker => {
+    return (
+      worker.firstName?.toLowerCase().includes(name) ||
+      worker.lastName?.toLowerCase().includes(name) ||
+      worker.middleName?.toLowerCase().includes(name)
+    );
+  });
 };
