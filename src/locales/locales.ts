@@ -26,10 +26,13 @@ export const strings = new LocalizedStrings({
     maxLastNameCharacters: 'Максимальное количество символов для фамилии 20.',
     maxMiddleNameCharacters:
       'Максимальное количество символов для отчества 20.',
-    scanQrCode: 'Сканировать код',
+    scanQrCode: 'Сканировать QR код',
     goToGiveQrCode: 'Перейти к выдаче QR кода',
     items: 'шт.',
-    workerNotFound: 'Работник не найден',
+    workerNotFound: 'Работник не найден.',
     registerWorker: 'Зарегистрировать работника',
+    qrCodeNotFound: 'QR код не найден.',
+    qrCodeUsed: 'QR код уже используется.',
+    farmNotFound: 'Ферма не найдена.',
   },
 });

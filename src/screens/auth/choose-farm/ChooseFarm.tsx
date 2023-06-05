@@ -12,7 +12,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {getFarm} from 'src/stores/services/firestore.service';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setFarm} from 'src/stores/slices/auth.slice';
+import {setFarm} from 'src/stores/slices/farm.slice';
 import {Toast} from 'src/components/toast';
 import {FirestoreServiceError} from 'src/stores/errors';
 
@@ -31,9 +31,15 @@ const ChooseFarm = () => {
 
   const login = useCallback(async () => {
     try {
-      const data = await getFarm(selectedFarm as FarmsEnum);
+      const farm = await getFarm(selectedFarm as FarmsEnum);
 
-      dispatch(setFarm(data));
+      if (farm === null) {
+        setError(strings.farmNotFound);
+
+        return;
+      }
+
+      dispatch(setFarm(farm));
       navigation.navigate('Login');
     } catch (error: any) {
       if (error instanceof FirestoreServiceError) {

@@ -3,7 +3,7 @@ import React, {useCallback, useState} from 'react';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Stack} from 'react-native-spacing-system';
 
-import {showByFormat} from 'src/helpers/date-helper';
+import {showByFormat} from 'src/helpers/date.helper';
 import {DatePickerInput} from '../date-picker-input';
 import {maxDATE} from 'src/constants/constants';
 

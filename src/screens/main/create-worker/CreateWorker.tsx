@@ -7,7 +7,7 @@ import styles from 'src/screens/main/create-worker/styles';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
+import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
 import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
@@ -18,11 +18,14 @@ import {
   getWorkerByParams,
   getWorkerByUuid,
 } from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/auth.slice';
+import {useFarm} from 'src/stores/slices/farm.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {setWorker} from 'src/stores/slices/worker.slice';
 
 const CreateWorker = () => {
+  const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {firestorePrefix} = useFarm();
@@ -47,7 +50,7 @@ const CreateWorker = () => {
     async (data: CreateWorkerRequest) => {
       setError('');
       try {
-        const result = await getWorkerByParams(
+        let worker = await getWorkerByParams(
           data.firstName,
           data.lastName,
           data.middleName,
@@ -55,15 +58,19 @@ const CreateWorker = () => {
           firestorePrefix,
         );
 
-        if (!result) {
+        if (!worker) {
           const workerUuid = uuid();
 
           await createWorker(workerUuid, data, firestorePrefix);
-          const worker = await getWorkerByUuid(workerUuid, firestorePrefix);
+          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
+          if (worker === null) {
+            setError(strings.workerNotFound);
 
-          console.log(worker);
+            return;
+          }
         }
 
+        dispatch(setWorker(worker));
         reset();
         navigation.navigate('ScanQrCode');
       } catch (error: any) {
@@ -73,7 +80,7 @@ const CreateWorker = () => {
         }
       }
     },
-    [firestorePrefix, navigation, reset],
+    [dispatch, firestorePrefix, navigation, reset],
   );
 
   return (
