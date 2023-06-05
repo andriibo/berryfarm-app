@@ -5,6 +5,8 @@ import {persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import {authReducer, cleanUser} from './slices/auth.slice';
+import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
+import {cleanFarm, farmReducer} from 'src/stores/slices/farm.slice';
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +16,8 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
+  farm: farmReducer,
+  worker: workerReducer,
 });
 
 export const store = configureStore({
@@ -30,6 +34,8 @@ export const callLogOut = async () => {
   await persistor.purge();
   await persistConfig.storage.clear();
   store.dispatch(cleanUser());
+  store.dispatch(cleanFarm());
+  store.dispatch(cleanWorker());
 };
 
 /** Infers the `RootState` types from the store itself */

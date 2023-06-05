@@ -5,15 +5,16 @@ import FastImage from 'react-native-fast-image';
 import {HelperText, Button, TextInput} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
-import {SignInRequest} from 'src/stores/requests/sign-in.request';
+import {SignInRequest} from 'src/stores/requests/signIn.request';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {login} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
-import {setUser, useFarm, useUser} from 'src/stores/slices/auth.slice';
+import {setUser, useUser} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {Toast} from 'src/components/toast';
+import {useFarm} from 'src/stores/slices/farm.slice';
 
 const Login = () => {
   const dispatch = useAppDispatch();

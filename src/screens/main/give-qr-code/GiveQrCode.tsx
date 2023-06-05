@@ -5,37 +5,37 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/give-qr-code/styles';
 import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
-import {useFarm} from 'src/stores/slices/auth.slice';
+import {useFarm} from 'src/stores/slices/farm.slice';
 import {getWorkersByName} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {Worker} from 'src/stores/types/worker.type';
+import {getFullname} from 'src/helpers/worker.helper';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {setWorker} from 'src/stores/slices/worker.slice';
 
 const Item = ({
   handleSelectWorker,
   worker,
 }: {
-  handleSelectWorker: (name: string) => void;
+  handleSelectWorker: (worker: Worker) => void;
   worker: Worker;
 }) => {
-  const name = `${worker.firstName}${
-    worker.middleName ? ` ${worker.middleName}` : ''
-  } ${worker.lastName}`;
-
   return (
     <TouchableOpacity
-      onPress={() => handleSelectWorker(name)}
+      onPress={() => handleSelectWorker(worker)}
       style={styles.item}>
       <View style={styles.titleItem}>
-        <Text variant="titleMedium">{name}</Text>
+        <Text variant="titleMedium">{getFullname(worker)}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const GiveQrCode = () => {
+  const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const [workers, setWorkers] = useState<Array<Worker>>([]);
@@ -43,11 +43,15 @@ const GiveQrCode = () => {
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
-  const handleSelectWorker = useCallback((name: string) => {
-    setSearchQuery(name);
-    setCanScanQrCode(true);
-    setWorkers([]);
-  }, []);
+  const handleSelectWorker = useCallback(
+    (worker: Worker) => {
+      setSearchQuery(getFullname(worker));
+      setCanScanQrCode(true);
+      setWorkers([]);
+      dispatch(setWorker(worker));
+    },
+    [dispatch],
+  );
 
   useFocusEffect(
     useCallback(() => {

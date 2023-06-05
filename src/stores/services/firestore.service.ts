@@ -6,14 +6,16 @@ import {Farm} from 'src/stores/types/farm.type';
 import {Worker} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
+import {QrCode} from 'src/stores/types/qrCode.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
 const workersCollection = '%sworkers';
 const harvestTemplatesCollection = '%sharvest_templates';
+const qrCodesCollection = '%sqr_codes';
 
 export const getFarm = async (farm: FarmsEnum) => {
-  const doc = await firestore()
+  const snapshot = await firestore()
     .collection(farmsCollection)
     .doc(farm)
     .get()
@@ -21,11 +23,7 @@ export const getFarm = async (farm: FarmsEnum) => {
       throw new FirestoreServiceError(err);
     });
 
-  if (doc.data() === undefined) {
-    throw new FirestoreServiceError("Farm doesn't exist.");
-  }
-
-  return doc.data() as Farm;
+  return snapshot.data() ? (snapshot.data() as Farm) : null;
 };
 
 export const getTemplates = async (prefix: string) => {
@@ -124,7 +122,36 @@ export const getWorkerByUuid = async (uuid: string, prefix: string) => {
       throw new FirestoreServiceError(err);
     });
 
-  return snapshot.data() as Worker;
+  return snapshot.data() ? (snapshot.data() as Worker) : null;
+};
+
+export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .doc(uuid)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  return snapshot.data() ? (snapshot.data() as QrCode) : null;
+};
+
+export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+
+  await firestore()
+    .collection(collection)
+    .doc(qrCode.uuid)
+    .set({
+      ...qrCode,
+      connectedTimestamp: firebase.firestore.Timestamp.now(),
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
 };
 
 export const getWorkersByName = async (name: string, prefix: string) => {

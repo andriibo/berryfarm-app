@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/templates/styles';
 import {getTemplates} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/auth.slice';
+import {useFarm} from 'src/stores/slices/farm.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
 
