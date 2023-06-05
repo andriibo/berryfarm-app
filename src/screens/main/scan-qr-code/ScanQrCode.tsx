@@ -50,7 +50,7 @@ const ScanQrCode = () => {
       }
 
       if (qrCode?.workerUuid === worker.uuid) {
-        setError(strings.qrCodeUsed);
+        setError(strings.qrCodeGiven);
 
         return;
       }

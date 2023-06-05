@@ -31,8 +31,8 @@ export const strings = new LocalizedStrings({
     items: 'шт.',
     workerNotFound: 'Работник не найден.',
     registerWorker: 'Зарегистрировать работника',
-    qrCodeNotFound: 'QR код не найден.',
-    qrCodeUsed: 'QR код уже используется.',
+    qrCodeNotFound: 'QR код не принабледит системе.',
+    qrCodeGiven: 'QR код уже выдан.',
     farmNotFound: 'Ферма не найдена.',
   },
 });
