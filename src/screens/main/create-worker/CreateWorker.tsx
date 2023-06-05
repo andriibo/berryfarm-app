@@ -72,7 +72,7 @@ const CreateWorker = () => {
 
         dispatch(setWorker(worker));
         reset();
-        navigation.navigate('ScanQrCode');
+        navigation.navigate('ScanQrCode', {scenario: 'CreateWorker'});
       } catch (error: any) {
         console.log(error);
         if (error instanceof FirestoreServiceError) {

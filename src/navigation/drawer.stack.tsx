@@ -6,12 +6,15 @@ import {strings} from 'src/locales/locales';
 import {Screens} from 'src/navigation/screens';
 import {Logout} from 'src/screens/main/logout';
 
+type ScenarioType = 'CreateWorker' | 'GiveQrCode';
+
 export type DrawerStackParamList = {
   Home: undefined;
   CreateWorker: undefined;
   GiveQrCode: undefined;
   Templates: undefined;
-  ScanQrCode: undefined;
+  ScanQrCode: {scenario: ScenarioType};
+  SuccessPage: {scenario: ScenarioType};
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
@@ -71,6 +74,11 @@ const DrawerStack = () => {
         component={Screens.Templates}
         name="Templates"
         options={{...options, title: strings.templates}}
+      />
+      <DrawerComponent.Screen
+        component={Screens.SuccessPage}
+        name="SuccessPage"
+        options={{...options, drawerItemStyle: {display: 'none'}}}
       />
     </DrawerComponent.Navigator>
   );

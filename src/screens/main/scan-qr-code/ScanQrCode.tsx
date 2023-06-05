@@ -9,7 +9,7 @@ import {
   updateQrCode,
 } from 'src/stores/services/firestore.service';
 import {Toast} from 'src/components/toast';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {useWorker} from 'src/stores/slices/worker.slice';
@@ -24,10 +24,13 @@ const ScanQrCode = () => {
   const {firestorePrefix} = useFarm();
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const {
+    params: {scenario},
+  } = useRoute<RouteProp<DrawerStackParamList, 'ScanQrCode'>>();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (
+      headerLeft: () => (
         <IconButton
           icon="arrow-left"
           iconColor={colors.white}
@@ -63,7 +66,7 @@ const ScanQrCode = () => {
       }
     }
 
-    navigation.navigate('Home');
+    navigation.navigate('SuccessPage', {scenario});
   };
 
   return (

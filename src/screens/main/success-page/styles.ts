@@ -6,7 +6,7 @@ export const width = Dimensions.get('window').width / 3 - 20;
 export default StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    margin: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -15,26 +15,20 @@ export default StyleSheet.create({
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    width,
+    width: '50%',
     margin: 10,
-    height: '80%',
-  },
-  titleWrapper: {
-    flex: 1,
-    flexDirection: 'column',
+    height: '40%',
     alignItems: 'center',
-    marginHorizontal: 10,
-    position: 'absolute',
-    bottom: 0,
     justifyContent: 'center',
-    alignSelf: 'center',
-    textAlign: 'center',
   },
   titleText: {
-    paddingBottom: 25,
     color: colors.black,
     fontWeight: 'bold',
     fontSize: 20,
     flexShrink: 1,
+  },
+  btn: {
+    width: Dimensions.get('window').width - 100,
+    marginBottom: 25,
   },
 });

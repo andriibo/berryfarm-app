@@ -132,7 +132,9 @@ const GiveQrCode = () => {
           disabled={!canScanQrCode}
           icon="qrcode"
           mode="contained"
-          onPress={() => navigation.navigate('ScanQrCode')}
+          onPress={() =>
+            navigation.navigate('ScanQrCode', {scenario: 'GiveQrCode'})
+          }
           style={[styles.btn]}>
           {strings.scanQrCode}
         </Button>
