@@ -1,111 +1,53 @@
-diff --git a/node_modules/react-native/Libraries/Core/ReactNativeVersion.js b/node_modules/react-native/Libraries/Core/ReactNativeVersion.js
-index d581093..79bc3b6 100644
---- a/node_modules/react-native/Libraries/Core/ReactNativeVersion.js
-+++ b/node_modules/react-native/Libraries/Core/ReactNativeVersion.js
-@@ -12,6 +12,6 @@
- exports.version = {
-   major: 0,
-   minor: 71,
--  patch: 7,
-+  patch: 8,
-   prerelease: null,
+diff --git a/node_modules/react-native/index.js b/node_modules/react-native/index.js
+index f556fa3..7edac4f 100644
+--- a/node_modules/react-native/index.js
++++ b/node_modules/react-native/index.js
+@@ -411,44 +411,16 @@ module.exports = {
+   },
+   // Deprecated Prop Types
+   get ColorPropType(): $FlowFixMe {
+-    console.error(
+-      'ColorPropType will be removed from React Native, along with all ' +
+-        'other PropTypes. We recommend that you migrate away from PropTypes ' +
+-        'and switch to a type system like TypeScript. If you need to ' +
+-        'continue using ColorPropType, migrate to the ' +
+-        "'deprecated-react-native-prop-types' package.",
+-    );
+-    return require('deprecated-react-native-prop-types').ColorPropType;
++    return require("deprecated-react-native-prop-types").ColorPropType;
+   },
+   get EdgeInsetsPropType(): $FlowFixMe {
+-    console.error(
+-      'EdgeInsetsPropType will be removed from React Native, along with all ' +
+-        'other PropTypes. We recommend that you migrate away from PropTypes ' +
+-        'and switch to a type system like TypeScript. If you need to ' +
+-        'continue using EdgeInsetsPropType, migrate to the ' +
+-        "'deprecated-react-native-prop-types' package.",
+-    );
+-    return require('deprecated-react-native-prop-types').EdgeInsetsPropType;
++    return require("deprecated-react-native-prop-types").EdgeInsetsPropType;
+   },
+   get PointPropType(): $FlowFixMe {
+-    console.error(
+-      'PointPropType will be removed from React Native, along with all ' +
+-        'other PropTypes. We recommend that you migrate away from PropTypes ' +
+-        'and switch to a type system like TypeScript. If you need to ' +
+-        'continue using PointPropType, migrate to the ' +
+-        "'deprecated-react-native-prop-types' package.",
+-    );
+-    return require('deprecated-react-native-prop-types').PointPropType;
++    return require("deprecated-react-native-prop-types").PointPropType;
+   },
+   get ViewPropTypes(): $FlowFixMe {
+-    console.error(
+-      'ViewPropTypes will be removed from React Native, along with all ' +
+-        'other PropTypes. We recommend that you migrate away from PropTypes ' +
+-        'and switch to a type system like TypeScript. If you need to ' +
+-        'continue using ViewPropTypes, migrate to the ' +
+-        "'deprecated-react-native-prop-types' package.",
+-    );
+-    return require('deprecated-react-native-prop-types').ViewPropTypes;
++    return require("deprecated-react-native-prop-types").ViewPropTypes;
+   },
  };
-diff --git a/node_modules/react-native/Libraries/Text/TextInput/RCTBackedTextInputDelegateAdapter.m b/node_modules/react-native/Libraries/Text/TextInput/RCTBackedTextInputDelegateAdapter.m
-index 0542362..1c8f8e0 100644
---- a/node_modules/react-native/Libraries/Text/TextInput/RCTBackedTextInputDelegateAdapter.m
-+++ b/node_modules/react-native/Libraries/Text/TextInput/RCTBackedTextInputDelegateAdapter.m
-@@ -256,21 +256,21 @@ static void *TextFieldSelectionObservingContext = &TextFieldSelectionObservingCo
  
- - (void)textViewDidChange:(__unused UITextView *)textView
- {
--  if (_ignoreNextTextInputCall && [_lastStringStateWasUpdatedWith isEqual:_backedTextInputView.attributedText]) {
-+  if (_ignoreNextTextInputCall) {
-     _ignoreNextTextInputCall = NO;
-     return;
-   }
--  _lastStringStateWasUpdatedWith = _backedTextInputView.attributedText;
-   _textDidChangeIsComing = NO;
-   [_backedTextInputView.textInputDelegate textInputDidChange];
- }
- 
- - (void)textViewDidChangeSelection:(__unused UITextView *)textView
- {
--  if (![_lastStringStateWasUpdatedWith isEqual:_backedTextInputView.attributedText]) {
-+  if (_lastStringStateWasUpdatedWith && ![_lastStringStateWasUpdatedWith isEqual:_backedTextInputView.attributedText]) {
-     [self textViewDidChange:_backedTextInputView];
-     _ignoreNextTextInputCall = YES;
-   }
-+  _lastStringStateWasUpdatedWith = _backedTextInputView.attributedText;
-   [self textViewProbablyDidChangeSelection];
- }
- 
-diff --git a/node_modules/react-native/React/Base/RCTVersion.m b/node_modules/react-native/React/Base/RCTVersion.m
-index 429d63e..7b54aec 100644
---- a/node_modules/react-native/React/Base/RCTVersion.m
-+++ b/node_modules/react-native/React/Base/RCTVersion.m
-@@ -23,7 +23,7 @@ NSDictionary* RCTGetReactNativeVersion(void)
-     __rnVersion = @{
-                   RCTVersionMajor: @(0),
-                   RCTVersionMinor: @(71),
--                  RCTVersionPatch: @(7),
-+                  RCTVersionPatch: @(8),
-                   RCTVersionPrerelease: [NSNull null],
-                   };
-   });
-diff --git a/node_modules/react-native/ReactAndroid/gradle.properties b/node_modules/react-native/ReactAndroid/gradle.properties
-index 262c854..dc30aee 100644
---- a/node_modules/react-native/ReactAndroid/gradle.properties
-+++ b/node_modules/react-native/ReactAndroid/gradle.properties
-@@ -1,4 +1,4 @@
--VERSION_NAME=0.71.7
-+VERSION_NAME=0.71.8
- GROUP=com.facebook.react
- 
- # JVM Versions
-diff --git a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.java b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.java
-index 62b07fa..4e01c52 100644
---- a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.java
-+++ b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.java
-@@ -17,6 +17,6 @@ public class ReactNativeVersion {
-   public static final Map<String, Object> VERSION = MapBuilder.<String, Object>of(
-       "major", 0,
-       "minor", 71,
--      "patch", 7,
-+      "patch", 8,
-       "prerelease", null);
- }
-diff --git a/node_modules/react-native/ReactCommon/cxxreact/ReactNativeVersion.h b/node_modules/react-native/ReactCommon/cxxreact/ReactNativeVersion.h
-index 47d2254..2aa1b58 100644
---- a/node_modules/react-native/ReactCommon/cxxreact/ReactNativeVersion.h
-+++ b/node_modules/react-native/ReactCommon/cxxreact/ReactNativeVersion.h
-@@ -17,7 +17,7 @@ namespace facebook::react {
- constexpr struct {
-   int32_t Major = 0;
-   int32_t Minor = 71;
--  int32_t Patch = 7;
-+  int32_t Patch = 8;
-   std::string_view Prerelease = "";
- } ReactNativeVersion;
- 
-diff --git a/node_modules/react-native/sdks/hermesc/linux64-bin/hermesc b/node_modules/react-native/sdks/hermesc/linux64-bin/hermesc
-index 9faffe8..73cf7e1 100755
-Binary files a/node_modules/react-native/sdks/hermesc/linux64-bin/hermesc and b/node_modules/react-native/sdks/hermesc/linux64-bin/hermesc differ
-diff --git a/node_modules/react-native/sdks/hermesc/osx-bin/hermesc b/node_modules/react-native/sdks/hermesc/osx-bin/hermesc
-index c5887f4..acf56fc 100755
-Binary files a/node_modules/react-native/sdks/hermesc/osx-bin/hermesc and b/node_modules/react-native/sdks/hermesc/osx-bin/hermesc differ
-diff --git a/node_modules/react-native/sdks/hermesc/win64-bin/hermesc.exe b/node_modules/react-native/sdks/hermesc/win64-bin/hermesc.exe
-index 340d363..76dcd5d 100755
-Binary files a/node_modules/react-native/sdks/hermesc/win64-bin/hermesc.exe and b/node_modules/react-native/sdks/hermesc/win64-bin/hermesc.exe differ
-diff --git a/node_modules/react-native/template/package.json b/node_modules/react-native/template/package.json
-index 83fd9b6..6a5427e 100644
---- a/node_modules/react-native/template/package.json
-+++ b/node_modules/react-native/template/package.json
-@@ -11,7 +11,7 @@
-   },
-   "dependencies": {
-     "react": "18.2.0",
--    "react-native": "0.71.7"
-+    "react-native": "0.71.8"
-   },
-   "devDependencies": {
-     "@babel/core": "^7.20.0",
