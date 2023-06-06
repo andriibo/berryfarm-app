@@ -23,6 +23,7 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
@@ -72,7 +73,9 @@ const CreateWorker = () => {
 
         dispatch(setWorker(worker));
         reset();
-        navigation.navigate('ScanQrCode');
+        navigation.navigate('ScanQrCode', {
+          scenario: ScenariosEnum.createWorker,
+        });
       } catch (error: any) {
         console.log(error);
         if (error instanceof FirestoreServiceError) {

@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import styles from 'src/screens/main/scan-qr-code/styles';
@@ -9,7 +9,7 @@ import {
   updateQrCode,
 } from 'src/stores/services/firestore.service';
 import {Toast} from 'src/components/toast';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {useWorker} from 'src/stores/slices/worker.slice';
@@ -24,10 +24,13 @@ const ScanQrCode = () => {
   const {firestorePrefix} = useFarm();
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const {
+    params: {scenario},
+  } = useRoute<RouteProp<DrawerStackParamList, 'ScanQrCode'>>();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (
+      headerLeft: () => (
         <IconButton
           icon="arrow-left"
           iconColor={colors.white}
@@ -63,21 +66,18 @@ const ScanQrCode = () => {
       }
     }
 
-    navigation.navigate('Home');
+    navigation.navigate('SuccessPage', {scenario});
   };
 
   return (
     <>
       {errorMessage && <Toast error={errorMessage} />}
       <QRCodeScanner
-        bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK!</Text>
-          </TouchableOpacity>
-        }
-        flashMode={RNCamera.Constants.FlashMode.torch}
+        flashMode={RNCamera.Constants.FlashMode.auto}
         onRead={onSuccess}
-        topContent={<Text style={styles.centerText}>{strings.scanQrCode}</Text>}
+        topContent={
+          <Text style={styles.centerText}>{strings.scanQrCodeWithCamera}</Text>
+        }
       />
     </>
   );

@@ -8,7 +8,15 @@ export default StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
   },
   titleWrapper: {
     margin: 10,

@@ -5,6 +5,7 @@ import {CreateWorker} from 'src/screens/main/create-worker';
 import {GiveQrCode} from 'src/screens/main/give-qr-code';
 import {Templates} from 'src/screens/main/templates';
 import {ScanQrCode} from 'src/screens/main/scan-qr-code';
+import {SuccessPage} from 'src/screens/main/success-page';
 
 export const Screens = {
   ChooseFarm,
@@ -14,4 +15,5 @@ export const Screens = {
   GiveQrCode,
   Templates,
   ScanQrCode,
+  SuccessPage,
 };

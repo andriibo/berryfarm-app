@@ -13,28 +13,38 @@ const Home = () => {
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
 
   return (
-    <SafeAreaView style={{flex: 1, flexDirection: 'row', marginTop: '10%'}}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('CreateWorker')}
-        style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.registration}</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('GiveQrCode')}
-        style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.giveQrCode}</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Templates')}
-        style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.templates}</Text>
-        </View>
-      </TouchableOpacity>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CreateWorker')}
+          style={styles.wrapper}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.titleText}>{strings.registration}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('GiveQrCode')}
+          style={styles.wrapper}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.titleText}>{strings.giveQrCode}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Templates')}
+          style={styles.wrapper}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.titleText}>{strings.templates}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.wrapper}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.titleText}>{strings.qrCodeInformation}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container} />
     </SafeAreaView>
   );
 };

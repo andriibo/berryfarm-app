@@ -5,7 +5,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: -25,
+    marginTop: -50,
     backgroundColor: colors.background,
     paddingLeft: 30,
     paddingRight: 30,
