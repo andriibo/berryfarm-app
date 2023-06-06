@@ -73,7 +73,7 @@ const ScanQrCode = () => {
     <>
       {errorMessage && <Toast error={errorMessage} />}
       <QRCodeScanner
-        flashMode={RNCamera.Constants.FlashMode.torch}
+        flashMode={RNCamera.Constants.FlashMode.auto}
         onRead={onSuccess}
         topContent={
           <Text style={styles.centerText}>{strings.scanQrCodeWithCamera}</Text>
