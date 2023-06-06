@@ -154,7 +154,7 @@ export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
     });
 };
 
-export const getWorkersByName = async (name: string, prefix: string) => {
+export const getWorkers = async (prefix: string) => {
   const collection = sprintf(workersCollection, prefix);
 
   const snapshot = await firestore()
@@ -172,11 +172,5 @@ export const getWorkersByName = async (name: string, prefix: string) => {
     }
   });
 
-  return workers.filter(worker => {
-    return (
-      worker.firstName?.toLowerCase().includes(name) ||
-      worker.lastName?.toLowerCase().includes(name) ||
-      worker.middleName?.toLowerCase().includes(name)
-    );
-  });
+  return workers;
 };

@@ -77,9 +77,10 @@ const CreateWorker = () => {
           scenario: ScenariosEnum.createWorker,
         });
       } catch (error: any) {
-        console.log(error);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
+        } else {
+          console.error(error);
         }
       }
     },

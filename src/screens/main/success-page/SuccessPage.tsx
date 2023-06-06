@@ -17,8 +17,6 @@ const SuccessPage = () => {
     params: {scenario},
   } = useRoute<RouteProp<DrawerStackParamList, 'SuccessPage'>>();
 
-  console.log(scenario);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => null,

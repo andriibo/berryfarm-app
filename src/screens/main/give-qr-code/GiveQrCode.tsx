@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Button, Divider, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -6,7 +6,7 @@ import styles from 'src/screens/main/give-qr-code/styles';
 import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
 import {useFarm} from 'src/stores/slices/farm.slice';
-import {getWorkersByName} from 'src/stores/services/firestore.service';
+import {getWorkers} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -40,6 +40,7 @@ const GiveQrCode = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const [workers, setWorkers] = useState<Array<Worker>>([]);
+  const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const [errorMessage, setError] = useState('');
@@ -48,7 +49,7 @@ const GiveQrCode = () => {
     (worker: Worker) => {
       setSearchQuery(getFullname(worker));
       setCanScanQrCode(true);
-      setWorkers([]);
+      setFoundWorkers([]);
       dispatch(setWorker(worker));
     },
     [dispatch],
@@ -58,9 +59,23 @@ const GiveQrCode = () => {
     useCallback(() => {
       setSearchQuery('');
       setCanScanQrCode(false);
-      setWorkers([]);
+      setFoundWorkers([]);
     }, []),
   );
+
+  useEffect(() => {
+    getWorkers(firestorePrefix)
+      .then(res => {
+        setWorkers(res);
+      })
+      .catch(error => {
+        if (error instanceof FirestoreServiceError) {
+          setError(error.message);
+        } else {
+          console.error(error);
+        }
+      });
+  }, [firestorePrefix]);
 
   const handleGetWorker = useCallback(
     async (name: string) => {
@@ -68,26 +83,30 @@ const GiveQrCode = () => {
       setSearchQuery(name);
       setCanScanQrCode(false);
       if (name === '') {
-        setWorkers([]);
+        setFoundWorkers([]);
 
         return;
       }
 
       try {
-        const result = await getWorkersByName(
-          name.toLowerCase(),
-          firestorePrefix,
-        );
+        const result = workers.filter(worker => {
+          return (
+            worker.firstName?.toLowerCase().includes(name) ||
+            worker.lastName?.toLowerCase().includes(name) ||
+            worker.middleName?.toLowerCase().includes(name)
+          );
+        });
 
-        setWorkers(result);
+        setFoundWorkers(result);
       } catch (error: any) {
-        console.log(error);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
+        } else {
+          console.error(error);
         }
       }
     },
-    [firestorePrefix, setWorkers],
+    [workers],
   );
 
   return (
@@ -106,19 +125,19 @@ const GiveQrCode = () => {
             />
             <Divider />
             <FlatList
-              data={workers}
+              data={foundWorkers}
               keyExtractor={item => `${item.uuid}`}
               renderItem={({item}) => (
                 <Item handleSelectWorker={handleSelectWorker} worker={item} />
               )}
             />
-            {!workers.length && searchQuery && !canScanQrCode && (
+            {!foundWorkers.length && searchQuery && !canScanQrCode && (
               <Text style={styles.workerNotFound} variant="titleMedium">
                 {strings.workerNotFound}
               </Text>
             )}
 
-            {!workers.length && searchQuery && !canScanQrCode && (
+            {!foundWorkers.length && searchQuery && !canScanQrCode && (
               <Text
                 onPress={() => navigation.navigate('CreateWorker')}
                 style={styles.linkCreateWorker}

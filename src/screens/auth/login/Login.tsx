@@ -39,9 +39,10 @@ const Login = () => {
 
         dispatch(setUser(data));
       } catch (error: any) {
-        console.log(error);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
+        } else {
+          console.error(error);
         }
       }
     },

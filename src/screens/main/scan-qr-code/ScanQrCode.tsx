@@ -63,6 +63,8 @@ const ScanQrCode = () => {
     } catch (error: any) {
       if (error instanceof FirestoreServiceError) {
         setError(error.message);
+      } else {
+        console.error(error);
       }
     }
 

@@ -8,6 +8,8 @@ import {useFarm} from 'src/stores/slices/farm.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
 import {colors} from 'src/styles/colors';
+import {FirestoreServiceError} from 'src/stores/errors';
+import {Toast} from 'src/components/toast';
 
 const Item = ({template}: {template: HarvestTemplate}) => (
   <TouchableOpacity onPress={() => {}} style={styles.container}>
@@ -30,19 +32,25 @@ const Item = ({template}: {template: HarvestTemplate}) => (
 const Templates = () => {
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
+  const [errorMessage, setError] = useState('');
 
   useEffect(() => {
-    async function getData() {
-      const data = await getTemplates(firestorePrefix);
-
-      setTemplates(data);
-    }
-
-    getData().then();
+    getTemplates(firestorePrefix)
+      .then(data => {
+        setTemplates(data);
+      })
+      .catch(error => {
+        if (error instanceof FirestoreServiceError) {
+          setError(error.message);
+        } else {
+          console.error(error);
+        }
+      });
   }, [firestorePrefix]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+      {errorMessage && <Toast error={errorMessage} />}
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}
