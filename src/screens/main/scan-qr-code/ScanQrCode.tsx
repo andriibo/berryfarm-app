@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import styles from 'src/screens/main/scan-qr-code/styles';
@@ -73,11 +73,6 @@ const ScanQrCode = () => {
     <>
       {errorMessage && <Toast error={errorMessage} />}
       <QRCodeScanner
-        bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK!</Text>
-          </TouchableOpacity>
-        }
         flashMode={RNCamera.Constants.FlashMode.torch}
         onRead={onSuccess}
         topContent={
