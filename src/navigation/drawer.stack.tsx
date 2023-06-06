@@ -5,16 +5,15 @@ import {useFarm} from 'src/stores/slices/farm.slice';
 import {strings} from 'src/locales/locales';
 import {Screens} from 'src/navigation/screens';
 import {Logout} from 'src/screens/main/logout';
-
-type ScenarioType = 'CreateWorker' | 'GiveQrCode';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
 
 export type DrawerStackParamList = {
   Home: undefined;
   CreateWorker: undefined;
   GiveQrCode: undefined;
   Templates: undefined;
-  ScanQrCode: {scenario: ScenarioType};
-  SuccessPage: {scenario: ScenarioType};
+  ScanQrCode: {scenario: ScenariosEnum};
+  SuccessPage: {scenario: ScenariosEnum};
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();

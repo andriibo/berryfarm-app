@@ -8,6 +8,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import styles from 'src/screens/main/success-page/styles';
 import {colors} from 'src/styles/colors';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
 
 const SuccessPage = () => {
   const navigation =
@@ -22,7 +23,9 @@ const SuccessPage = () => {
     navigation.setOptions({
       headerLeft: () => null,
       title:
-        scenario === 'CreateWorker' ? strings.registration : strings.giveQrCode,
+        scenario === ScenariosEnum.createWorker
+          ? strings.registration
+          : strings.giveQrCode,
     });
   }, [navigation, scenario]);
 
@@ -43,7 +46,7 @@ const SuccessPage = () => {
           style={styles.btn}>
           {strings.toMain}
         </Button>
-        {scenario === 'CreateWorker' && (
+        {scenario === ScenariosEnum.createWorker && (
           <Button
             mode="contained"
             onPress={() => navigation.navigate('CreateWorker')}
@@ -51,7 +54,7 @@ const SuccessPage = () => {
             {strings.registerMore}
           </Button>
         )}
-        {scenario === 'GiveQrCode' && (
+        {scenario === ScenariosEnum.giveQrCode && (
           <Button
             mode="contained"
             onPress={() => navigation.navigate('GiveQrCode')}

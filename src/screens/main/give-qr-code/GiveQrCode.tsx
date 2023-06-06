@@ -15,6 +15,7 @@ import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
 
 const Item = ({
   handleSelectWorker,
@@ -133,7 +134,9 @@ const GiveQrCode = () => {
           icon="qrcode"
           mode="contained"
           onPress={() =>
-            navigation.navigate('ScanQrCode', {scenario: 'GiveQrCode'})
+            navigation.navigate('ScanQrCode', {
+              scenario: ScenariosEnum.giveQrCode,
+            })
           }
           style={[styles.btn]}>
           {strings.scanQrCode}
