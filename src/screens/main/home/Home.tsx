@@ -7,13 +7,14 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import styles from 'src/screens/main/home/styles';
+import {colors} from 'src/styles/colors';
 
 const Home = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => navigation.navigate('CreateWorker')}
