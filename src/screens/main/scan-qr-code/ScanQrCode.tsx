@@ -80,7 +80,9 @@ const ScanQrCode = () => {
         }
         flashMode={RNCamera.Constants.FlashMode.torch}
         onRead={onSuccess}
-        topContent={<Text style={styles.centerText}>{strings.scanQrCode}</Text>}
+        topContent={
+          <Text style={styles.centerText}>{strings.scanQrCodeWithCamera}</Text>
+        }
       />
     </>
   );

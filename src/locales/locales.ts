@@ -39,5 +39,6 @@ export const strings = new LocalizedStrings({
     entrySaved: 'Запись сохранена',
     registerMore: 'Зарегестрировать еще',
     giveAnotherQrCode: 'Выдать другой QR код',
+    scanQrCodeWithCamera: 'Поднесите QR код к камере',
   },
 });

@@ -1,7 +1,7 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
-export const width = Dimensions.get('window').width / 3 - 20;
+export const width = Dimensions.get('window').width / 3 + 30;
 
 export default StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     width,
     margin: 10,
-    height: '80%',
+    height: '90%',
   },
   titleWrapper: {
     flex: 1,
@@ -31,10 +31,11 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   titleText: {
+    textAlign: 'center',
     paddingBottom: 25,
     color: colors.black,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 22,
     flexShrink: 1,
   },
 });

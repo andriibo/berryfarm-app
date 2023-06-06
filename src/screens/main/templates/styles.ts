@@ -8,7 +8,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 20,
   },
   titleWrapper: {
     margin: 10,

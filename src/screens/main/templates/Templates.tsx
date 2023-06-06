@@ -7,6 +7,7 @@ import {getTemplates} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/farm.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
+import {colors} from 'src/styles/colors';
 
 const Item = ({template}: {template: HarvestTemplate}) => (
   <TouchableOpacity onPress={() => {}} style={styles.container}>
@@ -41,7 +42,7 @@ const Templates = () => {
   }, [firestorePrefix]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}
