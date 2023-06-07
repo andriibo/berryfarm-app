@@ -58,16 +58,16 @@ const ScanQrCode = () => {
         return;
       }
 
-      if (scenario !== ScenariosEnum.handOverHarvest) {
-        await assignQrCodeToWorker(qrCode);
-
-        navigation.navigate('SuccessPage', {scenario});
+      if (scenario === ScenariosEnum.handOverHarvest) {
+        handleHarvest(qrCode);
+        navigation.navigate('HandOverHarvest');
 
         return;
       }
 
-      dispatchHarvest(qrCode);
-      navigation.navigate('HandOverHarvest');
+      await assignQrCodeToWorker(qrCode);
+
+      navigation.navigate('SuccessPage', {scenario});
     } catch (error: any) {
       if (error instanceof FirestoreServiceError) {
         setError(error.message);
@@ -91,7 +91,7 @@ const ScanQrCode = () => {
     await updateQrCode(qrCode, firestorePrefix);
   };
 
-  const dispatchHarvest = (qrCode: QrCode) => {
+  const handleHarvest = (qrCode: QrCode) => {
     if (qrCode.workerUuid === undefined) {
       setError(strings.qrCodeNotGiven);
     }
