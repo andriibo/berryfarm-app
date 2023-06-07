@@ -10,6 +10,7 @@ import {strings} from 'src/locales/locales';
 import {colors} from 'src/styles/colors';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {Toast} from 'src/components/toast';
+import {Loader} from 'src/components/loader';
 
 const Item = ({template}: {template: HarvestTemplate}) => (
   <TouchableOpacity onPress={() => {}} style={styles.container}>
@@ -47,6 +48,10 @@ const Templates = () => {
         }
       });
   }, [firestorePrefix]);
+
+  if (!templates.length) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>

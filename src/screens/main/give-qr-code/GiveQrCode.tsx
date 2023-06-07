@@ -16,6 +16,7 @@ import {getFullname} from 'src/helpers/worker.helper';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {Loader} from 'src/components/loader';
 
 const Item = ({
   handleSelectWorker,
@@ -108,6 +109,10 @@ const GiveQrCode = () => {
     },
     [workers],
   );
+
+  if (!workers.length) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>

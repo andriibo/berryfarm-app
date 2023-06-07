@@ -1,14 +1,14 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from 'src/styles';
+import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.white,
+    backgroundColor: colors.background,
   },
   indicator: {
-    color: '#565656',
+    color: colors.primary,
   },
 });
