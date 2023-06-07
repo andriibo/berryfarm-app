@@ -12,6 +12,7 @@ export type DrawerStackParamList = {
   CreateWorker: undefined;
   GiveQrCode: undefined;
   Templates: undefined;
+  HandOverHarvest: undefined;
   ScanQrCode: {scenario: ScenariosEnum};
   SuccessPage: {scenario: ScenariosEnum};
 };
@@ -73,6 +74,15 @@ const DrawerStack = () => {
         component={Screens.Templates}
         name="Templates"
         options={{...options, title: strings.templates}}
+      />
+      <DrawerComponent.Screen
+        component={Screens.HandOverHarvest}
+        name="HandOverHarvest"
+        options={{
+          ...options,
+          drawerItemStyle: {display: 'none'},
+          title: strings.hangOverHarvest,
+        }}
       />
       <DrawerComponent.Screen
         component={Screens.SuccessPage}

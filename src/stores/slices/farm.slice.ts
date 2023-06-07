@@ -4,10 +4,7 @@ import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Farm} from 'src/stores/types/farm.type';
 
-export type FarmInfo = Pick<
-  Farm,
-  'apiUrlPrefix' | 'farmName' | 'firestorePrefix'
->;
+type FarmInfo = Pick<Farm, 'apiUrlPrefix' | 'farmName' | 'firestorePrefix'>;
 
 type IFarm = {
   apiUrlPrefix: string;

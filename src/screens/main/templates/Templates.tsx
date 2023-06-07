@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity, View, FlatList} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,9 +11,23 @@ import {colors} from 'src/styles/colors';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {Toast} from 'src/components/toast';
 import {Loader} from 'src/components/loader';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {DrawerStackParamList} from 'src/navigation/drawer.stack';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {setHarvest} from 'src/stores/slices/harvest.slice';
 
-const Item = ({template}: {template: HarvestTemplate}) => (
-  <TouchableOpacity onPress={() => {}} style={styles.container}>
+const Item = ({
+  template,
+  scanQrCode,
+}: {
+  template: HarvestTemplate;
+  scanQrCode: (template: HarvestTemplate) => void;
+}) => (
+  <TouchableOpacity
+    onPress={() => scanQrCode(template)}
+    style={styles.container}>
     <View style={styles.titleWrapper}>
       <Text variant="headlineLarge">{template.product.title}</Text>
       <Text variant="headlineLarge">{template.location.title}</Text>
@@ -31,6 +45,9 @@ const Item = ({template}: {template: HarvestTemplate}) => (
 );
 
 const Templates = () => {
+  const dispatch = useAppDispatch();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
   const [errorMessage, setError] = useState('');
@@ -49,6 +66,25 @@ const Templates = () => {
       });
   }, [firestorePrefix]);
 
+  const scanQrCode = useCallback(
+    (template: HarvestTemplate) => {
+      const harvest = {
+        qty: template.qty,
+        workerUuid: '',
+        harvestPackageId: template.harvestPackage.id,
+        locationId: template.location.id,
+        productId: template.product.id,
+        productQualityId: template.productQuality.id,
+      };
+
+      dispatch(setHarvest(harvest));
+      navigation.navigate('ScanQrCode', {
+        scenario: ScenariosEnum.handOverHarvest,
+      });
+    },
+    [dispatch, navigation],
+  );
+
   if (!templates.length) {
     return <Loader />;
   }
@@ -59,7 +95,9 @@ const Templates = () => {
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}
-        renderItem={({item}) => <Item template={item} />}
+        renderItem={({item}) => (
+          <Item scanQrCode={scanQrCode} template={item} />
+        )}
       />
     </SafeAreaView>
   );

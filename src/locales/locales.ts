@@ -33,6 +33,7 @@ export const strings = new LocalizedStrings({
     registerWorker: 'Зарегистрировать работника',
     qrCodeNotFound: 'QR код не принадлежит системе.',
     qrCodeGiven: 'QR код уже выдан.',
+    qrCodeNotGiven: 'QR код не выдан.',
     farmNotFound: 'Ферма не найдена.',
     toMain: 'На главную',
     qrCodeInformation: 'Информация о QR коде',
@@ -40,5 +41,6 @@ export const strings = new LocalizedStrings({
     registerMore: 'Зарегестрировать еще',
     giveAnotherQrCode: 'Выдать другой QR код',
     scanQrCodeWithCamera: 'Поднесите QR код к камере',
+    hangOverHarvest: 'Сдать урожай',
   },
 });
