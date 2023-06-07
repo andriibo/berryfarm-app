@@ -77,6 +77,8 @@ const ScanQrCode = () => {
       <QRCodeScanner
         flashMode={RNCamera.Constants.FlashMode.auto}
         onRead={onSuccess}
+        reactivate={true}
+        showMarker={true}
         topContent={
           <Text style={styles.centerText}>{strings.scanQrCodeWithCamera}</Text>
         }

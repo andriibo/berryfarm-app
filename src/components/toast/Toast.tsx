@@ -30,6 +30,7 @@ const Toast = ({error}: ToastProps) => {
           setVisible(false);
         },
       }}
+      duration={3000}
       onDismiss={onDismissSnackBar}
       style={styles.container}
       theme={{

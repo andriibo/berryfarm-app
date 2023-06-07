@@ -91,9 +91,9 @@ const GiveQrCode = () => {
       try {
         const result = workers.filter(worker => {
           return (
-            worker.firstName?.toLowerCase().includes(name) ||
-            worker.lastName?.toLowerCase().includes(name) ||
-            worker.middleName?.toLowerCase().includes(name)
+            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
+            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
+            worker.middleName?.toLowerCase().includes(name.toLowerCase())
           );
         });
 
