@@ -4,7 +4,7 @@ import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {User} from 'src/stores/types/user.type';
 
-export type UserInfo = Pick<User, 'username'>;
+type UserInfo = Pick<User, 'username'>;
 
 type IUser = {
   id: number;

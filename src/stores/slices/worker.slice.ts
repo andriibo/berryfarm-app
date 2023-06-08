@@ -4,14 +4,9 @@ import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Worker} from 'src/stores/types/worker.type';
 
-export type IWorker = Pick<
+type IWorker = Pick<
   Worker,
-  | 'uuid'
-  | 'firstName'
-  | 'lastName'
-  | 'middleName'
-  | 'birthDate'
-  | 'syncTimestamp'
+  'uuid' | 'firstName' | 'lastName' | 'middleName' | 'birthDate'
 >;
 
 type IWorkerState = {
@@ -25,7 +20,6 @@ const initialState: IWorkerState | any = {
     lastName: '',
     middleName: '',
     birthDate: '' as unknown as Date,
-    createdTimestamp: '' as unknown as Date,
   },
 };
 
@@ -39,7 +33,6 @@ const authSlice = createSlice({
       state.worker.lastName = payload.lastName;
       state.worker.middleName = payload.middleName;
       state.worker.birthDate = payload.birthDate;
-      state.worker.syncTimestamp = payload.syncTimestamp;
     },
     cleanWorker: (state: IWorkerState) => {
       state.worker.uuid = '';
@@ -47,7 +40,6 @@ const authSlice = createSlice({
       state.worker.lastName = '';
       state.worker.middleName = '';
       state.worker.birthDate = '' as unknown as Date;
-      state.worker.syncTimestamp = '' as unknown as Date;
     },
   },
 });

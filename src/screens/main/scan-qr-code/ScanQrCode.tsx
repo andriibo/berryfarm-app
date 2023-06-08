@@ -17,8 +17,14 @@ import {strings} from 'src/locales/locales';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {QrCode} from 'src/stores/types/qrCode.type';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 
 const ScanQrCode = () => {
+  const dispatch = useAppDispatch();
+  const harvest = useHarvest();
   const worker = useWorker();
   const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
@@ -52,14 +58,16 @@ const ScanQrCode = () => {
         return;
       }
 
-      if (qrCode?.workerUuid === worker.uuid) {
-        setError(strings.qrCodeGiven);
+      if (scenario === ScenariosEnum.handOverHarvest) {
+        handleHarvest(qrCode);
+        navigation.navigate('HandOverHarvest');
 
         return;
       }
 
-      qrCode.workerUuid = worker.uuid;
-      await updateQrCode(qrCode, firestorePrefix);
+      await assignQrCodeToWorker(qrCode);
+
+      navigation.navigate('SuccessPage', {scenario});
     } catch (error: any) {
       if (error instanceof FirestoreServiceError) {
         setError(error.message);
@@ -67,8 +75,29 @@ const ScanQrCode = () => {
         console.error(error);
       }
     }
+  };
 
-    navigation.navigate('SuccessPage', {scenario});
+  const assignQrCodeToWorker = async (qrCode: QrCode) => {
+    if (
+      scenario !== ScenariosEnum.handOverHarvest &&
+      qrCode?.workerUuid === worker.uuid
+    ) {
+      setError(strings.qrCodeGiven);
+
+      return;
+    }
+
+    qrCode.workerUuid = worker.uuid;
+    await updateQrCode(qrCode, firestorePrefix);
+  };
+
+  const handleHarvest = (qrCode: QrCode) => {
+    if (qrCode.workerUuid === undefined) {
+      setError(strings.qrCodeNotGiven);
+    }
+
+    harvest.workerUuid = qrCode.workerUuid;
+    dispatch(setHarvest(harvest));
   };
 
   return (
