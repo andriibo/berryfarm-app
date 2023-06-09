@@ -23,7 +23,9 @@ const SuccessPage = () => {
       title:
         scenario === ScenariosEnum.createWorker
           ? strings.registration
-          : strings.giveQrCode,
+          : scenario === ScenariosEnum.giveQrCode
+          ? strings.giveQrCode
+          : strings.hangOverHarvest,
     });
   }, [navigation, scenario]);
 
@@ -56,6 +58,14 @@ const SuccessPage = () => {
           <Button
             mode="contained"
             onPress={() => navigation.navigate('GiveQrCode')}
+            style={styles.btn}>
+            {strings.giveAnotherQrCode}
+          </Button>
+        )}
+        {scenario === ScenariosEnum.handOverHarvest && (
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('HandOverHarvest')}
             style={styles.btn}>
             {strings.giveAnotherQrCode}
           </Button>

@@ -2,14 +2,18 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
+import {HarvestPackage} from 'src/stores/types/harvestPackage.type';
+import {Location} from 'src/stores/types/location.type';
+import {Product} from 'src/stores/types/product.type';
+import {ProductQuality} from 'src/stores/types/productQuality.type';
 
 export type IHarvest = {
   qty: number;
   workerUuid: string;
-  harvestPackageId: number;
-  locationId: number;
-  productId: number;
-  productQualityId: number;
+  harvestPackage: HarvestPackage;
+  location: Location;
+  product: Product;
+  productQuality: ProductQuality;
 };
 
 type IHarvestState = {
@@ -20,10 +24,22 @@ const initialState: IHarvestState | any = {
   harvest: {
     qty: 0,
     workerUuid: '',
-    harvestPackageId: 0,
-    locationId: 0,
-    productId: 0,
-    productQualityId: 0,
+    harvestPackage: {
+      id: 0,
+      title: '',
+    },
+    location: {
+      id: 0,
+      title: '',
+    },
+    product: {
+      id: 0,
+      title: '',
+    },
+    productQuality: {
+      id: 0,
+      title: '',
+    },
   },
 };
 
@@ -34,18 +50,30 @@ const authSlice = createSlice({
     setHarvest: (state: IHarvestState, {payload}: PayloadAction<IHarvest>) => {
       state.harvest.qty = payload.qty;
       state.harvest.workerUuid = payload.workerUuid;
-      state.harvest.harvestPackageId = payload.harvestPackageId;
-      state.harvest.locationId = payload.locationId;
-      state.harvest.productId = payload.productId;
-      state.harvest.productQualityId = payload.productQualityId;
+      state.harvest.harvestPackage = payload.harvestPackage;
+      state.harvest.location = payload.location;
+      state.harvest.product = payload.product;
+      state.harvest.productQuality = payload.productQuality;
     },
     cleanHarvest: (state: IHarvestState) => {
       state.harvest.qty = 0;
       state.harvest.workerUuid = '';
-      state.harvest.harvestPackageId = 0;
-      state.harvest.locationId = 0;
-      state.harvest.productId = 0;
-      state.harvest.productQualityId = 0;
+      state.harvest.harvestPackage = {
+        id: 0,
+        title: '',
+      };
+      state.harvest.location = {
+        id: 0,
+        title: '',
+      };
+      state.harvest.product = {
+        id: 0,
+        title: '',
+      };
+      state.harvest.productQuality = {
+        id: 0,
+        title: '',
+      };
     },
   },
 });

@@ -71,10 +71,10 @@ const Templates = () => {
       const harvest = {
         qty: template.qty,
         workerUuid: '',
-        harvestPackageId: template.harvestPackage.id,
-        locationId: template.location.id,
-        productId: template.product.id,
-        productQualityId: template.productQuality.id,
+        harvestPackage: template.harvestPackage,
+        location: template.location,
+        product: template.product,
+        productQuality: template.productQuality,
       };
 
       dispatch(setHarvest(harvest));

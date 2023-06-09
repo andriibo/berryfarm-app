@@ -31,4 +31,14 @@ export const validation = {
       birthDate: yup.string().required(errorMessages.required),
     })
     .required(),
+  createHarvest: yup
+    .object({
+      weight: yup
+        .number()
+        .typeError(errorMessages.number)
+        .required(errorMessages.required)
+        .min(0.1, errorMessages.minWeight)
+        .max(999999.99, errorMessages.maxWeight),
+    })
+    .required(),
 };
