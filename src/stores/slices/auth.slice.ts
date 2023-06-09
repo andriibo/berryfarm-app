@@ -16,11 +16,6 @@ type IAuthState = {
 };
 
 const initialState: IAuthState | any = {
-  farm: {
-    apiUrlPrefix: '',
-    farmName: '',
-    firestorePrefix: '',
-  },
   user: {
     id: 0,
     username: '',
@@ -42,7 +37,7 @@ const authSlice = createSlice({
 });
 
 export const selectIsAuthenticated = (state: RootState) =>
-  state.auth.user.username !== '';
+  !!state.auth.user.username;
 export const selectUser = (state: RootState) => state.auth.user;
 export const useIsAuthenticated = () => useAppSelector(selectIsAuthenticated);
 export const useUser = () => useAppSelector(selectUser);

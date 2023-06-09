@@ -17,6 +17,7 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
+import {colors} from 'src/styles/colors';
 
 const Item = ({
   handleSelectWorker,
@@ -115,7 +116,7 @@ const GiveQrCode = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <View>

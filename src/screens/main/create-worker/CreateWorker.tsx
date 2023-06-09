@@ -24,6 +24,7 @@ import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {colors} from 'src/styles/colors';
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
@@ -61,8 +62,15 @@ const CreateWorker = () => {
 
         if (!worker) {
           const workerUuid = uuid();
+          const post = {
+            uuid: uuid(),
+            firstName: data.firstName,
+            lastName: data.lastName,
+            middleName: data.middleName,
+            birthDate: data.birthDate,
+          };
 
-          await createWorker(workerUuid, data, firestorePrefix);
+          await createWorker(post, firestorePrefix);
           worker = await getWorkerByUuid(workerUuid, firestorePrefix);
           if (worker === null) {
             setError(strings.workerNotFound);
@@ -88,7 +96,7 @@ const CreateWorker = () => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <View style={styles.wrapper}>

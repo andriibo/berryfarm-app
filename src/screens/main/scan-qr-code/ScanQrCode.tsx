@@ -97,6 +97,7 @@ const ScanQrCode = () => {
     }
 
     harvest.workerUuid = qrCode.workerUuid;
+    console.log(harvest);
     dispatch(setHarvest(harvest));
   };
 

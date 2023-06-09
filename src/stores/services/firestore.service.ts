@@ -11,6 +11,7 @@ import {QrCode} from 'src/stores/types/qrCode.type';
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
 const workersCollection = '%sworkers';
+const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 
@@ -67,10 +68,9 @@ export const login = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (uuid: string, data: any, prefix: string) => {
+export const createWorker = async (data: any, prefix: string) => {
   const worker = {
     ...data,
-    uuid,
     syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
     createdTimestamp: firebase.firestore.Timestamp.now(),
   };
@@ -79,8 +79,24 @@ export const createWorker = async (uuid: string, data: any, prefix: string) => {
 
   await firestore()
     .collection(collection)
-    .doc(uuid)
+    .doc(data.uuid)
     .set(worker)
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+};
+
+export const createHarvest = async (data: any, prefix: string) => {
+  const collection = sprintf(harvestCollection, prefix);
+
+  await firestore()
+    .collection(collection)
+    .doc(data.uuid)
+    .set({
+      ...data,
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      createdTimestamp: firebase.firestore.Timestamp.now(),
+    })
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
