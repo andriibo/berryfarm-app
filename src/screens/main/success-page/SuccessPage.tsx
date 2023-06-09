@@ -40,12 +40,22 @@ const SuccessPage = () => {
         />
       </View>
       <View style={{marginTop: '20%'}}>
-        <Button
-          mode="outlined"
-          onPress={() => navigation.navigate('Home')}
-          style={styles.btn}>
-          {strings.toMain}
-        </Button>
+        {scenario === ScenariosEnum.handOverHarvest && (
+          <Button
+            mode="outlined"
+            onPress={() => navigation.navigate('Templates')}
+            style={styles.btn}>
+            {strings.toTemplates}
+          </Button>
+        )}
+        {scenario !== ScenariosEnum.handOverHarvest && (
+          <Button
+            mode="outlined"
+            onPress={() => navigation.navigate('Home')}
+            style={styles.btn}>
+            {strings.toMain}
+          </Button>
+        )}
         {scenario === ScenariosEnum.createWorker && (
           <Button
             mode="contained"
@@ -67,7 +77,7 @@ const SuccessPage = () => {
             mode="contained"
             onPress={() => navigation.navigate('HandOverHarvest')}
             style={styles.btn}>
-            {strings.giveAnotherQrCode}
+            {strings.hangOverAnotherHarvest}
           </Button>
         )}
       </View>

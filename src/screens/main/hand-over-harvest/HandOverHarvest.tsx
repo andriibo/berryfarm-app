@@ -24,6 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {Loader} from 'src/components/loader';
 
 const HandOverHarvest = () => {
   const [errorMessage, setError] = useState('');
@@ -36,6 +37,7 @@ const HandOverHarvest = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: {errors, isDirty, isValid},
   } = useForm<CreateHarvestRequest>({
     defaultValues: {weight: ''},
@@ -79,11 +81,12 @@ const HandOverHarvest = () => {
           locationId: harvest.location.id,
           productId: harvest.product.id,
           productQualityId: harvest.productQuality.id,
-          workerUuid: worker?.uuid,
+          workerUuid: harvest.workerUuid,
           weightTotal: weight,
         };
 
         await createHarvest(data, firestorePrefix);
+        reset();
         navigation.navigate('SuccessPage', {
           scenario: ScenariosEnum.handOverHarvest,
         });
@@ -95,8 +98,12 @@ const HandOverHarvest = () => {
         }
       }
     },
-    [firestorePrefix, harvest, navigation, worker],
+    [firestorePrefix, harvest, navigation, reset],
   );
+
+  if (!worker) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
@@ -150,7 +157,6 @@ const HandOverHarvest = () => {
                   keyboardType="decimal-pad"
                   mode="flat"
                   onChangeText={text => {
-                    console.log(text);
                     const value = onTextChanged(text);
 
                     field.onChange(value);
