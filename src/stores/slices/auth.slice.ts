@@ -16,11 +16,6 @@ type IAuthState = {
 };
 
 const initialState: IAuthState | any = {
-  farm: {
-    apiUrlPrefix: '',
-    farmName: '',
-    firestorePrefix: '',
-  },
   user: {
     id: 0,
     username: '',
