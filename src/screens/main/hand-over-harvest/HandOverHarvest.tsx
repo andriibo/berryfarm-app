@@ -63,13 +63,6 @@ const HandOverHarvest = () => {
       });
   }, [firestorePrefix, harvest.workerUuid]);
 
-  const onTextChanged = (value: string) => {
-    return value
-      .replace(/[-+,*/()=#\s]/, '')
-      .replace(/(^0)\d/, '$1')
-      .replace(/(\.\d{2}).*/, '$1');
-  };
-
   const handleSave = useCallback(
     async ({weight}: FieldValues) => {
       setError('');
@@ -157,9 +150,7 @@ const HandOverHarvest = () => {
                   keyboardType="decimal-pad"
                   mode="flat"
                   onChangeText={text => {
-                    const value = onTextChanged(text);
-
-                    field.onChange(value);
+                    field.onChange(text);
                   }}
                   style={{width: '100%'}}
                   testID="weight"
