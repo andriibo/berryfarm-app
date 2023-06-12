@@ -1,12 +1,13 @@
 import React from 'react';
 import {
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import {strings} from 'src/locales/locales';
 import {callLogOut} from 'src/stores/store';
-import {TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {View} from 'react-native';
+import {Divider} from 'react-native-paper';
 import styles from './styles';
 
 const Logout = (props: any) => {
@@ -16,12 +17,15 @@ const Logout = (props: any) => {
 
   return (
     <View style={{flex: 1}}>
-      <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView
+        {...props}
+        contentContainerStyle={styles.container}>
         <DrawerItemList {...props} />
+        <View style={styles.logout}>
+          <Divider style={{marginBottom: 20}} />
+          <DrawerItem label={strings.logout} onPress={handleSignOut} />
+        </View>
       </DrawerContentScrollView>
-      <TouchableOpacity onPress={handleSignOut}>
-        <Text style={styles.button}>{strings.logout}</Text>
-      </TouchableOpacity>
     </View>
   );
 };
