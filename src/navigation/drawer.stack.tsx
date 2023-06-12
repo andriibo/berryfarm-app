@@ -6,6 +6,7 @@ import {strings} from 'src/locales/locales';
 import {Screens} from 'src/navigation/screens';
 import {Logout} from 'src/screens/main/logout';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {HeaderLeft} from 'src/components/header-left/HeaderLeft';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -58,22 +59,35 @@ const DrawerStack = () => {
           ...options,
           drawerItemStyle: {display: 'none'},
           title: '',
+          headerLeft: () => <HeaderLeft />,
         }}
       />
       <DrawerComponent.Screen
         component={Screens.CreateWorker}
         name="CreateWorker"
-        options={{...options, title: strings.registration}}
+        options={{
+          ...options,
+          title: strings.registration,
+          headerLeft: () => <HeaderLeft />,
+        }}
       />
       <DrawerComponent.Screen
         component={Screens.GiveQrCode}
         name="GiveQrCode"
-        options={{...options, title: strings.giveQrCode}}
+        options={{
+          ...options,
+          title: strings.giveQrCode,
+          headerLeft: () => <HeaderLeft />,
+        }}
       />
       <DrawerComponent.Screen
         component={Screens.Templates}
         name="Templates"
-        options={{...options, title: strings.templates}}
+        options={{
+          ...options,
+          title: strings.templates,
+          headerLeft: () => <HeaderLeft />,
+        }}
       />
       <DrawerComponent.Screen
         component={Screens.HandOverHarvest}
@@ -82,6 +96,7 @@ const DrawerStack = () => {
           ...options,
           drawerItemStyle: {display: 'none'},
           title: strings.hangOverHarvest,
+          headerLeft: () => <HeaderLeft />,
         }}
       />
       <DrawerComponent.Screen

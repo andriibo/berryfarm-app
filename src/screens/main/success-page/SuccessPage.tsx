@@ -9,6 +9,7 @@ import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import styles from 'src/screens/main/success-page/styles';
 import {colors} from 'src/styles/colors';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {HeaderLeft} from 'src/components/header-left';
 
 const SuccessPage = () => {
   const navigation =
@@ -19,7 +20,8 @@ const SuccessPage = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => null,
+      headerLeft: () =>
+        scenario === ScenariosEnum.handOverHarvest ? <HeaderLeft /> : null,
       title:
         scenario === ScenariosEnum.createWorker
           ? strings.registration
