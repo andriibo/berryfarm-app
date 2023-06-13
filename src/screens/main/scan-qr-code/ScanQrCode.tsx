@@ -51,8 +51,6 @@ const ScanQrCode = () => {
       }
 
       await assignQrCodeToWorker(qrCode);
-
-      navigation.navigate('SuccessPage', {scenario});
     } catch (error: any) {
       if (error instanceof FirestoreServiceError) {
         setError(error.message);
@@ -74,6 +72,7 @@ const ScanQrCode = () => {
 
     qrCode.workerUuid = worker.uuid;
     await updateQrCode(qrCode, firestorePrefix);
+    navigation.navigate('SuccessPage', {scenario});
   };
 
   const handleHarvest = (qrCode: QrCode) => {

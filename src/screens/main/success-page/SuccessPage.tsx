@@ -69,7 +69,7 @@ const SuccessPage = () => {
         {scenario === ScenariosEnum.giveQrCode && (
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('GiveQrCode')}
+            onPress={() => navigation.navigate('ScanQrCode', {scenario})}
             style={styles.btn}>
             {strings.giveAnotherQrCode}
           </Button>
