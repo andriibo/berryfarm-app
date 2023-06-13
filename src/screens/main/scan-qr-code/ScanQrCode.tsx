@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
@@ -32,57 +32,72 @@ const ScanQrCode = () => {
     params: {scenario},
   } = useRoute<RouteProp<DrawerStackParamList, 'ScanQrCode'>>();
 
-  const onSuccess = async (event: any) => {
-    setError('');
-    try {
-      const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
-
-      if (qrCode === null) {
-        setError(strings.qrCodeNotFound);
-
-        return;
-      }
-
-      if (scenario === ScenariosEnum.handOverHarvest) {
-        handleHarvest(qrCode);
-        navigation.navigate('HandOverHarvest');
+  const assignQrCodeToWorker = useCallback(
+    async (qrCode: QrCode) => {
+      if (
+        scenario !== ScenariosEnum.handOverHarvest &&
+        qrCode?.workerUuid === worker.uuid
+      ) {
+        setError(strings.qrCodeGiven);
 
         return;
       }
 
-      await assignQrCodeToWorker(qrCode);
-    } catch (error: any) {
-      if (error instanceof FirestoreServiceError) {
-        setError(error.message);
-      } else {
-        console.error(error);
+      qrCode.workerUuid = worker.uuid;
+      await updateQrCode(qrCode, firestorePrefix);
+      navigation.navigate('SuccessPage', {scenario});
+    },
+    [firestorePrefix, navigation, scenario, worker.uuid],
+  );
+
+  const handleHarvest = useCallback(
+    (qrCode: QrCode) => {
+      if (qrCode.workerUuid === undefined) {
+        setError(strings.qrCodeNotGiven);
       }
-    }
-  };
 
-  const assignQrCodeToWorker = async (qrCode: QrCode) => {
-    if (
-      scenario !== ScenariosEnum.handOverHarvest &&
-      qrCode?.workerUuid === worker.uuid
-    ) {
-      setError(strings.qrCodeGiven);
+      harvest.workerUuid = qrCode.workerUuid;
+      dispatch(setHarvest(harvest));
+    },
+    [dispatch, harvest],
+  );
 
-      return;
-    }
+  const onSuccess = useCallback(
+    async (event: any) => {
+      setError('');
+      try {
+        const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
 
-    qrCode.workerUuid = worker.uuid;
-    await updateQrCode(qrCode, firestorePrefix);
-    navigation.navigate('SuccessPage', {scenario});
-  };
+        if (qrCode === null) {
+          setError(strings.qrCodeNotFound);
 
-  const handleHarvest = (qrCode: QrCode) => {
-    if (qrCode.workerUuid === undefined) {
-      setError(strings.qrCodeNotGiven);
-    }
+          return;
+        }
 
-    harvest.workerUuid = qrCode.workerUuid;
-    dispatch(setHarvest(harvest));
-  };
+        if (scenario === ScenariosEnum.handOverHarvest) {
+          handleHarvest(qrCode);
+          navigation.navigate('HandOverHarvest');
+
+          return;
+        }
+
+        await assignQrCodeToWorker(qrCode);
+      } catch (error: any) {
+        if (error instanceof FirestoreServiceError) {
+          setError(error.message);
+        } else {
+          console.error(error);
+        }
+      }
+    },
+    [
+      assignQrCodeToWorker,
+      firestorePrefix,
+      handleHarvest,
+      navigation,
+      scenario,
+    ],
+  );
 
   return (
     <>

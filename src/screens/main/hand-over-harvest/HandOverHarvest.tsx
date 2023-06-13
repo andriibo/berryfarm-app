@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,7 +20,7 @@ import {useFarm} from 'src/stores/slices/farm.slice';
 import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
@@ -45,23 +45,25 @@ const HandOverHarvest = () => {
     resolver: yupResolver(validation.createHarvest),
   });
 
-  useEffect(() => {
-    getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-      .then(data => {
-        if (data) {
-          setWorker(data);
-        } else {
-          setError(strings.workerNotFound);
-        }
-      })
-      .catch(error => {
-        if (error instanceof FirestoreServiceError) {
-          setError(error.message);
-        } else {
-          console.error(error);
-        }
-      });
-  }, [firestorePrefix, harvest.workerUuid]);
+  useFocusEffect(
+    useCallback(() => {
+      getWorkerByUuid(harvest.workerUuid, firestorePrefix)
+        .then(data => {
+          if (data) {
+            setWorker(data);
+          } else {
+            setError(strings.workerNotFound);
+          }
+        })
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            setError(error.message);
+          } else {
+            console.error(error);
+          }
+        });
+    }, [firestorePrefix, harvest]),
+  );
 
   const handleSave = useCallback(
     async ({weight}: FieldValues) => {
@@ -74,7 +76,7 @@ const HandOverHarvest = () => {
           locationId: harvest.location.id,
           productId: harvest.product.id,
           productQualityId: harvest.productQuality.id,
-          workerUuid: harvest.workerUuid,
+          workerUuid: worker?.uuid,
           weightTotal: weight,
         };
 
@@ -91,7 +93,7 @@ const HandOverHarvest = () => {
         }
       }
     },
-    [firestorePrefix, harvest, navigation, reset],
+    [firestorePrefix, harvest, navigation, reset, worker],
   );
 
   if (!worker) {
