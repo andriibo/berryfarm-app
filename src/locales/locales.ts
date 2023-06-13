@@ -45,6 +45,7 @@ export const strings = new LocalizedStrings({
     registerMore: 'Зарегестрировать еще',
     giveAnotherQrCode: 'Выдать другой QR код',
     scanQrCodeWithCamera: 'Поднесите QR код к камере',
+    scanWorkerQrCodeWithCamera: 'Поднесите QR код работника к камере',
     hangOverHarvest: 'Сдать урожай',
     hangOverAnotherHarvest: 'Сдать ещё урожай',
     location: 'Локация',

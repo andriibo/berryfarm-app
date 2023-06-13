@@ -81,7 +81,6 @@ const ScanQrCode = () => {
     }
 
     harvest.workerUuid = qrCode.workerUuid;
-    console.log(harvest);
     dispatch(setHarvest(harvest));
   };
 
@@ -94,7 +93,11 @@ const ScanQrCode = () => {
         reactivate={true}
         showMarker={true}
         topContent={
-          <Text style={styles.centerText}>{strings.scanQrCodeWithCamera}</Text>
+          <Text style={styles.centerText}>
+            {scenario === ScenariosEnum.handOverHarvest
+              ? strings.scanWorkerQrCodeWithCamera
+              : strings.scanQrCodeWithCamera}
+          </Text>
         }
       />
     </>
