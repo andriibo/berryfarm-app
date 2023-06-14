@@ -65,7 +65,7 @@ const CreateWorker = () => {
           data.uuid = uuid();
           await createWorker(data, firestorePrefix);
           worker = await getWorkerByUuid(data.uuid, firestorePrefix);
-          if (worker === null) {
+          if (!worker) {
             setError(strings.workerNotFound);
 
             return;
