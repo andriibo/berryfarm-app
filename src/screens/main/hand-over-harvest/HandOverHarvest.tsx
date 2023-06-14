@@ -6,7 +6,7 @@ import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
 import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
-import {Controller, FieldValues, useForm} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
@@ -40,45 +40,51 @@ const HandOverHarvest = () => {
     reset,
     formState: {errors, isDirty, isValid},
   } = useForm<CreateHarvestRequest>({
-    defaultValues: {weight: ''},
+    defaultValues: {
+      uuid: '',
+      qty: harvest.qty,
+      harvestPackageId: harvest.harvestPackage.id,
+      locationId: harvest.location.id,
+      productId: harvest.product.id,
+      productQualityId: harvest.productQuality.id,
+      weightTotal: '',
+    },
     mode: 'onChange',
     resolver: yupResolver(validation.createHarvest),
   });
 
   useFocusEffect(
     useCallback(() => {
-      getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-        .then(data => {
-          if (data) {
-            setWorker(data);
-          } else {
-            setError(strings.workerNotFound);
-          }
-        })
-        .catch(error => {
-          if (error instanceof FirestoreServiceError) {
-            setError(error.message);
-          } else {
-            console.error(error);
-          }
-        });
+      if (harvest.workerUuid) {
+        getWorkerByUuid(harvest.workerUuid, firestorePrefix)
+          .then(data => {
+            if (data) {
+              setWorker(data);
+            } else {
+              setError(strings.workerNotFound);
+            }
+          })
+          .catch(error => {
+            if (error instanceof FirestoreServiceError) {
+              setError(error.message);
+            } else {
+              console.error(error);
+            }
+          });
+      }
     }, [firestorePrefix, harvest]),
   );
 
   const handleSave = useCallback(
-    async ({weight}: FieldValues) => {
+    async (data: CreateHarvestRequest) => {
       setError('');
       try {
-        const data = {
-          uuid: uuid(),
-          qty: harvest.qty,
-          harvestPackageId: harvest.harvestPackage.id,
-          locationId: harvest.location.id,
-          productId: harvest.product.id,
-          productQualityId: harvest.productQuality.id,
-          workerUuid: worker?.uuid,
-          weightTotal: weight,
-        };
+        data.uuid = uuid();
+        if (harvest.workerUuid) {
+          data = {...data, workerUuid: harvest.workerUuid};
+        } else {
+          data = {...data, qrCodeUuid: harvest.qrCodeUuid};
+        }
 
         await createHarvest(data, firestorePrefix);
         reset();
@@ -93,10 +99,10 @@ const HandOverHarvest = () => {
         }
       }
     },
-    [firestorePrefix, harvest, navigation, reset, worker],
+    [firestorePrefix, harvest, navigation, reset],
   );
 
-  if (!worker) {
+  if (!harvest.qrCodeUuid && !worker) {
     return <Loader />;
   }
 
@@ -108,7 +114,11 @@ const HandOverHarvest = () => {
           <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
             {strings.worker}
           </Text>
-          <Text variant="titleLarge">{getFullname(worker)}</Text>
+          <Text variant="titleLarge">
+            {worker
+              ? getFullname(worker)
+              : strings.harvestTemporarilyFixedForWorkerQrCode}
+          </Text>
         </View>
         <View>
           <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
@@ -142,12 +152,12 @@ const HandOverHarvest = () => {
           </Text>
           <Controller
             control={control}
-            name="weight"
+            name="weightTotal"
             render={({field}) => (
               <View>
                 <TextInput
                   {...field}
-                  error={Boolean(errors.weight)}
+                  error={Boolean(errors.weightTotal)}
                   inputMode="decimal"
                   keyboardType="decimal-pad"
                   mode="flat"
@@ -155,10 +165,10 @@ const HandOverHarvest = () => {
                     field.onChange(text);
                   }}
                   style={{width: '100%'}}
-                  testID="weight"
+                  testID="weightTotal"
                 />
-                <HelperText type="error" visible={Boolean(errors.weight)}>
-                  {errors.weight?.message}
+                <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                  {errors.weightTotal?.message}
                 </HelperText>
               </View>
             )}

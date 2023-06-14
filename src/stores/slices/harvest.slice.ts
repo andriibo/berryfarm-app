@@ -9,7 +9,8 @@ import {ProductQuality} from 'src/stores/types/productQuality.type';
 
 export type IHarvest = {
   qty: number;
-  workerUuid: string;
+  workerUuid?: string;
+  qrCodeUuid?: string;
   harvestPackage: HarvestPackage;
   location: Location;
   product: Product;
@@ -23,7 +24,6 @@ type IHarvestState = {
 const initialState: IHarvestState | any = {
   harvest: {
     qty: 0,
-    workerUuid: '',
     harvestPackage: {
       id: 0,
       title: '',
@@ -50,6 +50,7 @@ const authSlice = createSlice({
     setHarvest: (state: IHarvestState, {payload}: PayloadAction<IHarvest>) => {
       state.harvest.qty = payload.qty;
       state.harvest.workerUuid = payload.workerUuid;
+      state.harvest.qrCodeUuid = payload.qrCodeUuid;
       state.harvest.harvestPackage = payload.harvestPackage;
       state.harvest.location = payload.location;
       state.harvest.product = payload.product;
@@ -57,7 +58,8 @@ const authSlice = createSlice({
     },
     cleanHarvest: (state: IHarvestState) => {
       state.harvest.qty = 0;
-      state.harvest.workerUuid = '';
+      state.harvest.workerUuid = undefined;
+      state.harvest.qrCodeUuid = undefined;
       state.harvest.harvestPackage = {
         id: 0,
         title: '',

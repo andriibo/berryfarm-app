@@ -39,6 +39,7 @@ const CreateWorker = () => {
     formState: {errors, isDirty, isValid},
   } = useForm<CreateWorkerRequest>({
     defaultValues: {
+      uuid: '',
       firstName: '',
       lastName: '',
       middleName: '',
@@ -61,17 +62,9 @@ const CreateWorker = () => {
         );
 
         if (!worker) {
-          const workerUuid = uuid();
-          const post = {
-            uuid: uuid(),
-            firstName: data.firstName,
-            lastName: data.lastName,
-            middleName: data.middleName,
-            birthDate: data.birthDate,
-          };
-
-          await createWorker(post, firestorePrefix);
-          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
+          data.uuid = uuid();
+          await createWorker(data, firestorePrefix);
+          worker = await getWorkerByUuid(data.uuid, firestorePrefix);
           if (worker === null) {
             setError(strings.workerNotFound);
 

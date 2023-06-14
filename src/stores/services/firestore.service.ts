@@ -7,6 +7,8 @@ import {Worker} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
+import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
+import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -68,25 +70,29 @@ export const login = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (data: any, prefix: string) => {
-  const worker = {
-    ...data,
-    syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    createdTimestamp: firebase.firestore.Timestamp.now(),
-  };
-
+export const createWorker = async (
+  data: CreateWorkerRequest,
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
 
   await firestore()
     .collection(collection)
     .doc(data.uuid)
-    .set(worker)
+    .set({
+      ...data,
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      createdTimestamp: firebase.firestore.Timestamp.now(),
+    })
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
 };
 
-export const createHarvest = async (data: any, prefix: string) => {
+export const createHarvest = async (
+  data: CreateHarvestRequest,
+  prefix: string,
+) => {
   const collection = sprintf(harvestCollection, prefix);
 
   await firestore()
