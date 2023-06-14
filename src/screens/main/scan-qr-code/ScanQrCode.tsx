@@ -18,11 +18,15 @@ import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {
+  IHarvest,
+  setHarvest,
+  useHarvest,
+} from 'src/stores/slices/harvest.slice';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
-  const harvest = useHarvest();
+  const harvest = useHarvest() as IHarvest;
   const worker = useWorker();
   const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
@@ -52,11 +56,12 @@ const ScanQrCode = () => {
 
   const handleHarvest = useCallback(
     (qrCode: QrCode) => {
-      if (qrCode.workerUuid === undefined) {
-        setError(strings.qrCodeNotGiven);
+      if (qrCode.workerUuid) {
+        harvest.workerUuid = qrCode.workerUuid;
+      } else {
+        harvest.qrCodeUuid = qrCode.uuid;
       }
 
-      harvest.workerUuid = qrCode.workerUuid;
       dispatch(setHarvest(harvest));
     },
     [dispatch, harvest],
@@ -68,7 +73,7 @@ const ScanQrCode = () => {
       try {
         const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
 
-        if (qrCode === null) {
+        if (!qrCode) {
           setError(strings.qrCodeNotFound);
 
           return;

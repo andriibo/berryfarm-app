@@ -70,7 +70,6 @@ const Templates = () => {
     (template: HarvestTemplate) => {
       const harvest = {
         qty: template.qty,
-        workerUuid: '',
         harvestPackage: template.harvestPackage,
         location: template.location,
         product: template.product,

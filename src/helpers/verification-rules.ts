@@ -13,6 +13,7 @@ export const validation = {
     .required(),
   createWorker: yup
     .object({
+      uuid: yup.string(),
       firstName: yup
         .string()
         .required(errorMessages.required)
@@ -33,7 +34,13 @@ export const validation = {
     .required(),
   createHarvest: yup
     .object({
-      weight: yup
+      uuid: yup.string(),
+      qty: yup.number().required(errorMessages.required),
+      harvestPackageId: yup.number().required(errorMessages.required),
+      locationId: yup.number().required(errorMessages.required),
+      productId: yup.number().required(errorMessages.required),
+      productQualityId: yup.number().required(errorMessages.required),
+      weightTotal: yup
         .number()
         .typeError(errorMessages.number)
         .required(errorMessages.required)

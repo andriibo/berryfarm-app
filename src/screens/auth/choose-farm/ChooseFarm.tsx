@@ -33,7 +33,7 @@ const ChooseFarm = () => {
     try {
       const farm = await getFarm(selectedFarm as FarmsEnum);
 
-      if (farm === null) {
+      if (!farm) {
         setError(strings.farmNotFound);
 
         return;

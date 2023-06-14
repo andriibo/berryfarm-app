@@ -36,7 +36,6 @@ export const strings = new LocalizedStrings({
     registerWorker: 'Зарегистрировать работника',
     qrCodeNotFound: 'QR код не принадлежит системе.',
     qrCodeGiven: 'QR код уже выдан.',
-    qrCodeNotGiven: 'QR код не выдан.',
     farmNotFound: 'Ферма не найдена.',
     toMain: 'На главную',
     toTemplates: 'К шаблонам',
@@ -52,5 +51,7 @@ export const strings = new LocalizedStrings({
     quality: 'Качество',
     package: 'Упаковка',
     product: 'Продукт',
+    harvestTemporarilyFixedForWorkerQrCode:
+      'Урожай временно зафиксирован за QR кодом работника',
   },
 });

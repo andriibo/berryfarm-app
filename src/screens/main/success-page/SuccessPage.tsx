@@ -1,4 +1,4 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useMemo} from 'react';
 import {View} from 'react-native';
 import {Button, IconButton, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -17,19 +17,23 @@ const SuccessPage = () => {
   const {
     params: {scenario},
   } = useRoute<RouteProp<DrawerStackParamList, 'SuccessPage'>>();
+  const title = useMemo(
+    () =>
+      scenario === ScenariosEnum.createWorker
+        ? strings.registration
+        : scenario === ScenariosEnum.giveQrCode
+        ? strings.giveQrCode
+        : strings.hangOverHarvest,
+    [scenario],
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () =>
         scenario === ScenariosEnum.handOverHarvest ? <HeaderLeft /> : null,
-      title:
-        scenario === ScenariosEnum.createWorker
-          ? strings.registration
-          : scenario === ScenariosEnum.giveQrCode
-          ? strings.giveQrCode
-          : strings.hangOverHarvest,
+      title,
     });
-  }, [navigation, scenario]);
+  }, [navigation, scenario, title]);
 
   return (
     <SafeAreaView style={styles.container}>
