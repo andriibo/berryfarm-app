@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Snackbar, Text, IconButton} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useFocusEffect} from '@react-navigation/native';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
@@ -17,13 +17,17 @@ import {
   getWorkers,
 } from 'src/stores/services/firestore.service';
 import {Loader} from 'src/components/loader';
+import {FirestoreServiceError} from 'src/stores/errors';
+import {Toast} from 'src/components/toast';
 
 const LoadData = () => {
+  const [errorMessage, setError] = useState('');
   const netState = useNetInfo();
   const dispatch = useAppDispatch();
 
   useFocusEffect(
     useCallback(() => {
+      setError('');
       if (netState.isConnected) {
         getFarms()
           .then(items => {
@@ -35,9 +39,14 @@ const LoadData = () => {
               getQrCodes(prefix).then();
               getTemplates(prefix).then();
             });
-          })
-          .finally(() => {
             dispatch(setLoadedData(true));
+          })
+          .catch(error => {
+            if (error instanceof FirestoreServiceError) {
+              setError(error.message);
+            } else {
+              console.error(error);
+            }
           });
       }
     }, [dispatch, netState.isConnected]),
@@ -49,6 +58,7 @@ const LoadData = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1}}>
+      {errorMessage && <Toast error={errorMessage} />}
       <View style={styles.container}>
         <FastImage
           resizeMode="contain"

@@ -66,6 +66,7 @@ const GiveQrCode = () => {
   );
 
   useEffect(() => {
+    setError('');
     getWorkers(firestorePrefix)
       .then(res => {
         setWorkers(res);

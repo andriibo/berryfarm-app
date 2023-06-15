@@ -29,7 +29,8 @@ const ChooseFarm = () => {
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
   const [errorMessage, setError] = useState('');
 
-  const login = useCallback(async () => {
+  const chooseFarm = useCallback(async () => {
+    setError('');
     try {
       const farm = await getFarm(selectedFarm as FarmsEnum);
 
@@ -81,7 +82,7 @@ const ChooseFarm = () => {
         <Button
           disabled={!selectedFarm}
           mode="contained"
-          onPress={login}
+          onPress={chooseFarm}
           style={[styles.btn, styles.continue]}>
           {strings.continue}
         </Button>

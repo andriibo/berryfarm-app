@@ -53,6 +53,7 @@ const Templates = () => {
   const [errorMessage, setError] = useState('');
 
   useEffect(() => {
+    setError('');
     getTemplates(firestorePrefix)
       .then(data => {
         setTemplates(data);
