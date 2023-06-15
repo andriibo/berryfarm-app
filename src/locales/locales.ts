@@ -53,5 +53,7 @@ export const strings = new LocalizedStrings({
     product: 'Продукт',
     harvestTemporarilyFixedForWorkerQrCode:
       'Урожай временно зафиксирован за QR кодом работника',
+    couldNotConnectToServerAppWorksOffline:
+      'Не удалось установить соединение с сервером. Приложение работает в автономном режиме.',
   },
 });

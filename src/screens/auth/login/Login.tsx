@@ -2,7 +2,7 @@ import styles from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {HelperText, Button, TextInput} from 'react-native-paper';
+import {HelperText, Button, TextInput, Text} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
 import {SignInRequest} from 'src/stores/requests/signIn.request';
@@ -15,11 +15,13 @@ import {setUser, useUser} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {Toast} from 'src/components/toast';
 import {useFarm} from 'src/stores/slices/farm.slice';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const user = useUser();
   const {firestorePrefix} = useFarm();
+  const netState = useNetInfo();
   const [errorMessage, setError] = useState('');
   const {
     control,
@@ -84,6 +86,11 @@ const Login = () => {
           style={[styles.btn]}>
           {strings.logIn}
         </Button>
+        {!netState.isConnected && (
+          <Text style={styles.notConnected} variant="bodyLarge">
+            {strings.couldNotConnectToServerAppWorksOffline}
+          </Text>
+        )}
       </View>
     </SafeAreaView>
   );
