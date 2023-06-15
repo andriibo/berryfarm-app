@@ -17,10 +17,10 @@ const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 
-export const getFarm = async (farm: FarmsEnum) => {
+export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
     .collection(farmsCollection)
-    .doc(farm)
+    .doc(document)
     .get()
     .catch(err => {
       throw new FirestoreServiceError(err);
@@ -50,26 +50,6 @@ export const getFarms = async () => {
   });
 
   return farms;
-};
-
-export const getUsers = async (prefix: string) => {
-  const collection = sprintf(usersCollection, prefix);
-  const snapshot = await firestore()
-    .collection(collection)
-    .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
-    });
-
-  const users: User[] = [];
-
-  snapshot.docs.forEach(doc => {
-    if (doc.data()) {
-      users.push(doc.data() as User);
-    }
-  });
-
-  return users;
 };
 
 export const getTemplates = async (prefix: string) => {
@@ -112,7 +92,7 @@ export const getQrCodes = async (prefix: string) => {
   return qrCodes;
 };
 
-export const login = async (username: string, prefix: string) => {
+export const getUserByUsername = async (username: string, prefix: string) => {
   const collection = sprintf(usersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
@@ -254,4 +234,15 @@ export const getWorkers = async (prefix: string) => {
   });
 
   return workers;
+};
+
+export const initData = async (prefix: string) => {
+  try {
+    await getFarms();
+    await getWorkers(prefix);
+    await getQrCodes(prefix);
+    await getTemplates(prefix);
+  } catch (error: any) {
+    throw new FirestoreServiceError(error);
+  }
 };

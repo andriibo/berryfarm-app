@@ -10,7 +10,7 @@ import {colors} from 'src/styles/colors';
 import {AuthStackParamList} from 'src/navigation/auth.stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {getFarm} from 'src/stores/services/firestore.service';
+import {getFarmByDoc} from 'src/stores/services/firestore.service';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setFarm} from 'src/stores/slices/farm.slice';
 import {Toast} from 'src/components/toast';
@@ -32,7 +32,7 @@ const ChooseFarm = () => {
   const chooseFarm = useCallback(async () => {
     setError('');
     try {
-      const farm = await getFarm(selectedFarm as FarmsEnum);
+      const farm = await getFarmByDoc(selectedFarm as FarmsEnum);
 
       if (!farm) {
         setError(strings.farmNotFound);

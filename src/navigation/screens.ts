@@ -7,12 +7,12 @@ import {Templates} from 'src/screens/main/templates';
 import {ScanQrCode} from 'src/screens/main/scan-qr-code';
 import {SuccessPage} from 'src/screens/main/success-page';
 import {HandOverHarvest} from 'src/screens/main/hand-over-harvest';
-import {LoadData} from 'src/screens/auth/load-data';
+import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
 
 export const Screens = {
   ChooseFarm,
   Login,
-  LoadData,
+  InternetNotConnected,
   Home,
   CreateWorker,
   GiveQrCode,

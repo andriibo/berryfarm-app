@@ -15,19 +15,26 @@ import {SignInRequest} from 'src/stores/requests/signIn.request';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {login} from 'src/stores/services/firestore.service';
+import {
+  getUserByUsername,
+  initData,
+} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {setUser, useUser} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {Toast} from 'src/components/toast';
 import {useFarm} from 'src/stores/slices/farm.slice';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {setLoadedData, useLoadedData} from 'src/stores/slices/device.slice';
+import {Loader} from 'src/components/loader';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const user = useUser();
   const {firestorePrefix} = useFarm();
+  const loadedData = useLoadedData();
   const netState = useNetInfo();
+  const [isLoad, setIsLoadActive] = useState(false);
   const [errorMessage, setError] = useState('');
   const {
     control,
@@ -42,13 +49,19 @@ const Login = () => {
   const handleLogin = useCallback(
     async ({username}: FieldValues) => {
       setError('');
+      setIsLoadActive(true);
       try {
-        const data = await login(username, firestorePrefix);
+        const data = await getUserByUsername(username, firestorePrefix);
 
         if (!data) {
           setError(strings.incorrectUsername);
 
           return;
+        }
+
+        if (!loadedData) {
+          await initData(firestorePrefix);
+          dispatch(setLoadedData(true));
         }
 
         dispatch(setUser(data));
@@ -58,10 +71,16 @@ const Login = () => {
         } else {
           console.error(error);
         }
+      } finally {
+        setIsLoadActive(false);
       }
     },
-    [dispatch, firestorePrefix],
+    [dispatch, firestorePrefix, loadedData],
   );
+
+  if (isLoad) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1}}>

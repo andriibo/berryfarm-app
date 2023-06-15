@@ -5,6 +5,7 @@ import {colors} from 'src/styles/colors';
 
 export type AuthStackParamList = {
   ChooseFarm: undefined;
+  InternetNotConnected: undefined;
   Login: undefined;
 };
 
@@ -24,6 +25,11 @@ export const AuthStack = () => {
       <AuthStackComponent.Screen
         component={Screens.ChooseFarm}
         name="ChooseFarm"
+        options={{...options, headerShown: false}}
+      />
+      <AuthStackComponent.Screen
+        component={Screens.InternetNotConnected}
+        name="InternetNotConnected"
         options={{...options, headerShown: false}}
       />
       <AuthStackComponent.Screen

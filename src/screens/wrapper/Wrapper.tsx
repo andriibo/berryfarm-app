@@ -6,10 +6,12 @@ import AuthStack from 'src/navigation/auth.stack';
 import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated} from 'src/stores/slices/auth.slice';
 import {useLoadedData} from 'src/stores/slices/device.slice';
-import {LoadData} from 'src/screens/auth/load-data';
+import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const Wrapper = () => {
   const isAuth = useIsAuthenticated();
+  const netState = useNetInfo();
   const loadedData = useLoadedData();
 
   const onFocusEffect = useCallback(() => {
@@ -26,8 +28,8 @@ const Wrapper = () => {
 
   useFocusEffect(onFocusEffect); // register callback to focus events
 
-  if (!loadedData) {
-    return <LoadData />;
+  if (!netState.isConnected && !loadedData) {
+    return <InternetNotConnected />;
   }
 
   if (!isAuth) {

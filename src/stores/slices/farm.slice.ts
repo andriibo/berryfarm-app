@@ -4,8 +4,6 @@ import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Farm} from 'src/stores/types/farm.type';
 
-type FarmInfo = Pick<Farm, 'apiUrlPrefix' | 'farmName' | 'firestorePrefix'>;
-
 type IFarmState = {
   apiUrlPrefix: string;
   farmName: string;
@@ -22,7 +20,7 @@ const farmSlice = createSlice({
   name: 'Farm',
   initialState,
   reducers: {
-    setFarm: (state: IFarmState, {payload}: PayloadAction<FarmInfo>) => {
+    setFarm: (state: IFarmState, {payload}: PayloadAction<Farm>) => {
       state.apiUrlPrefix = payload.apiUrlPrefix;
       state.farmName = payload.farmName;
       state.firestorePrefix = payload.firestorePrefix;
