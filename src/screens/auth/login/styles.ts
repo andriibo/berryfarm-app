@@ -6,20 +6,22 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: colors.background,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingHorizontal: 30,
     justifyContent: 'space-evenly',
   },
   image: {
     width: '90%',
     height: '50%',
   },
+  input: {
+    width: '90%',
+  },
   btn: {
     width: Dimensions.get('window').width - 100,
     marginBottom: 25,
     marginTop: 50,
   },
-  input: {
-    width: '90%',
+  notConnected: {
+    marginBottom: 25,
   },
 });
