@@ -21,7 +21,7 @@ type IHarvestState = {
   harvest: IHarvest;
 };
 
-const initialState: IHarvestState | any = {
+const initialState: IHarvestState = {
   harvest: {
     qty: 0,
     harvestPackage: {
@@ -43,7 +43,7 @@ const initialState: IHarvestState | any = {
   },
 };
 
-const authSlice = createSlice({
+const harvestSlice = createSlice({
   name: 'Harvest',
   initialState,
   reducers: {
@@ -86,4 +86,4 @@ export const useHarvest = () => useAppSelector(selectHarvest);
 export const {
   reducer: harvestReducer,
   actions: {setHarvest, cleanHarvest},
-} = authSlice;
+} = harvestSlice;

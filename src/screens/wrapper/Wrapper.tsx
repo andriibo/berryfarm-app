@@ -1,15 +1,18 @@
 import {useFocusEffect} from '@react-navigation/native';
-import React from 'react';
+import {useCallback} from 'react';
 import {AvoidSoftInput} from 'react-native-avoid-softinput';
 
 import AuthStack from 'src/navigation/auth.stack';
 import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated} from 'src/stores/slices/auth.slice';
+import {useLoadedData} from 'src/stores/slices/device.slice';
+import {LoadData} from 'src/screens/auth/load-data';
 
 const Wrapper = () => {
   const isAuth = useIsAuthenticated();
+  const loadedData = useLoadedData();
 
-  const onFocusEffect = React.useCallback(() => {
+  const onFocusEffect = useCallback(() => {
     // This should be run when screen gains focus - enable the module where it's needed
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
     AvoidSoftInput.setEnabled(true);
@@ -22,6 +25,10 @@ const Wrapper = () => {
   }, []);
 
   useFocusEffect(onFocusEffect); // register callback to focus events
+
+  if (!loadedData) {
+    return <LoadData />;
+  }
 
   if (!isAuth) {
     return <AuthStack />;

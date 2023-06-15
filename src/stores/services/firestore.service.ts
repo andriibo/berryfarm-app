@@ -29,6 +29,49 @@ export const getFarm = async (farm: FarmsEnum) => {
   return snapshot.data() ? (snapshot.data() as Farm) : null;
 };
 
+export const getFarms = async () => {
+  const snapshot = await firestore()
+    .collection(farmsCollection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  if (!snapshot.docs.length) {
+    throw new FirestoreServiceError('Farms not found.');
+  }
+
+  const farms: Farm[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      farms.push(doc.data() as Farm);
+    }
+  });
+
+  return farms;
+};
+
+export const getUsers = async (prefix: string) => {
+  const collection = sprintf(usersCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  const users: User[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      users.push(doc.data() as User);
+    }
+  });
+
+  return users;
+};
+
 export const getTemplates = async (prefix: string) => {
   const collection = sprintf(harvestTemplatesCollection, prefix);
   const snapshot = await firestore()
@@ -37,10 +80,6 @@ export const getTemplates = async (prefix: string) => {
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
-
-  if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Templates not found.');
-  }
 
   const templates: HarvestTemplate[] = [];
 
@@ -51,6 +90,26 @@ export const getTemplates = async (prefix: string) => {
   });
 
   return templates;
+};
+
+export const getQrCodes = async (prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  const qrCodes: QrCode[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      qrCodes.push(doc.data() as QrCode);
+    }
+  });
+
+  return qrCodes;
 };
 
 export const login = async (username: string, prefix: string) => {

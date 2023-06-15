@@ -13,7 +13,7 @@ type IWorkerState = {
   worker: IWorker;
 };
 
-const initialState: IWorkerState | any = {
+const initialState: IWorkerState = {
   worker: {
     uuid: '',
     firstName: '',
@@ -23,7 +23,7 @@ const initialState: IWorkerState | any = {
   },
 };
 
-const authSlice = createSlice({
+const workerSlice = createSlice({
   name: 'Worker',
   initialState,
   reducers: {
@@ -50,4 +50,4 @@ export const useWorker = () => useAppSelector(selectWorker);
 export const {
   reducer: workerReducer,
   actions: {setWorker, cleanWorker},
-} = authSlice;
+} = workerSlice;
