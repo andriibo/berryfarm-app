@@ -39,11 +39,11 @@ const Home = () => {
             <Text style={styles.titleText}>{strings.templates}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.wrapper}>
-          <View style={styles.titleWrapper}>
-            <Text style={styles.titleText}>{strings.qrCodeInformation}</Text>
-          </View>
-        </TouchableOpacity>
+        {/*<TouchableOpacity style={styles.wrapper}>*/}
+        {/*  <View style={styles.titleWrapper}>*/}
+        {/*    <Text style={styles.titleText}>{strings.qrCodeInformation}</Text>*/}
+        {/*  </View>*/}
+        {/*</TouchableOpacity>*/}
       </View>
       <View style={styles.container} />
     </SafeAreaView>
