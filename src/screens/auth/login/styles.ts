@@ -22,6 +22,7 @@ export default StyleSheet.create({
     marginTop: 50,
   },
   notConnected: {
+    textAlign: 'center',
     marginBottom: 25,
   },
 });
