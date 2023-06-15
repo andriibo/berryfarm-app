@@ -45,6 +45,12 @@ const Login = () => {
       try {
         const data = await login(username, firestorePrefix);
 
+        if (!data) {
+          setError(strings.incorrectUsername);
+
+          return;
+        }
+
         dispatch(setUser(data));
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {

@@ -60,5 +60,6 @@ export const strings = new LocalizedStrings({
     noInternetConnection: 'Отсутствует подключение к Интеренету',
     logInOnline:
       'Войдите в систему в он-лайн режиме хотя бы один раз, чтобы использовать приложение.',
+    incorrectUsername: 'Неверное имя пользователя',
   },
 });

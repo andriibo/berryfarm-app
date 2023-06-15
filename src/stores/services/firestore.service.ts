@@ -77,8 +77,8 @@ export const getTemplates = async (prefix: string) => {
   const snapshot = await firestore()
     .collection(collection)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   const templates: HarvestTemplate[] = [];
@@ -97,8 +97,8 @@ export const getQrCodes = async (prefix: string) => {
   const snapshot = await firestore()
     .collection(collection)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   const qrCodes: QrCode[] = [];
@@ -118,12 +118,12 @@ export const login = async (username: string, prefix: string) => {
     .collection(collection)
     .where('username', '==', username.trim())
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Incorrect username.');
+    return null;
   }
 
   return snapshot.docs[0].data() as User;
@@ -162,8 +162,8 @@ export const createHarvest = async (
       syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
       createdTimestamp: firebase.firestore.Timestamp.now(),
     })
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 };
 
@@ -182,8 +182,8 @@ export const getWorkerByParams = async (
     .where('middleName', '==', middleName)
     .where('birthDate', '==', birthDate)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (snapshot.docs.length) {
@@ -212,8 +212,8 @@ export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
     .collection(collection)
     .doc(uuid)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   return snapshot.data() ? (snapshot.data() as QrCode) : null;
@@ -230,8 +230,8 @@ export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
       connectedTimestamp: firebase.firestore.Timestamp.now(),
       syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 };
 
@@ -241,8 +241,8 @@ export const getWorkers = async (prefix: string) => {
   const snapshot = await firestore()
     .collection(collection)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   const workers: Worker[] = [];
