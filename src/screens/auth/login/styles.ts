@@ -21,8 +21,8 @@ export default StyleSheet.create({
     marginBottom: 25,
     marginTop: 50,
   },
-  notConnected: {
+  snackbar: {
     textAlign: 'center',
-    marginBottom: 25,
+    color: colors.white,
   },
 });

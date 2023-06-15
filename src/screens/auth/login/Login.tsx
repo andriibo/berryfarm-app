@@ -2,7 +2,13 @@ import styles from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {HelperText, Button, TextInput, Text} from 'react-native-paper';
+import {
+  HelperText,
+  Button,
+  TextInput,
+  Snackbar,
+  Text,
+} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
 import {SignInRequest} from 'src/stores/requests/signIn.request';
@@ -86,11 +92,12 @@ const Login = () => {
           style={[styles.btn]}>
           {strings.logIn}
         </Button>
-        {!netState.isConnected && (
-          <Text style={styles.notConnected} variant="bodyLarge">
-            {strings.couldNotConnectToServerAppWorksOffline}
-          </Text>
-        )}
+        <Snackbar
+          onDismiss={() => {}}
+          visible={!netState.isConnected}
+          wrapperStyle={{position: 'relative'}}>
+          <Text style={styles.snackbar}>{strings.couldNotConnectToServer}</Text>
+        </Snackbar>
       </View>
     </SafeAreaView>
   );

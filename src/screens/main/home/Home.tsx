@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Snackbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useNavigation} from '@react-navigation/native';
@@ -8,10 +8,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const Home = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const netState = useNetInfo();
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
@@ -46,6 +48,9 @@ const Home = () => {
         {/*</TouchableOpacity>*/}
       </View>
       <View style={styles.container} />
+      <Snackbar onDismiss={() => {}} visible={!netState.isConnected}>
+        <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
+      </Snackbar>
     </SafeAreaView>
   );
 };

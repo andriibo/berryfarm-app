@@ -46,4 +46,8 @@ export default StyleSheet.create({
     fontSize: 22,
     flexShrink: 1,
   },
+  snackbar: {
+    textAlign: 'center',
+    color: colors.white,
+  },
 });
