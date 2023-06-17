@@ -17,10 +17,10 @@ const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 
-export const getFarm = async (farm: FarmsEnum) => {
+export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
     .collection(farmsCollection)
-    .doc(farm)
+    .doc(document)
     .get()
     .catch(err => {
       throw new FirestoreServiceError(err);
@@ -29,18 +29,37 @@ export const getFarm = async (farm: FarmsEnum) => {
   return snapshot.data() ? (snapshot.data() as Farm) : null;
 };
 
-export const getTemplates = async (prefix: string) => {
-  const collection = sprintf(harvestTemplatesCollection, prefix);
+export const getFarms = async () => {
   const snapshot = await firestore()
-    .collection(collection)
+    .collection(farmsCollection)
     .get()
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
 
   if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Templates not found.');
+    throw new FirestoreServiceError('Farms not found.');
   }
+
+  const farms: Farm[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      farms.push(doc.data() as Farm);
+    }
+  });
+
+  return farms;
+};
+
+export const getTemplates = async (prefix: string) => {
+  const collection = sprintf(harvestTemplatesCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
 
   const templates: HarvestTemplate[] = [];
 
@@ -53,18 +72,38 @@ export const getTemplates = async (prefix: string) => {
   return templates;
 };
 
-export const login = async (username: string, prefix: string) => {
+export const getQrCodes = async (prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const qrCodes: QrCode[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      qrCodes.push(doc.data() as QrCode);
+    }
+  });
+
+  return qrCodes;
+};
+
+export const getUserByUsername = async (username: string, prefix: string) => {
   const collection = sprintf(usersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
     .where('username', '==', username.trim())
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Incorrect username.');
+    return null;
   }
 
   return snapshot.docs[0].data() as User;
@@ -103,8 +142,8 @@ export const createHarvest = async (
       syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
       createdTimestamp: firebase.firestore.Timestamp.now(),
     })
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 };
 
@@ -123,8 +162,8 @@ export const getWorkerByParams = async (
     .where('middleName', '==', middleName)
     .where('birthDate', '==', birthDate)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (snapshot.docs.length) {
@@ -153,8 +192,8 @@ export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
     .collection(collection)
     .doc(uuid)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   return snapshot.data() ? (snapshot.data() as QrCode) : null;
@@ -171,8 +210,8 @@ export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
       connectedTimestamp: firebase.firestore.Timestamp.now(),
       syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 };
 
@@ -182,8 +221,8 @@ export const getWorkers = async (prefix: string) => {
   const snapshot = await firestore()
     .collection(collection)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   const workers: Worker[] = [];
@@ -195,4 +234,15 @@ export const getWorkers = async (prefix: string) => {
   });
 
   return workers;
+};
+
+export const initData = async (prefix: string) => {
+  try {
+    await getFarms();
+    await getWorkers(prefix);
+    await getQrCodes(prefix);
+    await getTemplates(prefix);
+  } catch (error: any) {
+    throw new FirestoreServiceError(error);
+  }
 };

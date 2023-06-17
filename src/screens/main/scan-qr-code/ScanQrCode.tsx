@@ -40,7 +40,7 @@ const ScanQrCode = () => {
     async (qrCode: QrCode) => {
       if (
         scenario !== ScenariosEnum.handOverHarvest &&
-        qrCode?.workerUuid === worker.uuid
+        qrCode.workerUuid !== undefined
       ) {
         setError(strings.qrCodeGiven);
 

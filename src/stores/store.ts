@@ -8,6 +8,7 @@ import {authReducer, cleanUser} from './slices/auth.slice';
 import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
 import {cleanFarm, farmReducer} from 'src/stores/slices/farm.slice';
 import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
+import {deviceReducer} from 'src/stores/slices/device.slice';
 
 const persistConfig = {
   key: 'root',
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   farm: farmReducer,
   worker: workerReducer,
   harvest: harvestReducer,
+  device: deviceReducer,
 });
 
 export const store = configureStore({

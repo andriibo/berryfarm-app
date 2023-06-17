@@ -55,6 +55,7 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setError('');
       if (harvest.workerUuid) {
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {

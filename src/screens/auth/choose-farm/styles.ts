@@ -6,8 +6,6 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: colors.background,
-    paddingLeft: 30,
-    paddingRight: 30,
     justifyContent: 'space-evenly',
   },
   image: {
@@ -19,7 +17,7 @@ export default StyleSheet.create({
     marginTop: -30,
   },
   btn: {
-    width: Dimensions.get('window').width - 100,
+    width: Dimensions.get('window').width - 50,
     marginBottom: 25,
   },
   btnSelected: {
