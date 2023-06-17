@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -43,7 +43,7 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   searchBar: {
-    width: '100%',
+    width: Dimensions.get('screen').width - 30,
     backgroundColor: colors.background,
   },
 });

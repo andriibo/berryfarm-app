@@ -19,17 +19,9 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 
-const Item = ({
-  handleSelectWorker,
-  worker,
-}: {
-  handleSelectWorker: (worker: Worker) => void;
-  worker: Worker;
-}) => {
+const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
-    <TouchableOpacity
-      onPress={() => handleSelectWorker(worker)}
-      style={styles.item}>
+    <TouchableOpacity onPress={() => handleSelectWorker(worker)} style={styles.item}>
       <View style={styles.titleItem}>
         <Text variant="titleMedium">{getFullname(worker)}</Text>
       </View>
@@ -39,8 +31,7 @@ const Item = ({
 
 const GiveQrCode = () => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const [workers, setWorkers] = useState<Array<Worker>>([]);
   const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,9 +125,7 @@ const GiveQrCode = () => {
             <FlatList
               data={foundWorkers}
               keyExtractor={item => `${item.uuid}`}
-              renderItem={({item}) => (
-                <Item handleSelectWorker={handleSelectWorker} worker={item} />
-              )}
+              renderItem={({item}) => <Item handleSelectWorker={handleSelectWorker} worker={item} />}
             />
             {!foundWorkers.length && searchQuery && !canScanQrCode && (
               <Text style={styles.workerNotFound} variant="titleMedium">

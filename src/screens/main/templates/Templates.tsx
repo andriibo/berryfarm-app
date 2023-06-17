@@ -18,16 +18,8 @@ import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setHarvest} from 'src/stores/slices/harvest.slice';
 
-const Item = ({
-  template,
-  scanQrCode,
-}: {
-  template: HarvestTemplate;
-  scanQrCode: (template: HarvestTemplate) => void;
-}) => (
-  <TouchableOpacity
-    onPress={() => scanQrCode(template)}
-    style={styles.container}>
+const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
+  <TouchableOpacity onPress={() => scanQrCode(template)} style={styles.container}>
     <View style={styles.titleWrapper}>
       <Text variant="headlineLarge">{template.product.title}</Text>
       <Text variant="headlineLarge">{template.location.title}</Text>
@@ -46,8 +38,7 @@ const Item = ({
 
 const Templates = () => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
   const [errorMessage, setError] = useState('');
@@ -95,9 +86,7 @@ const Templates = () => {
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}
-        renderItem={({item}) => (
-          <Item scanQrCode={scanQrCode} template={item} />
-        )}
+        renderItem={({item}) => <Item scanQrCode={scanQrCode} template={item} />}
       />
     </SafeAreaView>
   );

@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView, DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import {strings} from 'src/locales/locales';
 import {callLogOut} from 'src/stores/store';
 import {View} from 'react-native';
@@ -17,9 +13,7 @@ const Logout = (props: any) => {
 
   return (
     <View style={{flex: 1}}>
-      <DrawerContentScrollView
-        {...props}
-        contentContainerStyle={styles.container}>
+      <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
         <DrawerItemList {...props} />
         <View style={styles.logout}>
           <Divider style={{marginBottom: 20}} />
