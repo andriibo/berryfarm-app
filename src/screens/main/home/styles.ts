@@ -1,7 +1,7 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
-export const width = Dimensions.get('window').width / 3 + 30;
+export const width = Dimensions.get('window').width / 3 + 40;
 
 export default StyleSheet.create({
   container: {
@@ -9,6 +9,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   wrapper: {
     backgroundColor: colors.background,
@@ -17,7 +18,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     width,
     margin: 10,
-    height: '90%',
+    height: '30%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -43,7 +44,7 @@ export default StyleSheet.create({
     paddingBottom: 25,
     color: colors.black,
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 20,
     flexShrink: 1,
   },
   snackbar: {
