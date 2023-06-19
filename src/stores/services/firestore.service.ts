@@ -9,7 +9,7 @@ import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
 import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
-import {isUUID} from 'src/helpers/is-uuid';
+import {validate as uuidValidate} from 'uuid';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -110,8 +110,11 @@ export const getUserByUsername = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (data: CreateWorkerRequest, prefix: string) => {
-  if (!isUUID(data.uuid)) {
+export const createWorker = async (
+  data: CreateWorkerRequest,
+  prefix: string,
+) => {
+  if (!uuidValidate(data.uuid)) {
     return null;
   }
 
@@ -130,8 +133,11 @@ export const createWorker = async (data: CreateWorkerRequest, prefix: string) =>
     });
 };
 
-export const createHarvest = async (data: CreateHarvestRequest, prefix: string) => {
-  if (!isUUID(data.uuid)) {
+export const createHarvest = async (
+  data: CreateHarvestRequest,
+  prefix: string,
+) => {
+  if (!uuidValidate(data.uuid)) {
     return null;
   }
 
@@ -177,7 +183,7 @@ export const getWorkerByParams = async (
 };
 
 export const getWorkerByUuid = async (uuid: string, prefix: string) => {
-  if (!isUUID(uuid)) {
+  if (!uuidValidate(uuid)) {
     return null;
   }
 
@@ -194,7 +200,7 @@ export const getWorkerByUuid = async (uuid: string, prefix: string) => {
 };
 
 export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
-  if (!isUUID(uuid)) {
+  if (!uuidValidate(uuid)) {
     return null;
   }
 
@@ -212,7 +218,7 @@ export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
 };
 
 export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
-  if (!isUUID(qrCode.uuid)) {
+  if (!uuidValidate(qrCode.uuid)) {
     return null;
   }
 

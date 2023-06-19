@@ -9,6 +9,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {colors} from 'src/styles/colors';
 import {persistor} from 'src/stores/store';
 import {PersistGate} from 'redux-persist/integration/react';
+import 'react-native-gesture-handler';
 
 const theme = {
   ...DefaultTheme,
