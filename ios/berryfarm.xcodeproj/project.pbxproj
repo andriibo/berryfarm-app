@@ -536,7 +536,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zenzersmedical;
+				PRODUCT_BUNDLE_IDENTIFIER = com.berryfarm;
 				PRODUCT_NAME = berryfarm;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -570,7 +570,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zenzersmedical;
+				PRODUCT_BUNDLE_IDENTIFIER = com.berryfarm;
 				PRODUCT_NAME = berryfarm;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
