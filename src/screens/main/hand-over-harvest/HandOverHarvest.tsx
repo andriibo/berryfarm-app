@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
@@ -12,10 +12,7 @@ import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
-import {
-  createHarvest,
-  getWorkerByUuid,
-} from 'src/stores/services/firestore.service';
+import {createHarvest, getWorkerByUuid} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/farm.slice';
 import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
@@ -31,8 +28,7 @@ const HandOverHarvest = () => {
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
 
   const {
     control,
@@ -108,17 +104,18 @@ const HandOverHarvest = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
       {errorMessage && <Toast error={errorMessage} />}
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled">
         <View>
           <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
             {strings.worker}
           </Text>
           <Text variant="titleLarge">
-            {worker
-              ? getFullname(worker)
-              : strings.harvestTemporarilyFixedForWorkerQrCode}
+            {worker ? getFullname(worker) : strings.harvestTemporarilyFixedForWorkerQrCode}
           </Text>
         </View>
         <View>
@@ -184,7 +181,7 @@ const HandOverHarvest = () => {
             Сохранить
           </Button>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

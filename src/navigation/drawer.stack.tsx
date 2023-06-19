@@ -7,6 +7,7 @@ import {Screens} from 'src/navigation/screens';
 import {Logout} from 'src/screens/main/logout';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {HeaderLeft} from 'src/components/header-left/HeaderLeft';
+import {Home} from 'src/screens/main/home';
 
 export type DrawerStackParamList = {
   Home: undefined;
@@ -36,7 +37,9 @@ const DrawerStack = () => {
   return (
     <DrawerComponent.Navigator
       drawerContent={Logout}
+      initialRouteName="Home"
       screenOptions={{
+        swipeEnabled: true,
         drawerActiveTintColor: colors.black,
         drawerInactiveTintColor: '#333',
         drawerLabelStyle: {
@@ -44,11 +47,11 @@ const DrawerStack = () => {
         },
       }}>
       <DrawerComponent.Screen
-        component={Screens.Home}
+        component={Home}
         name="Home"
         options={{
           ...options,
-          drawerItemStyle: {display: 'none'},
+          drawerItemStyle: {display: 'flex'},
           title: farmName,
         }}
       />
@@ -94,7 +97,7 @@ const DrawerStack = () => {
         name="HandOverHarvest"
         options={{
           ...options,
-          drawerItemStyle: {display: 'none'},
+          drawerItemStyle: {display: 'flex'},
           title: strings.hangOverHarvest,
           headerLeft: () => <HeaderLeft />,
         }}

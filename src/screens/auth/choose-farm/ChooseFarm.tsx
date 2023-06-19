@@ -24,8 +24,7 @@ const farms = [
 
 const ChooseFarm = () => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
   const [errorMessage, setError] = useState('');
 
@@ -55,11 +54,7 @@ const ChooseFarm = () => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
-        <FastImage
-          resizeMode="contain"
-          source={require('src/assets/images/logo.png')}
-          style={styles.image}
-        />
+        <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
         <Text style={styles.subheading} variant="bodyLarge">
           {strings.selectFarm}
         </Text>
@@ -72,18 +67,11 @@ const ChooseFarm = () => {
             }}
             mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
             onPress={() => handleClick(farm.value)}
-            style={[
-              styles.btn,
-              selectedFarm === farm.value && styles.btnSelected,
-            ]}>
+            style={[styles.btn, selectedFarm === farm.value && styles.btnSelected]}>
             {farm.label}
           </Button>
         ))}
-        <Button
-          disabled={!selectedFarm}
-          mode="contained"
-          onPress={chooseFarm}
-          style={[styles.btn, styles.continue]}>
+        <Button disabled={!selectedFarm} mode="contained" onPress={chooseFarm} style={[styles.btn, styles.continue]}>
           {strings.continue}
         </Button>
       </View>
