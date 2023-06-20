@@ -1,5 +1,5 @@
 export type CreateHarvestRequest = {
-  uuid: string | undefined;
+  uuid: string;
   qty: number;
   harvestPackageId: number;
   locationId: number;

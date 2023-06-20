@@ -32,11 +32,7 @@ export const AuthStack = () => {
         name="InternetNotConnected"
         options={{...options, headerShown: false}}
       />
-      <AuthStackComponent.Screen
-        component={Screens.Login}
-        name="Login"
-        options={{...options}}
-      />
+      <AuthStackComponent.Screen component={Screens.Login} name="Login" options={{...options}} />
     </AuthStackComponent.Navigator>
   );
 };

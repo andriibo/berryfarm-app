@@ -7,7 +7,7 @@ import styles from 'src/screens/main/create-worker/styles';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
+import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
@@ -22,6 +22,8 @@ import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 
+type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
+
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
@@ -32,7 +34,7 @@ const CreateWorker = () => {
     handleSubmit,
     reset,
     formState: {errors, isDirty, isValid},
-  } = useForm<CreateWorkerRequest>({
+  } = useForm<WorkerRequest>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -44,7 +46,7 @@ const CreateWorker = () => {
   });
 
   const handleCreateWorker = useCallback(
-    async (data: CreateWorkerRequest) => {
+    async (data: WorkerRequest) => {
       setError('');
       try {
         let worker = await getWorkerByParams(
@@ -56,9 +58,10 @@ const CreateWorker = () => {
         );
 
         if (!worker) {
-          data.uuid = uuid();
-          await createWorker(data, firestorePrefix);
-          worker = await getWorkerByUuid(data.uuid, firestorePrefix);
+          const workerUuid = uuid();
+
+          await createWorker({...data, uuid: workerUuid}, firestorePrefix);
+          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
           if (!worker) {
             setError(strings.workerNotFound);
 

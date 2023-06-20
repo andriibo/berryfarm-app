@@ -9,7 +9,6 @@ export const validation = {
     .required(),
   createWorker: yup
     .object({
-      uuid: yup.string().optional(),
       firstName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.firstName),
       lastName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.lastName),
       middleName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.middleName),
@@ -18,7 +17,6 @@ export const validation = {
     .required(),
   createHarvest: yup
     .object({
-      uuid: yup.string().optional(),
       qty: yup.number().required(errorMessages.required),
       harvestPackageId: yup.number().required(errorMessages.required),
       locationId: yup.number().required(errorMessages.required),

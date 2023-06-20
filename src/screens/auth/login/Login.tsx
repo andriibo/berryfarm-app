@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import {HelperText, Button, TextInput, Snackbar, Text} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
-import {SignInRequest} from 'src/stores/requests/signIn.request';
+import {SignInRequest} from 'src/stores/types/signInRequest';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';

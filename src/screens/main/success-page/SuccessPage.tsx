@@ -12,8 +12,7 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {HeaderLeft} from 'src/components/header-left';
 
 const SuccessPage = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {
     params: {scenario},
   } = useRoute<RouteProp<DrawerStackParamList, 'SuccessPage'>>();
@@ -29,8 +28,7 @@ const SuccessPage = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () =>
-        scenario === ScenariosEnum.handOverHarvest ? <HeaderLeft /> : null,
+      headerLeft: () => (scenario === ScenariosEnum.handOverHarvest ? <HeaderLeft /> : null),
       title,
     });
   }, [navigation, scenario, title]);
@@ -39,50 +37,31 @@ const SuccessPage = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <Text style={styles.titleText}>{strings.entrySaved}</Text>
-        <IconButton
-          icon="check-circle-outline"
-          iconColor={colors.black}
-          size={50}
-        />
+        <IconButton icon="check-circle-outline" iconColor={colors.black} size={50} />
       </View>
       <View style={{marginTop: '20%'}}>
         {scenario === ScenariosEnum.handOverHarvest && (
-          <Button
-            mode="outlined"
-            onPress={() => navigation.navigate('Templates')}
-            style={styles.btn}>
+          <Button mode="outlined" onPress={() => navigation.navigate('Templates')} style={styles.btn}>
             {strings.toTemplates}
           </Button>
         )}
         {scenario !== ScenariosEnum.handOverHarvest && (
-          <Button
-            mode="outlined"
-            onPress={() => navigation.navigate('Home')}
-            style={styles.btn}>
+          <Button mode="outlined" onPress={() => navigation.navigate('Home')} style={styles.btn}>
             {strings.toMain}
           </Button>
         )}
         {scenario === ScenariosEnum.createWorker && (
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('CreateWorker')}
-            style={styles.btn}>
+          <Button mode="contained" onPress={() => navigation.navigate('CreateWorker')} style={styles.btn}>
             {strings.registerMore}
           </Button>
         )}
         {scenario === ScenariosEnum.giveQrCode && (
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('ScanQrCode', {scenario})}
-            style={styles.btn}>
+          <Button mode="contained" onPress={() => navigation.navigate('ScanQrCode', {scenario})} style={styles.btn}>
             {strings.giveAnotherQrCode}
           </Button>
         )}
         {scenario === ScenariosEnum.handOverHarvest && (
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('HandOverHarvest')}
-            style={styles.btn}>
+          <Button mode="contained" onPress={() => navigation.navigate('HandOverHarvest')} style={styles.btn}>
             {strings.hangOverAnotherHarvest}
           </Button>
         )}
