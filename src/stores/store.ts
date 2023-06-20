@@ -6,9 +6,8 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import {authReducer, cleanUser} from './slices/auth.slice';
 import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
-import {cleanFarm, farmReducer} from 'src/stores/slices/farm.slice';
+import {cleanFarm} from 'src/stores/slices/auth.slice';
 import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
-import {deviceReducer} from 'src/stores/slices/device.slice';
 
 const persistConfig = {
   key: 'root',
@@ -18,16 +17,13 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
-  farm: farmReducer,
   worker: workerReducer,
   harvest: harvestReducer,
-  device: deviceReducer,
 });
 
 export const store = configureStore({
   reducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({serializableCheck: false}),
+  middleware: getDefaultMiddleware => getDefaultMiddleware({serializableCheck: false}),
 });
 
 export const persistor = persistStore(store);
@@ -41,6 +37,10 @@ export const callLogOut = async () => {
   store.dispatch(cleanFarm());
   store.dispatch(cleanWorker());
   store.dispatch(cleanHarvest());
+
+  const keys = await AsyncStorage.getAllKeys();
+
+  await AsyncStorage.multiRemove(keys);
 };
 
 /** Infers the `RootState` types from the store itself */

@@ -13,12 +13,8 @@ import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerStackParamList} from 'src/navigation/drawer.stack';
-import {
-  createWorker,
-  getWorkerByParams,
-  getWorkerByUuid,
-} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {createWorker, getWorkerByParams, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
@@ -28,8 +24,7 @@ import {colors} from 'src/styles/colors';
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [errorMessage, setError] = useState('');
   const {
@@ -161,9 +156,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="birthDate"
-              render={({field: {value, onChange}}) => (
-                <BirthPicker onChange={onChange} value={value} />
-              )}
+              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value} />}
             />
           </View>
           <View style={{alignItems: 'center'}}>
