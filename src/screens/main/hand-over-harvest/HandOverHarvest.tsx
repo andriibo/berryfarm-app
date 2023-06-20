@@ -13,7 +13,7 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {createHarvest, getWorkerByUuid} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';

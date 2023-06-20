@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/give-qr-code/styles';
 import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {getWorkers} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
