@@ -21,14 +21,11 @@ export type DrawerStackParamList = {
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
 const options = {
+  headerOptions: {},
   headerStyle: {
     backgroundColor: colors.primary,
   },
   headerTintColor: colors.white,
-  headerTitleAlign: 'center',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-  },
 };
 
 const DrawerStack = () => {
@@ -51,6 +48,10 @@ const DrawerStack = () => {
         name="Home"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           drawerItemStyle: {display: 'flex'},
           title: farmName,
         }}
@@ -60,6 +61,10 @@ const DrawerStack = () => {
         name="ScanQrCode"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           drawerItemStyle: {display: 'none'},
           title: '',
           headerLeft: () => <HeaderLeft />,
@@ -70,6 +75,10 @@ const DrawerStack = () => {
         name="CreateWorker"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           title: strings.registration,
           headerLeft: () => <HeaderLeft />,
         }}
@@ -79,6 +88,10 @@ const DrawerStack = () => {
         name="GiveQrCode"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           title: strings.giveQrCode,
           headerLeft: () => <HeaderLeft />,
         }}
@@ -88,6 +101,10 @@ const DrawerStack = () => {
         name="Templates"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           title: strings.templates,
           headerLeft: () => <HeaderLeft />,
         }}
@@ -97,6 +114,10 @@ const DrawerStack = () => {
         name="HandOverHarvest"
         options={{
           ...options,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
           drawerItemStyle: {display: 'flex'},
           title: strings.hangOverHarvest,
           headerLeft: () => <HeaderLeft />,
