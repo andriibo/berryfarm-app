@@ -1,11 +1,11 @@
 export type CreateHarvestRequest = {
-  uuid: string;
+  uuid: string | undefined;
   qty: number;
   harvestPackageId: number;
   locationId: number;
   productId: number;
   productQualityId: number;
-  weightTotal: string;
+  weightTotal: number;
   workerUuid?: string;
   qrCodeUuid?: string;
 };

@@ -34,7 +34,6 @@ const CreateWorker = () => {
     formState: {errors, isDirty, isValid},
   } = useForm<CreateWorkerRequest>({
     defaultValues: {
-      uuid: '',
       firstName: '',
       lastName: '',
       middleName: '',

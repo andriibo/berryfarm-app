@@ -1,5 +1,5 @@
 export type CreateWorkerRequest = {
-  uuid: string;
+  uuid: string | undefined;
   firstName: string;
   lastName: string;
   middleName: string;

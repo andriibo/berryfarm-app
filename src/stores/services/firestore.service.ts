@@ -110,11 +110,8 @@ export const getUserByUsername = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (
-  data: CreateWorkerRequest,
-  prefix: string,
-) => {
-  if (!uuidValidate(data.uuid)) {
+export const createWorker = async (data: CreateWorkerRequest, prefix: string) => {
+  if (data.uuid && !uuidValidate(data.uuid)) {
     return null;
   }
 
@@ -133,11 +130,8 @@ export const createWorker = async (
     });
 };
 
-export const createHarvest = async (
-  data: CreateHarvestRequest,
-  prefix: string,
-) => {
-  if (!uuidValidate(data.uuid)) {
+export const createHarvest = async (data: CreateHarvestRequest, prefix: string) => {
+  if (data.uuid && !uuidValidate(data.uuid)) {
     return null;
   }
 

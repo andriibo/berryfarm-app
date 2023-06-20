@@ -37,13 +37,12 @@ const HandOverHarvest = () => {
     formState: {errors, isDirty, isValid},
   } = useForm<CreateHarvestRequest>({
     defaultValues: {
-      uuid: '',
       qty: harvest.qty,
       harvestPackageId: harvest.harvestPackage.id,
       locationId: harvest.location.id,
       productId: harvest.product.id,
       productQualityId: harvest.productQuality.id,
-      weightTotal: '',
+      weightTotal: 0,
     },
     mode: 'onChange',
     resolver: yupResolver(validation.createHarvest),
@@ -164,6 +163,7 @@ const HandOverHarvest = () => {
                   }}
                   style={{width: '100%'}}
                   testID="weightTotal"
+                  value={field.value ? `${field.value}` : ''}
                 />
                 <HelperText type="error" visible={Boolean(errors.weightTotal)}>
                   {errors.weightTotal?.message}
