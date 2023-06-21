@@ -1,11 +1,10 @@
-import React, {useCallback, useState} from 'react';
-import {Text} from 'react-native';
+import React, {useCallback, useRef} from 'react';
+import {Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import styles from 'src/screens/main/scan-qr-code/styles';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {getQrCodeByUuid, updateQrCode} from 'src/stores/services/firestore.service';
-import {Toast} from 'src/components/toast';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {useWorker} from 'src/stores/slices/worker.slice';
 import {strings} from 'src/locales/locales';
@@ -21,26 +20,52 @@ const ScanQrCode = () => {
   const dispatch = useAppDispatch();
   const harvest = useHarvest() as IHarvest;
   const worker = useWorker();
-  const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
   const {
     params: {scenario},
   } = useRoute<RouteProp<DrawerStackParamList, 'ScanQrCode'>>();
+  const scanner = useRef(null);
+
+  const showAlert = useCallback(
+    (message: string) => {
+      Alert.alert(strings.error, message, [
+        {
+          text: strings.back,
+          style: 'cancel',
+          onPress: () => {
+            // @ts-ignore
+            scanner.current?.reactivate(true);
+            navigation.goBack();
+          },
+        },
+        {
+          text: strings.retry,
+          onPress: () => {
+            // @ts-ignore
+            scanner.current?.reactivate(true);
+          },
+        },
+      ]);
+    },
+    [navigation],
+  );
 
   const assignQrCodeToWorker = useCallback(
     async (qrCode: QrCode) => {
       if (scenario !== ScenariosEnum.handOverHarvest && qrCode.workerUuid !== undefined) {
-        setError(strings.qrCodeGiven);
+        showAlert(strings.qrCodeGiven);
 
         return;
       }
 
       qrCode.workerUuid = worker.uuid;
       await updateQrCode(qrCode, firestorePrefix);
+      // @ts-ignore
+      scanner.current?.reactivate(true);
       navigation.navigate('SuccessPage', {scenario});
     },
-    [firestorePrefix, navigation, scenario, worker.uuid],
+    [firestorePrefix, navigation, scenario, showAlert, worker.uuid],
   );
 
   const handleHarvest = useCallback(
@@ -56,18 +81,19 @@ const ScanQrCode = () => {
 
   const onSuccess = useCallback(
     async (event: any) => {
-      setError('');
       try {
         const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
 
         if (!qrCode) {
-          setError(strings.qrCodeNotFound);
+          showAlert(strings.qrCodeNotFound);
 
           return;
         }
 
         if (scenario === ScenariosEnum.handOverHarvest) {
           handleHarvest(qrCode);
+          // @ts-ignore
+          scanner.current?.reactivate(true);
           navigation.navigate('HandOverHarvest');
 
           return;
@@ -76,32 +102,29 @@ const ScanQrCode = () => {
         await assignQrCodeToWorker(qrCode);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          showAlert(error.message);
         } else {
           console.error(error);
         }
       }
     },
-    [assignQrCodeToWorker, firestorePrefix, handleHarvest, navigation, scenario],
+    [assignQrCodeToWorker, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
   );
 
   return (
-    <>
-      {errorMessage && <Toast error={errorMessage} />}
-      <QRCodeScanner
-        flashMode={RNCamera.Constants.FlashMode.auto}
-        onRead={onSuccess}
-        reactivate={true}
-        showMarker={true}
-        topContent={
-          <Text style={styles.centerText}>
-            {scenario === ScenariosEnum.handOverHarvest
-              ? strings.scanWorkerQrCodeWithCamera
-              : strings.scanQrCodeWithCamera}
-          </Text>
-        }
-      />
-    </>
+    <QRCodeScanner
+      flashMode={RNCamera.Constants.FlashMode.auto}
+      onRead={onSuccess}
+      ref={scanner}
+      showMarker={true}
+      topContent={
+        <Text style={styles.centerText}>
+          {scenario === ScenariosEnum.handOverHarvest
+            ? strings.scanWorkerQrCodeWithCamera
+            : strings.scanQrCodeWithCamera}
+        </Text>
+      }
+    />
   );
 };
 
