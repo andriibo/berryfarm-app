@@ -12,7 +12,6 @@ import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {createWorker, getWorkerByParams, getWorkerByUuid} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
@@ -21,12 +20,13 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
+import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 
 type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [errorMessage, setError] = useState('');
   const {

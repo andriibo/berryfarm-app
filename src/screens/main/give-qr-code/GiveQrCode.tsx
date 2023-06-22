@@ -10,7 +10,6 @@ import {getWorkers} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
@@ -18,6 +17,7 @@ import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
+import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -31,13 +31,14 @@ const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker
 
 const GiveQrCode = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<GiveQrCodeStackParamList>>();
   const [workers, setWorkers] = useState<Array<Worker>>([]);
   const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
+
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
       setSearchQuery(getFullname(worker));
@@ -135,7 +136,7 @@ const GiveQrCode = () => {
 
             {!foundWorkers.length && searchQuery && !canScanQrCode && (
               <Text
-                onPress={() => navigation.navigate('CreateWorker')}
+                onPress={() => navigation.navigate('CreateWorkerStack')}
                 style={styles.linkCreateWorker}
                 variant="titleMedium">
                 + {strings.registerWorker}

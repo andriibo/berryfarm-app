@@ -19,7 +19,7 @@ const options = {
   headerShadowVisible: false,
 };
 
-export const AuthStack = () => {
+const AuthStack = () => {
   return (
     <AuthStackComponent.Navigator initialRouteName="ChooseFarm">
       <AuthStackComponent.Screen

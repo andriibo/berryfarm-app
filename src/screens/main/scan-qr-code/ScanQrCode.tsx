@@ -10,21 +10,22 @@ import {useWorker} from 'src/stores/slices/worker.slice';
 import {strings} from 'src/locales/locales';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {IHarvest, setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
+import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
   const harvest = useHarvest() as IHarvest;
   const worker = useWorker();
   const {firestorePrefix} = useFarm();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const {
     params: {scenario},
-  } = useRoute<RouteProp<DrawerStackParamList, 'ScanQrCode'>>();
+  } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
   const scanner = useRef(null);
 
   const showAlert = useCallback(
