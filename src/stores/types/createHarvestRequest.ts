@@ -5,7 +5,7 @@ export type CreateHarvestRequest = {
   locationId: number;
   productId: number;
   productQualityId: number;
-  weightTotal: string;
+  weightTotal: number;
   workerUuid?: string;
   qrCodeUuid?: string;
 };

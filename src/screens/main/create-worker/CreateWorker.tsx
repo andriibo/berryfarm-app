@@ -7,29 +7,26 @@ import styles from 'src/screens/main/create-worker/styles';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
+import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
-import {
-  createWorker,
-  getWorkerByParams,
-  getWorkerByUuid,
-} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {createWorker, getWorkerByParams, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
+import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
+
+type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [errorMessage, setError] = useState('');
   const {
@@ -37,9 +34,8 @@ const CreateWorker = () => {
     handleSubmit,
     reset,
     formState: {errors, isDirty, isValid},
-  } = useForm<CreateWorkerRequest>({
+  } = useForm<WorkerRequest>({
     defaultValues: {
-      uuid: '',
       firstName: '',
       lastName: '',
       middleName: '',
@@ -50,7 +46,7 @@ const CreateWorker = () => {
   });
 
   const handleCreateWorker = useCallback(
-    async (data: CreateWorkerRequest) => {
+    async (data: WorkerRequest) => {
       setError('');
       try {
         let worker = await getWorkerByParams(
@@ -62,9 +58,10 @@ const CreateWorker = () => {
         );
 
         if (!worker) {
-          data.uuid = uuid();
-          await createWorker(data, firestorePrefix);
-          worker = await getWorkerByUuid(data.uuid, firestorePrefix);
+          const workerUuid = uuid();
+
+          await createWorker({...data, uuid: workerUuid}, firestorePrefix);
+          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
           if (!worker) {
             setError(strings.workerNotFound);
 
@@ -161,9 +158,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="birthDate"
-              render={({field: {value, onChange}}) => (
-                <BirthPicker onChange={onChange} value={value} />
-              )}
+              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value} />}
             />
           </View>
           <View style={{alignItems: 'center'}}>

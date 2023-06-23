@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/templates/styles';
 import {getTemplates} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
 import {colors} from 'src/styles/colors';
@@ -14,9 +14,9 @@ import {Loader} from 'src/components/loader';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setHarvest} from 'src/stores/slices/harvest.slice';
+import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 
 const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
   <TouchableOpacity onPress={() => scanQrCode(template)} style={styles.container}>
@@ -38,7 +38,7 @@ const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (t
 
 const Templates = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
   const [errorMessage, setError] = useState('');

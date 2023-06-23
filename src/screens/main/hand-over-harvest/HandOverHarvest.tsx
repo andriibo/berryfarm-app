@@ -10,40 +10,41 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
-import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
+import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {createHarvest, getWorkerByUuid} from 'src/stores/services/firestore.service';
-import {useFarm} from 'src/stores/slices/farm.slice';
+import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
+import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
+
+type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
 const HandOverHarvest = () => {
   const [errorMessage, setError] = useState('');
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
 
   const {
     control,
     handleSubmit,
     reset,
     formState: {errors, isDirty, isValid},
-  } = useForm<CreateHarvestRequest>({
+  } = useForm<HarvestRequest>({
     defaultValues: {
-      uuid: '',
       qty: harvest.qty,
       harvestPackageId: harvest.harvestPackage.id,
       locationId: harvest.location.id,
       productId: harvest.product.id,
       productQualityId: harvest.productQuality.id,
-      weightTotal: '',
+      weightTotal: 0,
     },
     mode: 'onChange',
     resolver: yupResolver(validation.createHarvest),
@@ -73,17 +74,16 @@ const HandOverHarvest = () => {
   );
 
   const handleSave = useCallback(
-    async (data: CreateHarvestRequest) => {
+    async (data: HarvestRequest) => {
       setError('');
       try {
-        data.uuid = uuid();
         if (harvest.workerUuid) {
           data = {...data, workerUuid: harvest.workerUuid};
         } else {
           data = {...data, qrCodeUuid: harvest.qrCodeUuid};
         }
 
-        await createHarvest(data, firestorePrefix);
+        await createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
         navigation.navigate('SuccessPage', {
           scenario: ScenariosEnum.handOverHarvest,
@@ -164,6 +164,7 @@ const HandOverHarvest = () => {
                   }}
                   style={{width: '100%'}}
                   testID="weightTotal"
+                  value={field.value ? `${field.value}` : ''}
                 />
                 <HelperText type="error" visible={Boolean(errors.weightTotal)}>
                   {errors.weightTotal?.message}

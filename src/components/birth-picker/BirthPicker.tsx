@@ -27,10 +27,7 @@ const BirthPicker = ({value, onChange}: BirthPickerProps) => {
 
   return (
     <>
-      <DatePickerInput
-        onPress={handlePicker}
-        value={value && showByFormat(value, 'MMM DD, YYYY')}
-      />
+      <DatePickerInput onPress={handlePicker} value={value && showByFormat(value, 'MMM DD, YYYY')} />
       {isDatePickerVisible && (
         <DateTimePickerModal
           display="inline"

@@ -7,8 +7,8 @@ import {Worker} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
-import {CreateHarvestRequest} from 'src/stores/requests/createHarvest.request';
-import {CreateWorkerRequest} from 'src/stores/requests/createWorker.request';
+import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
+import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {validate as uuidValidate} from 'uuid';
 
 const farmsCollection = 'farms';
@@ -110,10 +110,7 @@ export const getUserByUsername = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (
-  data: CreateWorkerRequest,
-  prefix: string,
-) => {
+export const createWorker = async (data: CreateWorkerRequest, prefix: string) => {
   if (!uuidValidate(data.uuid)) {
     return null;
   }
@@ -133,10 +130,7 @@ export const createWorker = async (
     });
 };
 
-export const createHarvest = async (
-  data: CreateHarvestRequest,
-  prefix: string,
-) => {
+export const createHarvest = async (data: CreateHarvestRequest, prefix: string) => {
   if (!uuidValidate(data.uuid)) {
     return null;
   }

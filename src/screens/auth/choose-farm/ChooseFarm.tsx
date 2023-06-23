@@ -12,7 +12,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {getFarmByDoc} from 'src/stores/services/firestore.service';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setFarm} from 'src/stores/slices/farm.slice';
+import {setFarm} from 'src/stores/slices/auth.slice';
 import {Toast} from 'src/components/toast';
 import {FirestoreServiceError} from 'src/stores/errors';
 
@@ -51,7 +51,7 @@ const ChooseFarm = () => {
   }, [selectedFarm, navigation, dispatch]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />

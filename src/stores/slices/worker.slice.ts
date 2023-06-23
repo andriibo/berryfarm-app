@@ -4,10 +4,7 @@ import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Worker} from 'src/stores/types/worker.type';
 
-type IWorker = Pick<
-  Worker,
-  'uuid' | 'firstName' | 'lastName' | 'middleName' | 'birthDate'
->;
+type IWorker = Pick<Worker, 'uuid' | 'firstName' | 'lastName' | 'middleName' | 'birthDate'>;
 
 type IWorkerState = {
   worker: IWorker;
