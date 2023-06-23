@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Button, Divider, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -57,20 +57,22 @@ const GiveQrCode = () => {
     }, []),
   );
 
-  useEffect(() => {
-    setError('');
-    getWorkers(firestorePrefix)
-      .then(res => {
-        setWorkers(res);
-      })
-      .catch(error => {
-        if (error instanceof FirestoreServiceError) {
-          setError(error.message);
-        } else {
-          console.error(error);
-        }
-      });
-  }, [firestorePrefix]);
+  useFocusEffect(
+    useCallback(() => {
+      setError('');
+      getWorkers(firestorePrefix)
+        .then(res => {
+          setWorkers(res);
+        })
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            setError(error.message);
+          } else {
+            console.error(error);
+          }
+        });
+    }, [firestorePrefix]),
+  );
 
   const handleGetWorker = useCallback(
     async (name: string) => {
