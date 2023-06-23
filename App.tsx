@@ -20,7 +20,7 @@ function App() {
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
           <SafeAreaProvider>
-            <StatusBar backgroundColor={colors.background} barStyle={'dark-content'} />
+            <StatusBar barStyle={'dark-content'} />
             <Wrapper />
           </SafeAreaProvider>
         </NavigationContainer>
