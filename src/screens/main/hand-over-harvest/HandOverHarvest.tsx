@@ -19,9 +19,9 @@ import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
+import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -30,7 +30,7 @@ const HandOverHarvest = () => {
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
-  const navigation = useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
 
   const {
     control,
