@@ -16,6 +16,7 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {Toast} from 'src/components/toast';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {Loader} from 'src/components/loader';
+import {colors} from 'src/styles/colors';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -72,7 +73,7 @@ const Login = () => {
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{flex: 1}}>
+    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />

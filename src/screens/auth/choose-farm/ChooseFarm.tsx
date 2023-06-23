@@ -51,7 +51,7 @@ const ChooseFarm = () => {
   }, [selectedFarm, navigation, dispatch]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         {errorMessage && <Toast error={errorMessage} />}
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
