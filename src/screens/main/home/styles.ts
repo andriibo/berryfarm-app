@@ -12,6 +12,7 @@ export default StyleSheet.create({
     flexWrap: 'wrap',
   },
   wrapper: {
+    backgroundColor: colors.background,
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,

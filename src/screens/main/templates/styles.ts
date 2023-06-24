@@ -3,6 +3,7 @@ import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
+    backgroundColor: colors.background,
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
