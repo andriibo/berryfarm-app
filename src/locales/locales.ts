@@ -63,5 +63,6 @@ export const strings = new LocalizedStrings({
     settings: 'Настройки',
     сonnectToScalesWeNeedAccess:
       'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',
+    weight: 'Вес',
   },
 });

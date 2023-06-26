@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {Button, HelperText, Text, TextInput} from 'react-native-paper';
+import {TouchableOpacity, ScrollView, View} from 'react-native';
+import {Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -22,6 +22,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
+import {getWeight} from 'src/stores/services/scales-wifi.service';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -31,6 +32,7 @@ const HandOverHarvest = () => {
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const [manualInput, setManualInput] = useState(false);
 
   const {
     control,
@@ -49,6 +51,18 @@ const HandOverHarvest = () => {
     mode: 'onChange',
     resolver: yupResolver(validation.createHarvest),
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      getWeight()
+        .then(res => {
+          console.log(res, 'HandOverHarvest res');
+        })
+        .catch(error => {
+          console.log(error, 'HandOverHarvest error');
+        });
+    }, []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -100,7 +114,7 @@ const HandOverHarvest = () => {
   );
 
   if (!harvest.qrCodeUuid && !worker) {
-    return <Loader />;
+    //return <Loader />;
   }
 
   return (
@@ -111,7 +125,7 @@ const HandOverHarvest = () => {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled">
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
             {strings.worker}
           </Text>
           <Text variant="titleLarge">
@@ -119,60 +133,88 @@ const HandOverHarvest = () => {
           </Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
             {strings.location}
           </Text>
           <Text variant="headlineSmall">{harvest.location.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
             {strings.product}
           </Text>
           <Text variant="headlineSmall">{harvest.product.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
             {strings.quality}
           </Text>
           <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
             {strings.package}
           </Text>
           <Text variant="headlineSmall">
             {harvest.harvestPackage.title} / {harvest.qty} {strings.items}
           </Text>
         </View>
-        <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
-            Вес
-          </Text>
-          <Controller
-            control={control}
-            name="weightTotal"
-            render={({field}) => (
-              <View>
-                <TextInput
-                  {...field}
-                  error={Boolean(errors.weightTotal)}
-                  inputMode="decimal"
-                  keyboardType="decimal-pad"
-                  mode="flat"
-                  onChangeText={text => {
-                    field.onChange(text);
+        {!manualInput && (
+          <>
+            <View>
+              <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+                Вес, кг
+              </Text>
+            </View>
+            <View style={{alignItems: 'center'}}>
+              <Text style={{alignItems: 'center'}} variant="headlineSmall">
+                Не удалось получить данные с весов
+              </Text>
+              <IconButton icon="alert-circle-check-outline" size={50} />
+              <TouchableOpacity onPress={() => setManualInput(true)}>
+                <Text
+                  style={{
+                    alignItems: 'center',
+                    textDecorationLine: 'underline',
+                    textDecorationStyle: 'solid',
                   }}
-                  style={{width: '100%'}}
-                  testID="weightTotal"
-                  value={field.value ? `${field.value}` : ''}
-                />
-                <HelperText type="error" visible={Boolean(errors.weightTotal)}>
-                  {errors.weightTotal?.message}
-                </HelperText>
-              </View>
-            )}
-          />
-        </View>
+                  variant="headlineSmall">
+                  Ввести данные вручную
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        {manualInput && (
+          <View>
+            <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+              {strings.weight}
+            </Text>
+            <Controller
+              control={control}
+              name="weightTotal"
+              render={({field}) => (
+                <View>
+                  <TextInput
+                    {...field}
+                    error={Boolean(errors.weightTotal)}
+                    inputMode="decimal"
+                    keyboardType="decimal-pad"
+                    mode="flat"
+                    onChangeText={text => {
+                      field.onChange(text);
+                    }}
+                    style={{width: '100%'}}
+                    testID="weightTotal"
+                    value={field.value ? `${field.value}` : ''}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                    {errors.weightTotal?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          </View>
+        )}
         <View style={{alignItems: 'center'}}>
           <Button
             disabled={!isDirty || !isValid}

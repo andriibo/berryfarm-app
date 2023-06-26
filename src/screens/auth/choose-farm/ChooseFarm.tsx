@@ -9,16 +9,12 @@ import {FarmsEnum} from 'src/enums/farms.enum';
 import {colors} from 'src/styles/colors';
 import {AuthStackParamList} from 'src/navigation/auth.stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {getFarmByDoc} from 'src/stores/services/firestore.service';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setFarm} from 'src/stores/slices/auth.slice';
 import {Toast} from 'src/components/toast';
 import {FirestoreServiceError} from 'src/stores/errors';
-import {Buffer} from 'buffer';
-import TcpSocket from 'react-native-tcp-socket';
-import WifiManager from 'react-native-wifi-reborn';
-import {requestLocationPermission} from 'src/helpers/location-permission';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -26,52 +22,11 @@ const farms = [
   {label: strings.testServer, value: FarmsEnum.testServer},
 ];
 
-const options = {
-  port: 1234,
-  host: '192.168.4.1',
-  reuseAddress: true,
-};
-
-const scalesSSID = 'ESP8266';
-
 const ChooseFarm = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
   const [errorMessage, setError] = useState('');
-
-  useFocusEffect(
-    useCallback(() => {
-      requestLocationPermission();
-      WifiManager.getCurrentWifiSSID().then(
-        ssid => {
-          if (ssid === scalesSSID) {
-            const scalesWiFi = TcpSocket.createConnection(options, () => {});
-
-            scalesWiFi.on('data', function (data) {
-              console.log('message was received', (data as Buffer).toString());
-              scalesWiFi.destroy();
-            });
-
-            scalesWiFi.on('error', function (error) {
-              console.log(error);
-              scalesWiFi.destroy();
-            });
-
-            scalesWiFi.on('close', function () {
-              console.log('Connection closed!');
-              scalesWiFi.destroy();
-            });
-          }
-          console.log('Your current connected wifi SSID is ' + ssid);
-        },
-        error => {
-          console.log(error);
-          console.log('Cannot get current SSID!');
-        },
-      );
-    }, []),
-  );
 
   const chooseFarm = useCallback(async () => {
     setError('');
