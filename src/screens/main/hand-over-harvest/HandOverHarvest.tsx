@@ -65,7 +65,7 @@ const HandOverHarvest = () => {
         .then(scalesWiFi => {
           if (scalesWiFi) {
             scalesWiFi.on('data', function (data) {
-              let weight = (data as Buffer).toString();
+              const weight = (data as Buffer).toString();
 
               if (weight.includes(wifiScalesLb)) {
                 setError(strings.unitOfScaleMeasurementMustBeKg);
@@ -73,8 +73,11 @@ const HandOverHarvest = () => {
                 return;
               }
 
-              weight = weight.substring(weight.indexOf(',') + 4, weight.lastIndexOf(wifiScalesKg)).trim();
-              const formattedWeight = Number(parseFloat(weight).toFixed(2));
+              const formattedWeight = Number(
+                parseFloat(weight.substring(weight.indexOf(',') + 4, weight.lastIndexOf(wifiScalesKg)).trim()).toFixed(
+                  2,
+                ),
+              );
               const options = formattedWeight > 0 ? {shouldDirty: true, shouldValidate: true} : {};
 
               setValue('weightTotal', formattedWeight, options);
@@ -157,7 +160,7 @@ const HandOverHarvest = () => {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled">
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.worker}
           </Text>
           <Text variant="titleLarge">
@@ -165,25 +168,25 @@ const HandOverHarvest = () => {
           </Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.location}
           </Text>
           <Text variant="headlineSmall">{harvest.location.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.product}
           </Text>
           <Text variant="headlineSmall">{harvest.product.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
           </Text>
           <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
           <Text variant="headlineSmall">
@@ -191,7 +194,7 @@ const HandOverHarvest = () => {
           </Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.weightKg}
           </Text>
           {!manualInput && !weightFromScales && (

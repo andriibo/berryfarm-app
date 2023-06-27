@@ -69,7 +69,9 @@ const Templates = () => {
       };
 
       dispatch(setHarvest(harvest));
-      navigation.navigate('HandOverHarvest');
+      navigation.navigate('ScanQrCode', {
+        scenario: ScenariosEnum.handOverHarvest,
+      });
     },
     [dispatch, navigation],
   );
