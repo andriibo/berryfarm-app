@@ -111,7 +111,7 @@ const HandOverHarvest = () => {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled">
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.worker}
           </Text>
           <Text variant="titleLarge">
@@ -119,25 +119,25 @@ const HandOverHarvest = () => {
           </Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.location}
           </Text>
           <Text variant="headlineSmall">{harvest.location.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.product}
           </Text>
           <Text variant="headlineSmall">{harvest.product.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
           </Text>
           <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
           <Text variant="headlineSmall">
@@ -145,7 +145,7 @@ const HandOverHarvest = () => {
           </Text>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold'}} variant="headlineSmall">
+          <Text style={styles.label} variant="headlineSmall">
             Вес
           </Text>
           <Controller
