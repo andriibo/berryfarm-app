@@ -86,15 +86,16 @@ const HandOverHarvest = () => {
               setLoader(false);
             });
 
-            scalesWiFi.on('error', function () {
+            scalesWiFi.on('error', function (error) {
               scalesWiFi.destroy();
+              console.error(error);
               setLoader(false);
             });
           } else {
             setLoader(false);
           }
         })
-        .catch(error => setError(error));
+        .catch(error => console.error(error));
     }, [setValue]),
   );
 
