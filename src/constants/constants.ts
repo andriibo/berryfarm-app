@@ -15,3 +15,12 @@ export const errorMessages = {
 
 export const isIOS = Platform.OS === 'ios';
 export const maxDATE = dayjs().subtract(1, 'day').toDate();
+
+export const wifiScalesTcpOptions = {
+  port: 1234,
+  host: '192.168.4.1',
+  reuseAddress: true,
+};
+export const wifiScalesSSID = 'ESP8266';
+export const wifiScalesKg = 'kg';
+export const wifiScalesLb = 'lb';

@@ -3,8 +3,6 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {isIOS} from 'src/constants/constants';
 import {openSettings} from 'react-native-permissions';
 import {strings} from 'src/locales/locales';
-
-const message = strings.сonnectToScalesWeNeedAccess;
 const systemAlert = (title: string, message: string) =>
   Alert.alert(title, message, [
     {
@@ -16,6 +14,8 @@ const systemAlert = (title: string, message: string) =>
 
 export async function requestLocationPermission() {
   try {
+    const message = strings.сonnectToScalesWeNeedAccess;
+
     if (isIOS) {
       const isAlreadyGrantedAlwaysIOS = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
       const isAlreadyGrantedWhenInUseIOS = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -28,11 +28,11 @@ export async function requestLocationPermission() {
 
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          systemAlert('Request Location', message);
+          systemAlert(strings.requestLocation, message);
 
           return false;
         case RESULTS.DENIED:
-          systemAlert('Request Location', message);
+          systemAlert(strings.requestLocation, message);
 
           return false;
         case RESULTS.LIMITED:
@@ -40,7 +40,7 @@ export async function requestLocationPermission() {
         case RESULTS.GRANTED:
           return true;
         case RESULTS.BLOCKED:
-          systemAlert('Request Location', message);
+          systemAlert(strings.requestLocation, message);
 
           return false;
       }
@@ -53,11 +53,10 @@ export async function requestLocationPermission() {
     }
 
     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-      title: 'Location permission is required for WiFi connections',
-      message: 'Please provide',
-      buttonNeutral: 'Ask Me Later',
-      buttonNegative: 'Cancel',
-      buttonPositive: 'OK',
+      title: strings.locationPermissionRequiredForWiFiConnections,
+      message: strings.pleaseProvide,
+      buttonNegative: strings.cancel,
+      buttonPositive: strings.ok,
     });
 
     if (granted) {

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity, ScrollView, View} from 'react-native';
 import {Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,9 +20,11 @@ import {v4 as uuid} from 'uuid';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
-import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
-import {getWeight} from 'src/stores/services/scales-wifi.service';
+import {connectToWiFiScales} from 'src/stores/services/scales-wifi.service';
+import {Buffer} from 'buffer';
+import {wifiScalesKg, wifiScalesLb} from 'src/constants/constants';
+import {Loader} from 'src/components/loader';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -33,10 +35,14 @@ const HandOverHarvest = () => {
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const [manualInput, setManualInput] = useState(false);
+  const [weightFromScales, setWeightFromScales] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const {
     control,
     handleSubmit,
+    setValue,
+    getValues,
     reset,
     formState: {errors, isDirty, isValid},
   } = useForm<HarvestRequest>({
@@ -54,38 +60,61 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getWeight()
-        .then(res => {
-          console.log(res, 'HandOverHarvest res');
+      setError('');
+      connectToWiFiScales()
+        .then(scalesWiFi => {
+          if (scalesWiFi) {
+            scalesWiFi.on('data', function (data) {
+              let weight = (data as Buffer).toString();
+
+              if (weight.includes(wifiScalesLb)) {
+                setError(strings.unitOfScaleMeasurementMustBeKg);
+
+                return;
+              }
+
+              weight = weight.substring(weight.indexOf(',') + 4, weight.lastIndexOf(wifiScalesKg)).trim();
+              const formattedWeight = Number(parseFloat(weight).toFixed(2));
+              const options = formattedWeight > 0 ? {shouldDirty: true, shouldValidate: true} : {};
+
+              setValue('weightTotal', formattedWeight, options);
+              setWeightFromScales(true);
+              scalesWiFi.destroy();
+              setLoader(false);
+            });
+
+            scalesWiFi.on('error', function () {
+              scalesWiFi.destroy();
+              setLoader(false);
+            });
+          } else {
+            setLoader(false);
+          }
         })
-        .catch(error => {
-          console.log(error, 'HandOverHarvest error');
-        });
-    }, []),
+        .catch(error => setError(error));
+    }, [setValue]),
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      setError('');
-      if (harvest.workerUuid) {
-        getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-          .then(data => {
-            if (data) {
-              setWorker(data);
-            } else {
-              setError(strings.workerNotFound);
-            }
-          })
-          .catch(error => {
-            if (error instanceof FirestoreServiceError) {
-              setError(error.message);
-            } else {
-              console.error(error);
-            }
-          });
-      }
-    }, [firestorePrefix, harvest]),
-  );
+  useEffect(() => {
+    setError('');
+    if (harvest.workerUuid) {
+      getWorkerByUuid(harvest.workerUuid, firestorePrefix)
+        .then(data => {
+          if (data) {
+            setWorker(data);
+          } else {
+            setError(strings.workerNotFound);
+          }
+        })
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            setError(error.message);
+          } else {
+            console.error(error);
+          }
+        });
+    }
+  }, [firestorePrefix, harvest.workerUuid]);
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
@@ -99,6 +128,7 @@ const HandOverHarvest = () => {
 
         await createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
+
         navigation.navigate('SuccessPage', {
           scenario: ScenariosEnum.handOverHarvest,
         });
@@ -113,8 +143,10 @@ const HandOverHarvest = () => {
     [firestorePrefix, harvest, navigation, reset],
   );
 
-  if (!harvest.qrCodeUuid && !worker) {
-    //return <Loader />;
+  const {weightTotal} = getValues();
+
+  if (!harvest.qrCodeUuid && !worker && loader) {
+    return <Loader />;
   }
 
   return (
@@ -158,13 +190,11 @@ const HandOverHarvest = () => {
             {harvest.harvestPackage.title} / {harvest.qty} {strings.items}
           </Text>
         </View>
-        {!manualInput && (
-          <>
-            <View>
-              <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
-                Вес, кг
-              </Text>
-            </View>
+        <View>
+          <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
+            {strings.weightKg}
+          </Text>
+          {!manualInput && !weightFromScales && (
             <View style={{alignItems: 'center'}}>
               <Text style={{alignItems: 'center'}} variant="headlineSmall">
                 Не удалось получить данные с весов
@@ -182,39 +212,33 @@ const HandOverHarvest = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </>
-        )}
-        {manualInput && (
-          <View>
-            <Text style={{fontWeight: 'bold', color: colors.outline}} variant="headlineSmall">
-              {strings.weight}
-            </Text>
-            <Controller
-              control={control}
-              name="weightTotal"
-              render={({field}) => (
-                <View>
-                  <TextInput
-                    {...field}
-                    error={Boolean(errors.weightTotal)}
-                    inputMode="decimal"
-                    keyboardType="decimal-pad"
-                    mode="flat"
-                    onChangeText={text => {
-                      field.onChange(text);
-                    }}
-                    style={{width: '100%'}}
-                    testID="weightTotal"
-                    value={field.value ? `${field.value}` : ''}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.weightTotal)}>
-                    {errors.weightTotal?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          </View>
-        )}
+          )}
+          <Controller
+            control={control}
+            name="weightTotal"
+            render={({field}) => (
+              <View>
+                <TextInput
+                  {...field}
+                  disabled={!manualInput}
+                  error={Boolean(errors.weightTotal)}
+                  inputMode="decimal"
+                  keyboardType="decimal-pad"
+                  mode="flat"
+                  onChangeText={text => {
+                    field.onChange(text);
+                  }}
+                  style={{width: '100%'}}
+                  testID="weightTotal"
+                  value={weightTotal ? `${weightTotal}` : ''}
+                />
+                <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                  {errors.weightTotal?.message}
+                </HelperText>
+              </View>
+            )}
+          />
+        </View>
         <View style={{alignItems: 'center'}}>
           <Button
             disabled={!isDirty || !isValid}

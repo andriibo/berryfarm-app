@@ -60,9 +60,14 @@ export const strings = new LocalizedStrings({
     error: 'Ошибка',
     back: 'Назад',
     cancel: 'Отмена',
+    ok: 'OK',
     settings: 'Настройки',
     сonnectToScalesWeNeedAccess:
       'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',
-    weight: 'Вес',
+    weightKg: 'Вес, кг',
+    requestLocation: 'Запрос на местоположение.',
+    locationPermissionRequiredForWiFiConnections: 'Для подключения WiFi требуется разрешение на местоположение.',
+    pleaseProvide: 'Просьба предоставить',
+    unitOfScaleMeasurementMustBeKg: 'Единица измерения весов должна быть кг.',
   },
 });
