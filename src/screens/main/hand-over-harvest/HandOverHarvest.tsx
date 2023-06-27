@@ -23,8 +23,9 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {connectToWiFiScales} from 'src/stores/services/scales-wifi.service';
 import {Buffer} from 'buffer';
-import {wifiScalesKg, wifiScalesLb} from 'src/constants/constants';
+import {wifiScalesLb} from 'src/constants/constants';
 import {Loader} from 'src/components/loader';
+import {getFormattedWeightFromWiFiScales} from 'src/helpers/weight.helper';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -55,6 +56,7 @@ const HandOverHarvest = () => {
       weightTotal: 0,
     },
     mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: yupResolver(validation.createHarvest),
   });
 
@@ -73,11 +75,7 @@ const HandOverHarvest = () => {
                 return;
               }
 
-              const formattedWeight = Number(
-                parseFloat(weight.substring(weight.indexOf(',') + 4, weight.lastIndexOf(wifiScalesKg)).trim()).toFixed(
-                  2,
-                ),
-              );
+              const formattedWeight = getFormattedWeightFromWiFiScales(weight);
               const options = formattedWeight > 0 ? {shouldDirty: true, shouldValidate: true} : {};
 
               setValue('weightTotal', formattedWeight, options);
