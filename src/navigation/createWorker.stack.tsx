@@ -46,7 +46,15 @@ const CreateWorkerStack = () => {
       <CreateWorkerStackComponent.Screen
         component={Screens.SuccessPage}
         name="SuccessPage"
-        options={{...drawerOptions, title: strings.registration, headerLeft: () => null}}
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.registration,
+          headerLeft: () => null,
+        }}
       />
     </CreateWorkerStackComponent.Navigator>
   );

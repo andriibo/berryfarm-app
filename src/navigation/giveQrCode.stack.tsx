@@ -59,7 +59,15 @@ export const GiveQrCodeStack = () => {
       <GiveQrCodeStackComponent.Screen
         component={Screens.SuccessPage}
         name="SuccessPage"
-        options={{...drawerOptions, title: strings.giveQrCode, headerLeft: () => null}}
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.giveQrCode,
+          headerLeft: () => null,
+        }}
       />
     </GiveQrCodeStackComponent.Navigator>
   );

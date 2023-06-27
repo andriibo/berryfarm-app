@@ -60,7 +60,15 @@ const HandOverHarvestStack = () => {
       <HandOverHarvestStackComponent.Screen
         component={Screens.SuccessPage}
         name="SuccessPage"
-        options={{...drawerOptions, title: strings.hangOverHarvest, headerLeft: () => <HeaderLeft />}}
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.hangOverHarvest,
+          headerLeft: () => <HeaderLeft />,
+        }}
       />
     </HandOverHarvestStackComponent.Navigator>
   );
