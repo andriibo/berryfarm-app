@@ -68,6 +68,7 @@ const ScanQrCode = () => {
       // @ts-ignore
       scanner.current?.reactivate(true);
       navigation.navigate('SuccessPage', {scenario});
+      setLoader(false);
     },
     [firestorePrefix, navigation, scenario, showAlert, worker.uuid],
   );
@@ -83,6 +84,7 @@ const ScanQrCode = () => {
       // @ts-ignore
       scanner.current?.reactivate(true);
       navigation.navigate('HandOverHarvest');
+      setLoader(false);
     },
     [dispatch, harvest, navigation],
   );
@@ -99,8 +101,8 @@ const ScanQrCode = () => {
         }
 
         getQrCodeByUuid(event.data, firestorePrefix).then(qrCode => {
-          setLoader(false);
           if (!qrCode) {
+            setLoader(false);
             showAlert(strings.qrCodeNotFound);
 
             return;

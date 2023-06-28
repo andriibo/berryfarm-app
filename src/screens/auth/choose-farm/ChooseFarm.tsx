@@ -42,9 +42,9 @@ const ChooseFarm = () => {
           return;
         }
 
-        setLoader(false);
         dispatch(setFarm(farm));
         navigation.navigate('Login');
+        setLoader(false);
       });
     } catch (error: any) {
       setLoader(false);
