@@ -37,7 +37,7 @@ export const strings = new LocalizedStrings({
     farmNotFound: 'Ферма не найдена.',
     toMain: 'На главную',
     toTemplates: 'К шаблонам',
-    qrCodeInformation: 'Информация о QR коде',
+    qrCodeInfo: 'Информация о QR коде',
     entrySaved: 'Запись сохранена',
     registerMore: 'Зарегестрировать еще',
     giveAnotherQrCode: 'Выдать другой QR код',

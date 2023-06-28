@@ -35,7 +35,13 @@ const SuccessPage = () => {
           </>
         )}
         {scenario !== ScenariosEnum.handOverHarvest && (
-          <Button mode="outlined" onPress={() => navigation.navigate('HomeStack')} style={styles.btn}>
+          <Button
+            mode="outlined"
+            onPress={() => {
+              navigation.popToTop();
+              navigation.navigate('HomeStack');
+            }}
+            style={styles.btn}>
             {strings.toMain}
           </Button>
         )}
