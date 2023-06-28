@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
@@ -8,7 +8,6 @@ import {getQrCodeByUuid, updateQrCode} from 'src/stores/services/firestore.servi
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {useWorker} from 'src/stores/slices/worker.slice';
 import {strings} from 'src/locales/locales';
-import {FirestoreServiceError} from 'src/stores/errors';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {QrCode} from 'src/stores/types/qrCode.type';
@@ -16,6 +15,9 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {IHarvest, setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
+import {FirestoreServiceError} from 'src/stores/errors';
+import {validate as uuidValidate} from 'uuid';
+import {Loader} from 'src/components/loader';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +29,7 @@ const ScanQrCode = () => {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
   const scanner = useRef(null);
+  const [loader, setLoader] = useState(false);
 
   const showAlert = useCallback(
     (message: string) => {
@@ -61,7 +64,7 @@ const ScanQrCode = () => {
       }
 
       qrCode.workerUuid = worker.uuid;
-      await updateQrCode(qrCode, firestorePrefix);
+      updateQrCode(qrCode, firestorePrefix);
       // @ts-ignore
       scanner.current?.reactivate(true);
       navigation.navigate('SuccessPage', {scenario});
@@ -76,31 +79,41 @@ const ScanQrCode = () => {
       } else {
         dispatch(setHarvest({...harvest, qrCodeUuid: qrCode.uuid}));
       }
+
+      // @ts-ignore
+      scanner.current?.reactivate(true);
+      navigation.navigate('HandOverHarvest');
     },
-    [dispatch, harvest],
+    [dispatch, harvest, navigation],
   );
 
   const onSuccess = useCallback(
     async (event: any) => {
+      setLoader(true);
       try {
-        const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
-
-        if (!qrCode) {
+        if (!uuidValidate(event.data)) {
+          setLoader(false);
           showAlert(strings.qrCodeNotFound);
 
           return;
         }
 
-        if (scenario === ScenariosEnum.handOverHarvest) {
-          handleHarvest(qrCode);
-          // @ts-ignore
-          scanner.current?.reactivate(true);
-          navigation.navigate('HandOverHarvest');
+        getQrCodeByUuid(event.data, firestorePrefix).then(qrCode => {
+          setLoader(false);
+          if (!qrCode) {
+            showAlert(strings.qrCodeNotFound);
 
-          return;
-        }
+            return;
+          }
 
-        await assignQrCodeToWorker(qrCode);
+          if (scenario === ScenariosEnum.handOverHarvest) {
+            handleHarvest(qrCode);
+
+            return;
+          }
+
+          assignQrCodeToWorker(qrCode);
+        });
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           showAlert(error.message);
@@ -109,8 +122,12 @@ const ScanQrCode = () => {
         }
       }
     },
-    [assignQrCodeToWorker, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
+    [assignQrCodeToWorker, firestorePrefix, handleHarvest, scenario, showAlert],
   );
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <QRCodeScanner

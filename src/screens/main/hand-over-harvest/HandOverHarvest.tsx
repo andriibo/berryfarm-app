@@ -83,7 +83,7 @@ const HandOverHarvest = () => {
           data = {...data, qrCodeUuid: harvest.qrCodeUuid};
         }
 
-        await createHarvest({...data, uuid: uuid()}, firestorePrefix);
+        createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
         navigation.navigate('SuccessPage', {
           scenario: ScenariosEnum.handOverHarvest,

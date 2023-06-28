@@ -61,8 +61,8 @@ const GiveQrCode = () => {
     useCallback(() => {
       setError('');
       getWorkers(firestorePrefix)
-        .then(res => {
-          setWorkers(res);
+        .then(response => {
+          setWorkers(response);
         })
         .catch(error => {
           if (error instanceof FirestoreServiceError) {

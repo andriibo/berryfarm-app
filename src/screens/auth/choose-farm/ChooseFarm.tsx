@@ -15,6 +15,7 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setFarm} from 'src/stores/slices/auth.slice';
 import {Toast} from 'src/components/toast';
 import {FirestoreServiceError} from 'src/stores/errors';
+import {Loader} from 'src/components/loader';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -27,21 +28,26 @@ const ChooseFarm = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
   const [errorMessage, setError] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const chooseFarm = useCallback(async () => {
     setError('');
+    setLoader(true);
     try {
-      const farm = await getFarmByDoc(selectedFarm as FarmsEnum);
+      getFarmByDoc(selectedFarm as FarmsEnum).then(farm => {
+        if (!farm) {
+          setLoader(false);
+          setError(strings.farmNotFound);
 
-      if (!farm) {
-        setError(strings.farmNotFound);
+          return;
+        }
 
-        return;
-      }
-
-      dispatch(setFarm(farm));
-      navigation.navigate('Login');
+        setLoader(false);
+        dispatch(setFarm(farm));
+        navigation.navigate('Login');
+      });
     } catch (error: any) {
+      setLoader(false);
       if (error instanceof FirestoreServiceError) {
         setError(error.message);
       } else {
@@ -49,6 +55,10 @@ const ChooseFarm = () => {
       }
     }
   }, [selectedFarm, navigation, dispatch]);
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>

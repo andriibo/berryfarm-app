@@ -24,8 +24,9 @@ const Login = () => {
   const {firestorePrefix} = useFarm();
   const isLoadedData = useIsLoadedData();
   const netState = useNetInfo();
-  const [isLoad, setIsLoadActive] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [errorMessage, setError] = useState('');
+
   const {
     control,
     handleSubmit,
@@ -39,36 +40,38 @@ const Login = () => {
   const handleLogin = useCallback(
     async ({username}: FieldValues) => {
       setError('');
-      setIsLoadActive(true);
+      setLoader(true);
       try {
-        const data = await getUserByUsername(username, firestorePrefix);
+        getUserByUsername(username, firestorePrefix).then(response => {
+          if (!response) {
+            setLoader(false);
+            setError(strings.incorrectUsername);
 
-        if (!data) {
-          setError(strings.incorrectUsername);
+            return;
+          }
 
-          return;
-        }
+          if (!isLoadedData) {
+            initData(firestorePrefix).then(() => {
+              dispatch(setLoadedData(true));
+            });
+          }
 
-        if (!isLoadedData) {
-          await initData(firestorePrefix);
-          dispatch(setLoadedData(true));
-        }
-
-        dispatch(setUser(data));
+          setLoader(false);
+          dispatch(setUser(response));
+        });
       } catch (error: any) {
+        setLoader(false);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
         } else {
           console.error(error);
         }
-      } finally {
-        setIsLoadActive(false);
       }
     },
     [dispatch, firestorePrefix, isLoadedData],
   );
 
-  if (isLoad) {
+  if (loader) {
     return <Loader />;
   }
 

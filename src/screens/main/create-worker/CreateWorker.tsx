@@ -12,7 +12,7 @@ import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {createWorker, getWorkerByParams, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {createWorker, getWorkerByParams} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
@@ -21,6 +21,7 @@ import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
+import {Loader} from 'src/components/loader';
 
 type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
@@ -29,6 +30,7 @@ const CreateWorker = () => {
   const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [errorMessage, setError] = useState('');
+  const [loader, setLoader] = useState(false);
   const {
     control,
     handleSubmit,
@@ -45,36 +47,44 @@ const CreateWorker = () => {
     resolver: yupResolver(validation.createWorker),
   });
 
+  const createNewWorker = useCallback(
+    (data: WorkerRequest) => {
+      const worker = {...data, uuid: uuid()};
+
+      createWorker(worker, firestorePrefix);
+      dispatch(setWorker(worker));
+      reset();
+      navigation.navigate('ScanQrCode', {
+        scenario: ScenariosEnum.createWorker,
+      });
+      setLoader(false);
+    },
+    [dispatch, firestorePrefix, navigation, reset],
+  );
+
   const handleCreateWorker = useCallback(
     async (data: WorkerRequest) => {
       setError('');
+      setLoader(true);
       try {
-        let worker = await getWorkerByParams(
-          data.firstName,
-          data.lastName,
-          data.middleName,
-          data.birthDate,
-          firestorePrefix,
+        getWorkerByParams(data.firstName, data.lastName, data.middleName, data.birthDate, firestorePrefix).then(
+          worker => {
+            if (!worker) {
+              createNewWorker(data);
+
+              return;
+            }
+
+            dispatch(setWorker(worker));
+            reset();
+            navigation.navigate('ScanQrCode', {
+              scenario: ScenariosEnum.createWorker,
+            });
+            setLoader(false);
+          },
         );
-
-        if (!worker) {
-          const workerUuid = uuid();
-
-          await createWorker({...data, uuid: workerUuid}, firestorePrefix);
-          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
-          if (!worker) {
-            setError(strings.workerNotFound);
-
-            return;
-          }
-        }
-
-        dispatch(setWorker(worker));
-        reset();
-        navigation.navigate('ScanQrCode', {
-          scenario: ScenariosEnum.createWorker,
-        });
       } catch (error: any) {
+        setLoader(false);
         if (error instanceof FirestoreServiceError) {
           setError(error.message);
         } else {
@@ -82,8 +92,12 @@ const CreateWorker = () => {
         }
       }
     },
-    [dispatch, firestorePrefix, navigation, reset],
+    [createNewWorker, dispatch, firestorePrefix, navigation, reset],
   );
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
