@@ -8,6 +8,7 @@ import {authReducer, cleanUser} from './slices/auth.slice';
 import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
 import {cleanFarm} from 'src/stores/slices/auth.slice';
 import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
+import {cleanQrCode, qrCodeReducer} from 'src/stores/slices/qrCode.slice';
 
 const persistConfig = {
   key: 'root',
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
   worker: workerReducer,
   harvest: harvestReducer,
+  qrCode: qrCodeReducer,
 });
 
 export const store = configureStore({
@@ -37,6 +39,7 @@ export const callLogOut = async () => {
   store.dispatch(cleanFarm());
   store.dispatch(cleanWorker());
   store.dispatch(cleanHarvest());
+  store.dispatch(cleanQrCode());
 
   const keys = await AsyncStorage.getAllKeys();
 

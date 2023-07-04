@@ -59,5 +59,7 @@ export const strings = new LocalizedStrings({
     retry: 'Повторить',
     error: 'Ошибка',
     back: 'Назад',
+    qrCodeNotIssuedToWorker: 'Данный QR код не выдан работнику.',
+    issueQrCodeDate: 'Дата выдачи кода',
   },
 });

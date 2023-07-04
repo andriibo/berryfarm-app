@@ -3,6 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Worker} from 'src/stores/types/worker.type';
+import {firebase} from '@react-native-firebase/firestore';
 
 export type IWorker = Pick<Worker, 'uuid' | 'firstName' | 'lastName' | 'middleName' | 'birthDate'>;
 
@@ -16,7 +17,7 @@ const initialState: IWorkerState = {
     firstName: '',
     lastName: '',
     middleName: '',
-    birthDate: '' as unknown as Date,
+    birthDate: firebase.firestore.Timestamp.now(),
   },
 };
 
@@ -36,7 +37,7 @@ const workerSlice = createSlice({
       state.worker.firstName = '';
       state.worker.lastName = '';
       state.worker.middleName = '';
-      state.worker.birthDate = '' as unknown as Date;
+      state.worker.birthDate = firebase.firestore.Timestamp.now();
     },
   },
 });

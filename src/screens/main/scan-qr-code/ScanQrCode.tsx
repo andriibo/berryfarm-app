@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
@@ -17,6 +17,7 @@ import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
+import {setQrCode} from 'src/stores/slices/qrCode.slice';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,13 @@ const ScanQrCode = () => {
   const {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
+  const scanText = useMemo(() => {
+    if (scenario === ScenariosEnum.handOverHarvest || scenario === ScenariosEnum.getQrCodeInfo) {
+      return strings.scanWorkerQrCodeWithCamera;
+    }
+
+    return strings.scanQrCodeWithCamera;
+  }, [scenario]);
   const scanner = useRef<QRCodeScanner>(null);
 
   useFocusEffect(
@@ -102,6 +110,13 @@ const ScanQrCode = () => {
           return;
         }
 
+        if (scenario === ScenariosEnum.getQrCodeInfo) {
+          dispatch(setQrCode(qrCode));
+          navigation.navigate('QrCodeInfo');
+
+          return;
+        }
+
         if (scenario === ScenariosEnum.handOverHarvest) {
           handleHarvest(qrCode);
 
@@ -117,7 +132,7 @@ const ScanQrCode = () => {
         }
       }
     },
-    [assignQrCodeToWorker, firestorePrefix, handleHarvest, scenario, showAlert],
+    [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
   );
 
   return (
@@ -126,13 +141,7 @@ const ScanQrCode = () => {
       onRead={onSuccess}
       ref={scanner}
       showMarker={true}
-      topContent={
-        <Text style={styles.centerText}>
-          {scenario === ScenariosEnum.handOverHarvest
-            ? strings.scanWorkerQrCodeWithCamera
-            : strings.scanQrCodeWithCamera}
-        </Text>
-      }
+      topContent={<Text style={styles.centerText}>{scanText}</Text>}
     />
   );
 };

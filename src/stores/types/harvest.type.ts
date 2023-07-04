@@ -1,3 +1,6 @@
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import Timestamp = FirebaseFirestoreTypes.Timestamp;
+
 export type Harvest = {
   uuid: string;
   qty: number;
@@ -7,6 +10,6 @@ export type Harvest = {
   productQualityId: number;
   workerUuid: string;
   weightTotal: number;
-  createdTimestamp: Date;
-  syncTimestamp: Date;
+  createdTimestamp: Timestamp;
+  syncTimestamp: Timestamp;
 };
