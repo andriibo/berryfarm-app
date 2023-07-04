@@ -94,21 +94,21 @@ const ScanQrCode = () => {
           return;
         }
 
-        getQrCodeByUuid(event.data, firestorePrefix).then(qrCode => {
-          if (!qrCode) {
-            showAlert(strings.qrCodeNotFound);
+        const qrCode = await getQrCodeByUuid(event.data, firestorePrefix);
 
-            return;
-          }
+        if (!qrCode) {
+          showAlert(strings.qrCodeNotFound);
 
-          if (scenario === ScenariosEnum.handOverHarvest) {
-            handleHarvest(qrCode);
+          return;
+        }
 
-            return;
-          }
+        if (scenario === ScenariosEnum.handOverHarvest) {
+          handleHarvest(qrCode);
 
-          assignQrCodeToWorker(qrCode);
-        });
+          return;
+        }
+
+        await assignQrCodeToWorker(qrCode);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           showAlert(error.message);

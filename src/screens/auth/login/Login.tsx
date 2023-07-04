@@ -42,23 +42,21 @@ const Login = () => {
       setError('');
       setLoader(true);
       try {
-        getUserByUsername(username, firestorePrefix).then(response => {
-          if (!response) {
-            setLoader(false);
-            setError(strings.incorrectUsername);
+        const data = await getUserByUsername(username, firestorePrefix);
 
-            return;
-          }
+        if (!data) {
+          setError(strings.incorrectUsername);
 
-          if (!isLoadedData) {
-            initData(firestorePrefix).then(() => {
-              dispatch(setLoadedData(true));
-            });
-          }
+          return;
+        }
 
-          setLoader(false);
-          dispatch(setUser(response));
-        });
+        if (!isLoadedData) {
+          await initData(firestorePrefix);
+          dispatch(setLoadedData(true));
+        }
+
+        dispatch(setUser(data));
+        setLoader(false);
       } catch (error: any) {
         setLoader(false);
         if (error instanceof FirestoreServiceError) {

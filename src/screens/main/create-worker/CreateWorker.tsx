@@ -17,7 +17,7 @@ import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setWorker} from 'src/stores/slices/worker.slice';
+import {IWorker, setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
@@ -47,42 +47,31 @@ const CreateWorker = () => {
     resolver: yupResolver(validation.createWorker),
   });
 
-  const createNewWorker = useCallback(
-    (data: WorkerRequest) => {
-      const worker = {...data, uuid: uuid()};
-
-      createWorker(worker, firestorePrefix);
-      dispatch(setWorker(worker));
-      reset();
-      navigation.navigate('ScanQrCode', {
-        scenario: ScenariosEnum.createWorker,
-      });
-      setLoader(false);
-    },
-    [dispatch, firestorePrefix, navigation, reset],
-  );
-
   const handleCreateWorker = useCallback(
     async (data: WorkerRequest) => {
       setError('');
       setLoader(true);
       try {
-        getWorkerByParams(data.firstName, data.lastName, data.middleName, data.birthDate, firestorePrefix).then(
-          worker => {
-            if (!worker) {
-              createNewWorker(data);
-
-              return;
-            }
-
-            dispatch(setWorker(worker));
-            reset();
-            navigation.navigate('ScanQrCode', {
-              scenario: ScenariosEnum.createWorker,
-            });
-            setLoader(false);
-          },
+        let worker: IWorker | null = await getWorkerByParams(
+          data.firstName,
+          data.lastName,
+          data.middleName,
+          data.birthDate,
+          firestorePrefix,
         );
+
+        if (!worker) {
+          worker = {...data, uuid: uuid()};
+
+          await createWorker(worker, firestorePrefix);
+        }
+
+        dispatch(setWorker(worker));
+        reset();
+        navigation.navigate('ScanQrCode', {
+          scenario: ScenariosEnum.createWorker,
+        });
+        setLoader(false);
       } catch (error: any) {
         setLoader(false);
         if (error instanceof FirestoreServiceError) {
@@ -92,7 +81,7 @@ const CreateWorker = () => {
         }
       }
     },
-    [createNewWorker, dispatch, firestorePrefix, navigation, reset],
+    [dispatch, firestorePrefix, navigation, reset],
   );
 
   if (loader) {

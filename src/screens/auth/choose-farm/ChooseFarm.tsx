@@ -34,18 +34,17 @@ const ChooseFarm = () => {
     setError('');
     setLoader(true);
     try {
-      getFarmByDoc(selectedFarm as FarmsEnum).then(farm => {
-        if (!farm) {
-          setLoader(false);
-          setError(strings.farmNotFound);
+      const farm = await getFarmByDoc(selectedFarm as FarmsEnum);
 
-          return;
-        }
+      if (!farm) {
+        setError(strings.farmNotFound);
 
-        dispatch(setFarm(farm));
-        navigation.navigate('Login');
-        setLoader(false);
-      });
+        return;
+      }
+
+      dispatch(setFarm(farm));
+      navigation.navigate('Login');
+      setLoader(false);
     } catch (error: any) {
       setLoader(false);
       if (error instanceof FirestoreServiceError) {
