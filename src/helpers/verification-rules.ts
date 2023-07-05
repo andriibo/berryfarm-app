@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import {errorMessages} from 'src/constants/constants';
+import {WorkerStatus} from 'src/stores/types/worker.type';
 
 export const validation = {
   login: yup
@@ -13,6 +14,11 @@ export const validation = {
       lastName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.lastName),
       middleName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.middleName),
       birthDate: yup.date().required(errorMessages.required),
+      status: yup
+        .mixed<WorkerStatus>()
+        .oneOf(Object.values(WorkerStatus))
+        .required(errorMessages.required)
+        .default(WorkerStatus.active),
     })
     .required(),
   createHarvest: yup

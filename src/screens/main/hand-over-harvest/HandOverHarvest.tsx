@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Button, HelperText, Text, TextInput} from 'react-native-paper';
+import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -14,7 +14,7 @@ import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {createHarvest, getWorkerByUuid} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
-import {Worker} from 'src/stores/types/worker.type';
+import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -115,7 +115,9 @@ const HandOverHarvest = () => {
             {strings.worker}
           </Text>
           <Text variant="titleLarge">
-            {worker ? getFullname(worker) : strings.harvestTemporarilyFixedForWorkerQrCode}
+            {worker && getFullname(worker) + ' '}
+            {worker && worker.status === WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
+            {!worker && strings.harvestTemporarilyFixedForWorkerQrCode}
           </Text>
         </View>
         <View>
