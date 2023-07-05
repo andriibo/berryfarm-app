@@ -3,7 +3,7 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
-import {Worker} from 'src/stores/types/worker.type';
+import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
@@ -213,6 +213,7 @@ export const getWorkers = async (prefix: string) => {
 
   const snapshot = await firestore()
     .collection(collection)
+    .where('status', '==', WorkerStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);
