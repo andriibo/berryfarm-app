@@ -12,7 +12,7 @@ const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
   {title: strings.giveQrCode, destination: 'GiveQrCodeStack'},
   {title: strings.templates, destination: 'HandOverHarvestStack'},
-  // {title: strings.qrCodeInfo, destination: ''},
+  {title: strings.qrCodeInfo, destination: 'GetQrCodeInfoStack'},
 ];
 
 const HomeButton = ({title, destination}: {title: string; destination: string}) => {

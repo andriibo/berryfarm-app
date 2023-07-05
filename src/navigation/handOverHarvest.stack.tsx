@@ -8,8 +8,9 @@ import {drawerOptions} from 'src/navigation/drawer.stack';
 
 export type HandOverHarvestStackParamList = {
   Templates: undefined;
-  HandOverHarvest: undefined;
   ScanQrCode: {scenario: ScenariosEnum};
+  QrCodeInfo: undefined;
+  HandOverHarvest: undefined;
   SuccessPage: {scenario: ScenariosEnum};
 };
 
@@ -41,6 +42,19 @@ const HandOverHarvestStack = () => {
             fontWeight: 'bold',
           },
           title: '',
+          headerLeft: () => <HeaderLeft />,
+        }}
+      />
+      <HandOverHarvestStackComponent.Screen
+        component={Screens.QrCodeInfo}
+        name="QrCodeInfo"
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.qrCodeInfo,
           headerLeft: () => <HeaderLeft />,
         }}
       />

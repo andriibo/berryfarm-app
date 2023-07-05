@@ -7,12 +7,14 @@ import GiveQrCodeStack from 'src/navigation/giveQrCode.stack';
 import CreateWorkerStack from 'src/navigation/createWorker.stack';
 import HomeStack from 'src/navigation/home.stack';
 import {strings} from 'src/locales/locales';
+import GetQrCodeInfoStack from 'src/navigation/getQrCodeInfo.stack';
 
 export type DrawerStackParamList = {
   HomeStack: undefined;
   CreateWorkerStack: undefined;
   GiveQrCodeStack: undefined;
   HandOverHarvestStack: undefined;
+  GetQrCodeInfoStack: undefined;
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
@@ -67,6 +69,14 @@ const DrawerStack = () => {
         options={{
           headerShown: false,
           title: strings.giveQrCode,
+        }}
+      />
+      <DrawerComponent.Screen
+        component={GetQrCodeInfoStack}
+        name="GetQrCodeInfoStack"
+        options={{
+          headerShown: false,
+          title: strings.qrCodeInfo,
         }}
       />
     </DrawerComponent.Navigator>
