@@ -1,10 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
-import {Worker} from 'src/stores/types/worker.type';
+import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 
-export type IWorker = Pick<Worker, 'uuid' | 'firstName' | 'lastName' | 'middleName' | 'birthDate'>;
+export type IWorker = Omit<Worker, 'createdTimestamp' | 'syncTimestamp'>;
 
 type IWorkerState = {
   worker: IWorker;
@@ -17,6 +16,7 @@ const initialState: IWorkerState = {
     lastName: '',
     middleName: '',
     birthDate: '' as unknown as Date,
+    status: WorkerStatus.inactive,
   },
 };
 
@@ -30,6 +30,7 @@ const workerSlice = createSlice({
       state.worker.lastName = payload.lastName;
       state.worker.middleName = payload.middleName;
       state.worker.birthDate = payload.birthDate;
+      state.worker.status = payload.status;
     },
     cleanWorker: (state: IWorkerState) => {
       state.worker.uuid = '';
@@ -37,6 +38,7 @@ const workerSlice = createSlice({
       state.worker.lastName = '';
       state.worker.middleName = '';
       state.worker.birthDate = '' as unknown as Date;
+      state.worker.status = WorkerStatus.inactive;
     },
   },
 });

@@ -59,5 +59,6 @@ export const strings = new LocalizedStrings({
     retry: 'Повторить',
     error: 'Ошибка',
     back: 'Назад',
+    notActive: 'не активен',
   },
 });
