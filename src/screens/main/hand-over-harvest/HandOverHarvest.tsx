@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -31,6 +31,18 @@ const HandOverHarvest = () => {
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const workerName = useMemo(() => {
+    if (worker) {
+      return (
+        <>
+          {getFullname(worker)}{' '}
+          {worker.status === WorkerStatus.inactive && <Badge size={30}>{strings.notActive}</Badge>}
+        </>
+      );
+    }
+
+    return strings.harvestTemporarilyFixedForWorkerQrCode;
+  }, [worker]);
 
   const {
     control,
@@ -114,11 +126,7 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.worker}
           </Text>
-          <Text variant="titleLarge">
-            {worker && getFullname(worker) + ' '}
-            {worker && worker.status === WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
-            {!worker && strings.harvestTemporarilyFixedForWorkerQrCode}
-          </Text>
+          <Text variant="titleLarge">{workerName}</Text>
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
