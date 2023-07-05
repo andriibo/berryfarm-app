@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
