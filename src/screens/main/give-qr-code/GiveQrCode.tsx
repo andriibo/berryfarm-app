@@ -3,7 +3,6 @@ import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Button, Divider, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/give-qr-code/styles';
-import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {getWorkers} from 'src/stores/services/firestore.service';
@@ -18,6 +17,7 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -36,7 +36,6 @@ const GiveQrCode = () => {
   const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
-  const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
 
   const handleSelectWorker = useCallback(
@@ -59,24 +58,22 @@ const GiveQrCode = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setError('');
       getWorkers(firestorePrefix)
         .then(response => {
           setWorkers(response);
         })
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
-            setError(error.message);
+            dispatch(addErrorNotification(error.message));
           } else {
             console.error(error);
           }
         });
-    }, [firestorePrefix]),
+    }, [dispatch, firestorePrefix]),
   );
 
   const handleGetWorker = useCallback(
     async (name: string) => {
-      setError('');
       setSearchQuery(name);
       setCanScanQrCode(false);
       if (name === '') {
@@ -97,13 +94,13 @@ const GiveQrCode = () => {
         setFoundWorkers(result);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
       }
     },
-    [workers],
+    [dispatch, workers],
   );
 
   if (!workers.length) {
@@ -113,7 +110,6 @@ const GiveQrCode = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View>
           <Text variant="headlineSmall">{strings.worker}</Text>
           <View style={styles.wrapper}>
