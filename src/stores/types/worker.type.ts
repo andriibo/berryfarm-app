@@ -1,5 +1,4 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import Timestamp = FirebaseFirestoreTypes.Timestamp;
 
 export enum WorkerStatus {
   active = 'active',
@@ -12,8 +11,8 @@ export type Worker = {
   firstName: string;
   lastName: string;
   middleName: string;
-  birthDate: Timestamp;
+  birthDate: FirebaseFirestoreTypes.Timestamp;
   status: WorkerStatus;
-  createdTimestamp: Timestamp;
-  syncTimestamp: Timestamp;
+  createdTimestamp: FirebaseFirestoreTypes.Timestamp;
+  syncTimestamp: FirebaseFirestoreTypes.Timestamp;
 };
