@@ -11,22 +11,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
-  wrapper: {
-    backgroundColor: colors.background,
-    borderColor: colors.black,
-    borderRadius: 10,
-    borderWidth: 1,
+  surface: {
+    padding: 8,
     width,
     margin: 10,
     height: '30%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.secondaryContainer,
   },
   titleWrapper: {
     flex: 1,
