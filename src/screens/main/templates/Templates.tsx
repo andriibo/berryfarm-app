@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity, View, FlatList} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/templates/styles';
 import {getTemplates} from 'src/stores/services/firestore.service';
@@ -19,20 +19,22 @@ import {setHarvest} from 'src/stores/slices/harvest.slice';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 
 const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
-  <TouchableOpacity onPress={() => scanQrCode(template)} style={styles.container}>
-    <View style={styles.titleWrapper}>
-      <Text variant="headlineLarge">{template.product.title}</Text>
-      <Text variant="headlineLarge">{template.location.title}</Text>
-    </View>
-    <View style={styles.titleWrapper}>
-      <Text variant="titleLarge">{template.productQuality.title}</Text>
-    </View>
-    <View style={styles.titleWrapper}>
-      <Text variant="titleLarge">{template.harvestPackage.title}</Text>
-      <Text variant="titleLarge">
-        {template.qty} {strings.items}
-      </Text>
-    </View>
+  <TouchableOpacity onPress={() => scanQrCode(template)}>
+    <Surface elevation={4} style={styles.surface}>
+      <View style={styles.titleWrapper}>
+        <Text variant="headlineLarge">{template.product.title}</Text>
+        <Text variant="headlineLarge">{template.location.title}</Text>
+      </View>
+      <View style={styles.titleWrapper}>
+        <Text variant="titleLarge">{template.productQuality.title}</Text>
+      </View>
+      <View style={styles.titleWrapper}>
+        <Text variant="titleLarge">{template.harvestPackage.title}</Text>
+        <Text variant="titleLarge">
+          {template.qty} {strings.items}
+        </Text>
+      </View>
+    </Surface>
   </TouchableOpacity>
 );
 
@@ -81,7 +83,7 @@ const Templates = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background, marginTop: -30}}>
       {errorMessage && <Toast error={errorMessage} />}
       <FlatList
         data={templates}
