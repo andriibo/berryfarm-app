@@ -1,4 +1,4 @@
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import firestore, {firebase, FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
@@ -107,7 +107,10 @@ export const getUserByUsername = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = (data: CreateWorkerRequest, prefix: string) => {
+export const createWorker = (
+  data: Omit<CreateWorkerRequest, 'birthDate'> & {birthDate: FirebaseFirestoreTypes.Timestamp},
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
 
   firestore()
@@ -147,12 +150,17 @@ export const getWorkerByParams = async (
   prefix: string,
 ) => {
   const collection = sprintf(workersCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
-    .where('firstName', '==', firstName)
-    .where('lastName', '==', lastName)
-    .where('middleName', '==', middleName)
-    .where('birthDate', '==', birthDate)
+    .where(
+      firebase.firestore.Filter.and(
+        firebase.firestore.Filter('firstName', '==', firstName),
+        firebase.firestore.Filter('lastName', '==', lastName),
+        firebase.firestore.Filter('middleName', '==', middleName),
+        firebase.firestore.Filter('birthDate', '==', firebase.firestore.Timestamp.fromDate(birthDate)),
+      ),
+    )
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);

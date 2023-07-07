@@ -60,10 +60,9 @@ const CreateWorker = () => {
         );
 
         if (!worker) {
-          const newWorker = {...data, uuid: uuid()};
+          worker = {...data, birthDate: firebase.firestore.Timestamp.fromDate(data.birthDate), uuid: uuid()};
 
-          await createWorker(newWorker, firestorePrefix);
-          worker = {...newWorker, birthDate: firebase.firestore.Timestamp.fromDate(newWorker.birthDate)};
+          await createWorker(worker, firestorePrefix);
         }
 
         dispatch(setWorker(worker));
