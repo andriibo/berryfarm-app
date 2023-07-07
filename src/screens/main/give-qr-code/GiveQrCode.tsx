@@ -5,12 +5,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/give-qr-code/styles';
 import {strings} from 'src/locales/locales';
 import {useFarm} from 'src/stores/slices/auth.slice';
-import {getWorkers} from 'src/stores/services/firestore.service';
+import {getWorkersByName} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Worker} from 'src/stores/types/worker.type';
-import {getFullname} from 'src/helpers/worker.helper';
+import {capitalizeFirstLowercaseRest, getFullname} from 'src/helpers/worker.helper';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
@@ -32,8 +32,8 @@ const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker
 const GiveQrCode = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<GiveQrCodeStackParamList>>();
+  const [loader, setLoader] = useState(false);
   const [workers, setWorkers] = useState<Array<Worker>>([]);
-  const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const {firestorePrefix} = useFarm();
@@ -42,7 +42,7 @@ const GiveQrCode = () => {
     (worker: Worker) => {
       setSearchQuery(getFullname(worker));
       setCanScanQrCode(true);
-      setFoundWorkers([]);
+      setWorkers([]);
       dispatch(setWorker(worker));
     },
     [dispatch],
@@ -52,58 +52,40 @@ const GiveQrCode = () => {
     useCallback(() => {
       setSearchQuery('');
       setCanScanQrCode(false);
-      setFoundWorkers([]);
+      setWorkers([]);
     }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      getWorkers(firestorePrefix)
-        .then(response => {
-          setWorkers(response);
-        })
-        .catch(error => {
-          if (error instanceof FirestoreServiceError) {
-            dispatch(addErrorNotification(error.message));
-          } else {
-            console.error(error);
-          }
-        });
-    }, [dispatch, firestorePrefix]),
   );
 
   const handleGetWorker = useCallback(
     async (name: string) => {
       setSearchQuery(name);
       setCanScanQrCode(false);
-      if (name === '') {
-        setFoundWorkers([]);
+      if (name === '' || name.length < 3) {
+        setWorkers([]);
 
         return;
       }
 
-      try {
-        const result = workers.filter(worker => {
-          return (
-            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.middleName?.toLowerCase().includes(name.toLowerCase())
-          );
-        });
+      setLoader(true);
 
-        setFoundWorkers(result);
+      try {
+        const result = await getWorkersByName(capitalizeFirstLowercaseRest(name), firestorePrefix);
+
+        setWorkers(result);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
+      } finally {
+        setLoader(false);
       }
     },
-    [dispatch, workers],
+    [dispatch, firestorePrefix],
   );
 
-  if (!workers.length) {
+  if (loader) {
     return <Loader />;
   }
 
@@ -122,17 +104,17 @@ const GiveQrCode = () => {
             />
             <Divider />
             <FlatList
-              data={foundWorkers}
+              data={workers}
               keyExtractor={item => `${item.uuid}`}
               renderItem={({item}) => <Item handleSelectWorker={handleSelectWorker} worker={item} />}
             />
-            {!foundWorkers.length && searchQuery && !canScanQrCode && (
+            {!workers.length && searchQuery && !canScanQrCode && (
               <Text style={styles.workerNotFound} variant="titleMedium">
                 {strings.workerNotFound}
               </Text>
             )}
 
-            {!foundWorkers.length && searchQuery && !canScanQrCode && (
+            {!workers.length && searchQuery && !canScanQrCode && (
               <Text
                 onPress={() => navigation.navigate('CreateWorkerStack')}
                 style={styles.linkCreateWorker}

@@ -23,6 +23,7 @@ import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {Loader} from 'src/components/loader';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {firebase} from '@react-native-firebase/firestore';
+import {capitalizeFirstLowercaseRest} from 'src/helpers/worker.helper';
 
 type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
@@ -51,16 +52,24 @@ const CreateWorker = () => {
     async (data: WorkerRequest) => {
       setLoader(true);
       try {
+        const formattedParams = {
+          firstName: capitalizeFirstLowercaseRest(data.firstName),
+          lastName: capitalizeFirstLowercaseRest(data.lastName),
+          middleName: capitalizeFirstLowercaseRest(data.middleName),
+          birthDate: firebase.firestore.Timestamp.fromDate(data.birthDate),
+          status: data.status,
+        };
+
         let worker: IWorker | null = await getWorkerByParams(
-          data.firstName,
-          data.lastName,
-          data.middleName,
-          data.birthDate,
+          formattedParams.firstName,
+          formattedParams.lastName,
+          formattedParams.middleName,
+          formattedParams.birthDate,
           firestorePrefix,
         );
 
-        if (!worker) {
-          worker = {...data, birthDate: firebase.firestore.Timestamp.fromDate(data.birthDate), uuid: uuid()};
+        if (worker === null) {
+          worker = {...formattedParams, uuid: uuid()};
 
           await createWorker(worker, firestorePrefix);
         }
