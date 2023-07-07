@@ -71,7 +71,7 @@ const CreateWorker = () => {
         if (worker === null) {
           worker = {...formattedParams, uuid: uuid()};
 
-          await createWorker(worker, firestorePrefix);
+          createWorker(worker, firestorePrefix);
         }
 
         dispatch(setWorker(worker));
