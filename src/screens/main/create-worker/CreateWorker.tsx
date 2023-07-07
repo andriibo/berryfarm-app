@@ -8,7 +8,6 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
-import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -22,6 +21,8 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {Loader} from 'src/components/loader';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {firebase} from '@react-native-firebase/firestore';
 
 type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
@@ -29,7 +30,6 @@ const CreateWorker = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
-  const [errorMessage, setError] = useState('');
   const [loader, setLoader] = useState(false);
   const {
     control,
@@ -49,7 +49,6 @@ const CreateWorker = () => {
 
   const handleCreateWorker = useCallback(
     async (data: WorkerRequest) => {
-      setError('');
       setLoader(true);
       try {
         let worker: IWorker | null = await getWorkerByParams(
@@ -61,9 +60,10 @@ const CreateWorker = () => {
         );
 
         if (!worker) {
-          worker = {...data, uuid: uuid()};
+          const newWorker = {...data, uuid: uuid()};
 
-          await createWorker(worker, firestorePrefix);
+          await createWorker(newWorker, firestorePrefix);
+          worker = {...newWorker, birthDate: firebase.firestore.Timestamp.fromDate(newWorker.birthDate)};
         }
 
         dispatch(setWorker(worker));
@@ -75,7 +75,7 @@ const CreateWorker = () => {
       } catch (error: any) {
         setLoader(false);
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(strings.incorrectUsername));
         } else {
           console.error(error);
         }
@@ -91,7 +91,6 @@ const CreateWorker = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View style={styles.wrapper}>
           <View>
             <Text variant="titleMedium">{strings.worker}</Text>

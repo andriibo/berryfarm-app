@@ -9,6 +9,7 @@ import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
 import {cleanFarm} from 'src/stores/slices/auth.slice';
 import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
 import {cleanQrCode, qrCodeReducer} from 'src/stores/slices/qrCode.slice';
+import {notificationsReducer} from 'src/stores/slices/notifications.slice';
 
 const persistConfig = {
   key: 'root',
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   worker: workerReducer,
   harvest: harvestReducer,
   qrCode: qrCodeReducer,
+  notifications: notificationsReducer,
 });
 
 export const store = configureStore({

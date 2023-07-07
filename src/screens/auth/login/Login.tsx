@@ -13,10 +13,10 @@ import {getUserByUsername, initData} from 'src/stores/services/firestore.service
 import {FirestoreServiceError} from 'src/stores/errors';
 import {setUser, useUser, useFarm, setLoadedData, useIsLoadedData} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {Toast} from 'src/components/toast';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +25,6 @@ const Login = () => {
   const isLoadedData = useIsLoadedData();
   const netState = useNetInfo();
   const [loader, setLoader] = useState(false);
-  const [errorMessage, setError] = useState('');
 
   const {
     control,
@@ -39,13 +38,13 @@ const Login = () => {
 
   const handleLogin = useCallback(
     async ({username}: FieldValues) => {
-      setError('');
       setLoader(true);
       try {
         const data = await getUserByUsername(username, firestorePrefix);
 
         if (!data) {
-          setError(strings.incorrectUsername);
+          dispatch(addErrorNotification(strings.incorrectUsername));
+          setLoader(false);
 
           return;
         }
@@ -56,11 +55,10 @@ const Login = () => {
         }
 
         dispatch(setUser(data));
-        setLoader(false);
       } catch (error: any) {
         setLoader(false);
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
@@ -76,7 +74,6 @@ const Login = () => {
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
         <Controller
           control={control}

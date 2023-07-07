@@ -4,7 +4,6 @@ import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
-import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -22,11 +21,13 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
 const HandOverHarvest = () => {
-  const [errorMessage, setError] = useState('');
+  const dispatch = useAppDispatch();
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
@@ -64,30 +65,28 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setError('');
       if (harvest.workerUuid) {
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
               setWorker(data);
             } else {
-              setError(strings.workerNotFound);
+              dispatch(addErrorNotification(strings.workerNotFound));
             }
           })
           .catch(error => {
             if (error instanceof FirestoreServiceError) {
-              setError(error.message);
+              dispatch(addErrorNotification(error.message));
             } else {
               console.error(error);
             }
           });
       }
-    }, [firestorePrefix, harvest]),
+    }, [dispatch, firestorePrefix, harvest]),
   );
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
-      setError('');
       try {
         if (harvest.workerUuid) {
           data = {...data, workerUuid: harvest.workerUuid};
@@ -102,13 +101,13 @@ const HandOverHarvest = () => {
         });
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
       }
     },
-    [firestorePrefix, harvest, navigation, reset],
+    [dispatch, firestorePrefix, harvest, navigation, reset],
   );
 
   if (!harvest.qrCodeUuid && !worker) {
@@ -117,7 +116,6 @@ const HandOverHarvest = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
-      {errorMessage && <Toast error={errorMessage} />}
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardDismissMode="on-drag"

@@ -12,45 +12,44 @@ import {getWorkerByUuid} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker} from 'src/stores/types/worker.type';
-import {Toast} from 'src/components/toast';
 import {showByFormat} from 'src/helpers/date.helper';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {GetQrCodeInfoStackParamList} from 'src/navigation/getQrCodeInfo.stack';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 
 const QrCodeInfo = () => {
+  const dispatch = useAppDispatch();
   const {firestorePrefix} = useFarm();
   const qrCode = useQrCode();
   const [worker, setWorker] = useState<Worker | null>(null);
-  const [errorMessage, setError] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<GetQrCodeInfoStackParamList>>();
 
   useFocusEffect(
     useCallback(() => {
-      setError('');
       if (qrCode.workerUuid) {
         getWorkerByUuid(qrCode.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
               setWorker(data);
             } else {
-              setError(strings.workerNotFound);
+              dispatch(addErrorNotification(strings.workerNotFound));
             }
           })
           .catch(error => {
             if (error instanceof FirestoreServiceError) {
-              setError(error.message);
+              dispatch(addErrorNotification(error.message));
             } else {
               console.error(error);
             }
           });
       }
-    }, [firestorePrefix, qrCode]),
+    }, [dispatch, firestorePrefix, qrCode]),
   );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View style={styles.wrapper}>
           <View>
             <Text style={styles.label} variant="headlineSmall">

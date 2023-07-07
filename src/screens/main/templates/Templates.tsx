@@ -9,7 +9,6 @@ import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
 import {colors} from 'src/styles/colors';
 import {FirestoreServiceError} from 'src/stores/errors';
-import {Toast} from 'src/components/toast';
 import {Loader} from 'src/components/loader';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {useNavigation} from '@react-navigation/native';
@@ -17,6 +16,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setHarvest} from 'src/stores/slices/harvest.slice';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 
 const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
   <TouchableOpacity onPress={() => scanQrCode(template)}>
@@ -43,22 +43,20 @@ const Templates = () => {
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
-  const [errorMessage, setError] = useState('');
 
   useEffect(() => {
-    setError('');
     getTemplates(firestorePrefix)
       .then(data => {
         setTemplates(data);
       })
       .catch(error => {
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
       });
-  }, [firestorePrefix]);
+  }, [dispatch, firestorePrefix]);
 
   const scanQrCode = useCallback(
     (template: HarvestTemplate) => {
@@ -83,8 +81,7 @@ const Templates = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background, marginTop: -30}}>
-      {errorMessage && <Toast error={errorMessage} />}
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background, marginTop: -10}}>
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}
