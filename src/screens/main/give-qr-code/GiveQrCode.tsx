@@ -18,6 +18,7 @@ import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {useDebounce} from 'src/stores/hooks/use-debounce';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -37,6 +38,7 @@ const GiveQrCode = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const {firestorePrefix} = useFarm();
+  const debouncedSearchTerm = useDebounce(searchQuery, 500);
 
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
@@ -76,24 +78,22 @@ const GiveQrCode = () => {
     async (name: string) => {
       setSearchQuery(name);
       setCanScanQrCode(false);
-      if (name === '' || name.length < 2) {
+      if ((name === '' || name.length < 2) && !debouncedSearchTerm) {
         setFoundWorkers([]);
 
         return;
       }
 
       try {
-        setTimeout(() => {
-          const result = workers.filter(worker => {
-            return (
-              worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
-              worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
-              worker.middleName?.toLowerCase().includes(name.toLowerCase())
-            );
-          });
+        const result = workers.filter(worker => {
+          return (
+            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
+            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
+            worker.middleName?.toLowerCase().includes(name.toLowerCase())
+          );
+        });
 
-          setFoundWorkers(result);
-        }, 500);
+        setFoundWorkers(result);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));
@@ -102,7 +102,7 @@ const GiveQrCode = () => {
         }
       }
     },
-    [dispatch, workers],
+    [debouncedSearchTerm, dispatch, workers],
   );
 
   if (!workers.length) {
