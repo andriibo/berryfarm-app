@@ -76,7 +76,7 @@ const GiveQrCode = () => {
     async (name: string) => {
       setSearchQuery(name);
       setCanScanQrCode(false);
-      if (name === '') {
+      if (name === '' && name.length < 2) {
         setFoundWorkers([]);
 
         return;
