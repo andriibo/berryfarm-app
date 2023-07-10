@@ -62,5 +62,9 @@ export const strings = new LocalizedStrings({
     notActive: 'не активен',
     qrCodeNotIssuedToWorker: 'Данный QR код не выдан работнику.',
     issueQrCodeDate: 'Дата выдачи кода',
+    cancel: 'Отмена',
+    parameters: 'Настройки',
+    technowagyNeedsBluetooth: 'Чтобы использовать Technowagy надо включить Bluetooth.',
+    turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
   },
 });

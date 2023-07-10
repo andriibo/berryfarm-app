@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {Alert, Linking, ScrollView, View} from 'react-native';
 import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
@@ -23,6 +23,9 @@ import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {bleManager, startScanBle, stopScanBle} from 'src/helpers/scan-ble.helper';
+import {useConnectedDevices, useDevices} from 'src/stores/slices/connect-device.slice';
+import {androidBLE, iosBLE, isIOS} from 'src/constants/constants';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -32,6 +35,8 @@ const HandOverHarvest = () => {
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const devices = useDevices();
+  const connectedDevices = useConnectedDevices();
   const workerName = useMemo(() => {
     if (worker) {
       return (
@@ -84,6 +89,33 @@ const HandOverHarvest = () => {
       }
     }, [dispatch, firestorePrefix, harvest]),
   );
+
+  useEffect(() => {
+    const subscription = bleManager.onStateChange(state => {
+      if (state === 'PoweredOn') {
+        startScanBle(dispatch, devices, connectedDevices).then();
+        subscription.remove();
+      }
+
+      if (state === 'PoweredOff') {
+        stopScanBle(dispatch);
+        Alert.alert(strings.technowagyNeedsBluetooth, strings.turnOnBluetoothInParameters, [
+          {
+            text: strings.cancel,
+            style: 'cancel',
+          },
+          {
+            text: strings.parameters,
+            onPress: () => {
+              isIOS ? Linking.openURL(iosBLE) : Linking.sendIntent(androidBLE);
+            },
+          },
+        ]);
+      }
+    }, true);
+
+    return () => subscription.remove();
+  }, [connectedDevices, devices, dispatch]);
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {

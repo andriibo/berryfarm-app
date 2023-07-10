@@ -42,29 +42,18 @@ const connectDeviceSlice = createSlice({
   },
 });
 
-export const selectIsSearching = (state: RootState) =>
-  state.connectDevice.isSearching;
-export const selectIsDeviceConnected = (state: RootState) =>
-  state.connectDevice.isDeviceConnected;
-export const selectActiveDeviceId = (state: RootState) =>
-  state.connectDevice.activeDeviceId;
+export const selectIsSearching = (state: RootState) => state.connectDevice.isSearching;
+export const selectIsDeviceConnected = (state: RootState) => state.connectDevice.isDeviceConnected;
+export const selectActiveDeviceId = (state: RootState) => state.connectDevice.activeDeviceId;
 export const selectDevices = (state: RootState) => state.connectDevice.devices;
-export const selectConnectedDevices = (state: RootState) =>
-  state.connectDevice.connectedDevices;
+export const selectConnectedDevices = (state: RootState) => state.connectDevice.connectedDevices;
 export const useIsSearching = () => useAppSelector(selectIsSearching);
-export const useIsDeviceConnected = () =>
-  useAppSelector(selectIsDeviceConnected);
+export const useIsDeviceConnected = () => useAppSelector(selectIsDeviceConnected);
 export const useActiveDeviceId = () => useAppSelector(selectActiveDeviceId);
 export const useDevices = () => useAppSelector(selectDevices);
 export const useConnectedDevices = () => useAppSelector(selectConnectedDevices);
 
 export const {
   reducer: connectDeviceReducer,
-  actions: {
-    setIsSearching,
-    setIsDeviceConnected,
-    setActiveDeviceId,
-    setDevices,
-    setConnectedDevices,
-  },
+  actions: {setIsSearching, setIsDeviceConnected, setActiveDeviceId, setDevices, setConnectedDevices},
 } = connectDeviceSlice;

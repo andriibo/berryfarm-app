@@ -16,14 +16,6 @@ import {setFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {Loader} from 'src/components/loader';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
-import {
-  setDevices,
-  setIsSearching,
-  useConnectedDevices,
-  useDevices,
-  useIsSearching,
-} from 'src/stores/slices/connect-device.slice';
-import {startScanBle, stopScanBle} from 'src/helpers/scan-ble.helper';
 
 const farms = [
   {label: strings.lyubotin, value: FarmsEnum.lyubotin},
@@ -36,19 +28,6 @@ const ChooseFarm = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
   const [loader, setLoader] = useState(false);
-  const devices = useDevices();
-  const connectedDevices = useConnectedDevices();
-  const isSearch = useIsSearching();
-
-  const handleSearch = async () => {
-    if (!isSearch) {
-      dispatch(setDevices([]));
-      dispatch(setIsSearching(true));
-      await startScanBle(dispatch, devices, connectedDevices);
-    } else {
-      stopScanBle(dispatch);
-    }
-  };
 
   const chooseFarm = useCallback(async () => {
     setLoader(true);
@@ -99,11 +78,7 @@ const ChooseFarm = () => {
             {farm.label}
           </Button>
         ))}
-        <Button
-          disabled={!selectedFarm}
-          mode="contained"
-          onPress={handleSearch}
-          style={[styles.btn, styles.continue]}>
+        <Button disabled={!selectedFarm} mode="contained" onPress={chooseFarm} style={[styles.btn, styles.continue]}>
           {strings.continue}
         </Button>
       </View>

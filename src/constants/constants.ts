@@ -15,6 +15,9 @@ export const errorMessages = {
 } as const;
 
 export const isIOS = Platform.OS === 'ios';
+export const bleTechnowagy = 'Technowagy';
+export const iosBLE = 'App-Prefs:Bluetooth';
+export const androidBLE = 'android.settings.BLUETOOTH_SETTINGS';
 export const maxDATE = dayjs().subtract(1, 'day').toDate();
 
 export const systemAlert = (title: string, message: string) =>
