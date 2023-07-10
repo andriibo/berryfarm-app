@@ -12,7 +12,7 @@ export type Worker = {
   lastName: string;
   middleName: string;
   birthDate: FirebaseFirestoreTypes.Timestamp;
-  status: WorkerStatus;
+  status?: WorkerStatus;
   createdTimestamp: FirebaseFirestoreTypes.Timestamp;
   syncTimestamp: FirebaseFirestoreTypes.Timestamp;
 };
