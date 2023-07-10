@@ -12,8 +12,8 @@ export const validation = {
     .object({
       firstName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.firstName),
       lastName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.lastName),
-      middleName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.middleName),
-      birthDate: yup.date().required(errorMessages.required),
+      middleName: yup.string().optional().max(20, errorMessages.middleName),
+      birthDate: yup.date().optional(),
       status: yup
         .mixed<WorkerStatus>()
         .oneOf(Object.values(WorkerStatus))

@@ -9,14 +9,14 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {BirthPicker} from 'src/components/birth-picker';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createWorker, getWorkerByParams} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {IWorker, setWorker} from 'src/stores/slices/worker.slice';
+import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
@@ -24,8 +24,6 @@ import {Loader} from 'src/components/loader';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {firebase} from '@react-native-firebase/firestore';
 import {capitalizeFirstLowercaseRest} from 'src/helpers/worker.helper';
-
-type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
@@ -36,8 +34,9 @@ const CreateWorker = () => {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: {errors, isDirty, isValid},
-  } = useForm<WorkerRequest>({
+  } = useForm<CreateWorkerRequest>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -48,19 +47,26 @@ const CreateWorker = () => {
     resolver: yupResolver(validation.createWorker),
   });
 
+  useFocusEffect(
+    useCallback(() => {
+      setValue('middleName', undefined, {shouldTouch: false});
+      setValue('birthDate', undefined, {shouldTouch: false});
+    }, [setValue]),
+  );
+
   const handleCreateWorker = useCallback(
-    async (data: WorkerRequest) => {
+    async (data: CreateWorkerRequest) => {
       setLoader(true);
       try {
         const formattedParams = {
           firstName: capitalizeFirstLowercaseRest(data.firstName),
           lastName: capitalizeFirstLowercaseRest(data.lastName),
-          middleName: capitalizeFirstLowercaseRest(data.middleName),
-          birthDate: firebase.firestore.Timestamp.fromDate(data.birthDate),
+          middleName: data.middleName ? capitalizeFirstLowercaseRest(data.middleName) : null,
+          birthDate: data.birthDate ? firebase.firestore.Timestamp.fromDate(data.birthDate) : null,
           status: data.status,
         };
 
-        let worker: IWorker | null = await getWorkerByParams(
+        const worker = await getWorkerByParams(
           formattedParams.firstName,
           formattedParams.lastName,
           formattedParams.middleName,
@@ -69,12 +75,14 @@ const CreateWorker = () => {
         );
 
         if (worker === null) {
-          worker = {...formattedParams, uuid: uuid()};
+          const newWorker = {...formattedParams, uuid: uuid()};
 
-          createWorker(worker, firestorePrefix);
+          createWorker(newWorker, firestorePrefix);
+          dispatch(setWorker(newWorker));
+        } else {
+          dispatch(setWorker(worker));
         }
 
-        dispatch(setWorker(worker));
         reset();
         navigation.navigate('ScanQrCode', {
           scenario: ScenariosEnum.createWorker,
@@ -171,7 +179,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="birthDate"
-              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value} />}
+              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value ?? new Date()} />}
             />
           </View>
           <View style={{alignItems: 'center'}}>
