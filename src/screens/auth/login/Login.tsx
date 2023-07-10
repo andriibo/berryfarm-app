@@ -2,24 +2,30 @@ import styles from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {HelperText, Button, TextInput} from 'react-native-paper';
+import {HelperText, Button, TextInput, Snackbar, Text} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import React, {useCallback, useState} from 'react';
-import {SignInRequest} from 'src/stores/requests/sign-in.request';
+import {SignInRequest} from 'src/stores/types/signInRequest';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {login} from 'src/stores/services/firestore.service';
+import {getUserByUsername, initData} from 'src/stores/services/firestore.service';
 import {FirestoreServiceError} from 'src/stores/errors';
-import {setUser, useFarm, useUser} from 'src/stores/slices/auth.slice';
+import {setUser, useUser, useFarm, setLoadedData, useIsLoadedData} from 'src/stores/slices/auth.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {Toast} from 'src/components/toast';
+import {useNetInfo} from '@react-native-community/netinfo';
+import {Loader} from 'src/components/loader';
+import {colors} from 'src/styles/colors';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const user = useUser();
   const {firestorePrefix} = useFarm();
-  const [errorMessage, setError] = useState('');
+  const isLoadedData = useIsLoadedData();
+  const netState = useNetInfo();
+  const [loader, setLoader] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -32,30 +38,43 @@ const Login = () => {
 
   const handleLogin = useCallback(
     async ({username}: FieldValues) => {
-      setError('');
+      setLoader(true);
       try {
-        const data = await login(username, firestorePrefix);
+        const data = await getUserByUsername(username, firestorePrefix);
+
+        if (!data) {
+          dispatch(addErrorNotification(strings.incorrectUsername));
+          setLoader(false);
+
+          return;
+        }
+
+        if (!isLoadedData) {
+          await initData(firestorePrefix);
+          dispatch(setLoadedData(true));
+        }
 
         dispatch(setUser(data));
       } catch (error: any) {
-        console.log(error);
+        setLoader(false);
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(error.message));
+        } else {
+          console.error(error);
         }
       }
     },
-    [dispatch, firestorePrefix],
+    [dispatch, firestorePrefix, isLoadedData],
   );
 
+  if (loader) {
+    return <Loader />;
+  }
+
   return (
-    <SafeAreaView edges={['bottom']} style={{flex: 1}}>
+    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
-        <FastImage
-          resizeMode="contain"
-          source={require('src/assets/images/logo.png')}
-          style={styles.image}
-        />
+        <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
         <Controller
           control={control}
           name="username"
@@ -82,6 +101,9 @@ const Login = () => {
           style={[styles.btn]}>
           {strings.logIn}
         </Button>
+        <Snackbar onDismiss={() => {}} visible={!netState.isConnected} wrapperStyle={{position: 'relative'}}>
+          <Text style={styles.snackbar}>{strings.couldNotConnectToServer}</Text>
+        </Snackbar>
       </View>
     </SafeAreaView>
   );

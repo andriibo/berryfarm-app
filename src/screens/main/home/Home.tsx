@@ -1,40 +1,51 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Snackbar, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
 import styles from 'src/screens/main/home/styles';
+import {colors} from 'src/styles/colors';
+import {useNetInfo} from '@react-native-community/netinfo';
 
-const Home = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+const buttons = [
+  {title: strings.registration, destination: 'CreateWorkerStack'},
+  {title: strings.giveQrCode, destination: 'GiveQrCodeStack'},
+  {title: strings.templates, destination: 'HandOverHarvestStack'},
+  {title: strings.qrCodeInfo, destination: 'GetQrCodeInfoStack'},
+];
+
+const HomeButton = ({title, destination}: {title: string; destination: string}) => {
+  const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{flex: 1, flexDirection: 'row', marginTop: '10%'}}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('CreateWorker')}
-        style={styles.container}>
+    <TouchableOpacity onPress={() => navigation.navigate(destination as never)}>
+      <Surface elevation={4} style={styles.surface}>
         <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.registration}</Text>
+          <Text style={styles.titleText}>{title}</Text>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('GiveQrCode')}
-        style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.giveQrCode}</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Templates')}
-        style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{strings.templates}</Text>
-        </View>
-      </TouchableOpacity>
+      </Surface>
+    </TouchableOpacity>
+  );
+};
+
+const Home = () => {
+  const netState = useNetInfo();
+
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+      <View style={styles.container}>
+        {buttons.map(({title, destination}) => {
+          return (
+            <Fragment key={title}>
+              <HomeButton destination={destination} title={title} />
+            </Fragment>
+          );
+        })}
+      </View>
+      <Snackbar onDismiss={() => {}} visible={!netState.isConnected}>
+        <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
+      </Snackbar>
     </SafeAreaView>
   );
 };

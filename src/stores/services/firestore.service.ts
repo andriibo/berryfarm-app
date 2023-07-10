@@ -1,47 +1,62 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase, FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
-import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
-import {Worker} from 'src/stores/types/worker.type';
-import {v4 as uuid} from 'uuid';
+import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
+import {QrCode} from 'src/stores/types/qrCode.type';
+import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
+import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
 const workersCollection = '%sworkers';
+const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
+const qrCodesCollection = '%sqr_codes';
 
-export const getFarm = async (farm: FarmsEnum) => {
-  const doc = await firestore()
+export const getFarmByDoc = async (document: FarmsEnum) => {
+  const snapshot = await firestore()
     .collection(farmsCollection)
-    .doc(farm)
+    .doc(document)
     .get()
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
 
-  if (doc.data() === undefined) {
-    throw new FirestoreServiceError("Farm doesn't exist.");
-  }
+  return snapshot.data() ? (snapshot.data() as Farm) : null;
+};
 
-  return doc.data() as Farm;
+export const getFarms = async () => {
+  const snapshot = await firestore()
+    .collection(farmsCollection)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  const farms: Farm[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      farms.push(doc.data() as Farm);
+    }
+  });
+
+  return farms;
 };
 
 export const getTemplates = async (prefix: string) => {
   const collection = sprintf(harvestTemplatesCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
-
-  if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Templates not found.');
-  }
 
   const templates: HarvestTemplate[] = [];
 
@@ -54,52 +69,102 @@ export const getTemplates = async (prefix: string) => {
   return templates;
 };
 
-export const login = async (username: string, prefix: string) => {
+export const getQrCodes = async (prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const qrCodes: QrCode[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      qrCodes.push(doc.data() as QrCode);
+    }
+  });
+
+  return qrCodes;
+};
+
+export const getUserByUsername = async (username: string, prefix: string) => {
   const collection = sprintf(usersCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
     .where('username', '==', username.trim())
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Incorrect username.');
+    return null;
   }
 
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (
-  data: CreateWorkerRequest,
+export const createWorker = (
+  data: Omit<CreateWorkerRequest, 'birthDate'> & {birthDate: FirebaseFirestoreTypes.Timestamp},
   prefix: string,
 ) => {
-  const worker = {...data, uuid: uuid()};
   const collection = sprintf(workersCollection, prefix);
 
-  await firestore()
+  firestore()
     .collection(collection)
-    .doc(uuid())
-    .set(worker)
+    .doc(data.uuid)
+    .set({
+      ...data,
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      createdTimestamp: firebase.firestore.Timestamp.now(),
+    })
     .catch(err => {
       throw new FirestoreServiceError(err);
     });
-
-  return worker as Worker;
 };
 
-export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
+export const createHarvest = (data: CreateHarvestRequest, prefix: string) => {
+  const collection = sprintf(harvestCollection, prefix);
+
+  firestore()
+    .collection(collection)
+    .doc(data.uuid)
+    .set({
+      ...data,
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      createdTimestamp: firebase.firestore.Timestamp.now(),
+    })
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+};
+
+export const getWorkerByParams = async (
+  firstName: string,
+  lastName: string,
+  middleName: string,
+  birthDate: FirebaseFirestoreTypes.Timestamp,
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
-    .where('firstName', '==', data.firstName)
-    .where('lastName', '==', data.lastName)
-    .where('middleName', '==', data.middleName)
-    .where('birthDate', '==', data.birthDate)
+    .where(
+      firebase.firestore.Filter.and(
+        firebase.firestore.Filter('firstName', '==', firstName),
+        firebase.firestore.Filter('lastName', '==', lastName),
+        firebase.firestore.Filter('middleName', '==', middleName),
+        firebase.firestore.Filter('birthDate', '==', birthDate),
+      ),
+    )
+    .where('status', '==', WorkerStatus.active)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   if (snapshot.docs.length) {
@@ -107,4 +172,80 @@ export const findWorker = async (data: CreateWorkerRequest, prefix: string) => {
   }
 
   return null;
+};
+
+export const getWorkerByUuid = async (uuid: string, prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .doc(uuid)
+    .get()
+    .catch(err => {
+      throw new FirestoreServiceError(err);
+    });
+
+  return snapshot.data() ? (snapshot.data() as Worker) : null;
+};
+
+export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .doc(uuid)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  return snapshot.data() ? (snapshot.data() as QrCode) : null;
+};
+
+export const updateQrCode = (qrCode: QrCode, prefix: string) => {
+  const collection = sprintf(qrCodesCollection, prefix);
+
+  firestore()
+    .collection(collection)
+    .doc(qrCode.uuid)
+    .set({
+      ...qrCode,
+      connectedTimestamp: firebase.firestore.Timestamp.now(),
+      syncTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+};
+
+export const getWorkers = async (prefix: string) => {
+  const collection = sprintf(workersCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .where('status', '==', WorkerStatus.active)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const workers: Worker[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      workers.push(doc.data() as Worker);
+    }
+  });
+
+  return workers;
+};
+
+export const initData = async (prefix: string) => {
+  try {
+    await getFarms();
+    await getWorkers(prefix);
+    await getQrCodes(prefix);
+    await getTemplates(prefix);
+  } catch (error: any) {
+    throw new FirestoreServiceError(error);
+  }
 };

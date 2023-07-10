@@ -10,11 +10,12 @@ import {colors} from 'src/styles/colors';
 import {AuthStackParamList} from 'src/navigation/auth.stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {getFarm} from 'src/stores/services/firestore.service';
+import {getFarmByDoc} from 'src/stores/services/firestore.service';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setFarm} from 'src/stores/slices/auth.slice';
-import {Toast} from 'src/components/toast';
 import {FirestoreServiceError} from 'src/stores/errors';
+import {Loader} from 'src/components/loader';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {
   setDevices,
   setIsSearching,
@@ -32,11 +33,9 @@ const farms = [
 
 const ChooseFarm = () => {
   const dispatch = useAppDispatch();
-
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [selectedFarm, handleClick] = useState<FarmsEnum>();
-  const [errorMessage, setError] = useState('');
+  const [loader, setLoader] = useState(false);
   const devices = useDevices();
   const connectedDevices = useConnectedDevices();
   const isSearch = useIsSearching();
@@ -51,28 +50,39 @@ const ChooseFarm = () => {
     }
   };
 
-  const login = useCallback(async () => {
+  const chooseFarm = useCallback(async () => {
+    setLoader(true);
     try {
-      const data = await getFarm(selectedFarm as FarmsEnum);
+      const farm = await getFarmByDoc(selectedFarm as FarmsEnum);
 
-      dispatch(setFarm(data));
+      if (!farm) {
+        dispatch(addErrorNotification(strings.incorrectUsername));
+        setLoader(false);
+
+        return;
+      }
+
+      dispatch(setFarm(farm));
       navigation.navigate('Login');
+      setLoader(false);
     } catch (error: any) {
+      setLoader(false);
       if (error instanceof FirestoreServiceError) {
-        setError(error.message);
+        dispatch(addErrorNotification(error.message));
+      } else {
+        console.error(error);
       }
     }
   }, [selectedFarm, navigation, dispatch]);
 
+  if (loader) {
+    return <Loader />;
+  }
+
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
-        <FastImage
-          resizeMode="contain"
-          source={require('src/assets/images/logo.png')}
-          style={styles.image}
-        />
+        <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
         <Text style={styles.subheading} variant="bodyLarge">
           {strings.selectFarm}
         </Text>
@@ -85,10 +95,7 @@ const ChooseFarm = () => {
             }}
             mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
             onPress={() => handleClick(farm.value)}
-            style={[
-              styles.btn,
-              selectedFarm === farm.value && styles.btnSelected,
-            ]}>
+            style={[styles.btn, selectedFarm === farm.value && styles.btnSelected]}>
             {farm.label}
           </Button>
         ))}

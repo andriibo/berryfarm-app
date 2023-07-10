@@ -1,38 +1,38 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React from 'react';
 import {colors} from 'src/styles/colors';
-import {useFarm} from 'src/stores/slices/auth.slice';
-import {strings} from 'src/locales/locales';
-import {Screens} from 'src/navigation/screens';
 import {Logout} from 'src/screens/main/logout';
+import HandOverHarvestStack from 'src/navigation/handOverHarvest.stack';
+import GiveQrCodeStack from 'src/navigation/giveQrCode.stack';
+import CreateWorkerStack from 'src/navigation/createWorker.stack';
+import HomeStack from 'src/navigation/home.stack';
+import {strings} from 'src/locales/locales';
+import GetQrCodeInfoStack from 'src/navigation/getQrCodeInfo.stack';
 
 export type DrawerStackParamList = {
-  Home: undefined;
-  CreateWorker: undefined;
-  GiveQrCode: undefined;
-  Templates: undefined;
-  ScanQrCode: undefined;
+  HomeStack: undefined;
+  CreateWorkerStack: undefined;
+  GiveQrCodeStack: undefined;
+  HandOverHarvestStack: undefined;
+  GetQrCodeInfoStack: undefined;
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
-const options = {
+
+export const drawerOptions = {
   headerStyle: {
     backgroundColor: colors.primary,
   },
   headerTintColor: colors.white,
-  headerTitleAlign: 'center',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-  },
 };
 
 const DrawerStack = () => {
-  const {farmName} = useFarm();
-
   return (
     <DrawerComponent.Navigator
       drawerContent={Logout}
+      initialRouteName="HomeStack"
       screenOptions={{
+        swipeEnabled: true,
         drawerActiveTintColor: colors.black,
         drawerInactiveTintColor: '#333',
         drawerLabelStyle: {
@@ -40,37 +40,44 @@ const DrawerStack = () => {
         },
       }}>
       <DrawerComponent.Screen
-        component={Screens.Home}
-        name="Home"
+        component={HomeStack}
+        name="HomeStack"
         options={{
-          ...options,
+          headerShown: false,
           drawerItemStyle: {display: 'none'},
-          title: farmName,
         }}
       />
       <DrawerComponent.Screen
-        component={Screens.ScanQrCode}
-        name="ScanQrCode"
+        component={CreateWorkerStack}
+        name="CreateWorkerStack"
         options={{
-          ...options,
-          drawerItemStyle: {display: 'none'},
-          title: '',
+          headerShown: false,
+          title: strings.registration,
         }}
       />
       <DrawerComponent.Screen
-        component={Screens.CreateWorker}
-        name="CreateWorker"
-        options={{...options, title: strings.registration}}
+        component={HandOverHarvestStack}
+        name="HandOverHarvestStack"
+        options={{
+          headerShown: false,
+          title: strings.templates,
+        }}
       />
       <DrawerComponent.Screen
-        component={Screens.GiveQrCode}
-        name="GiveQrCode"
-        options={{...options, title: strings.giveQrCode}}
+        component={GiveQrCodeStack}
+        name="GiveQrCodeStack"
+        options={{
+          headerShown: false,
+          title: strings.giveQrCode,
+        }}
       />
       <DrawerComponent.Screen
-        component={Screens.Templates}
-        name="Templates"
-        options={{...options, title: strings.templates}}
+        component={GetQrCodeInfoStack}
+        name="GetQrCodeInfoStack"
+        options={{
+          headerShown: false,
+          title: strings.qrCodeInfo,
+        }}
       />
     </DrawerComponent.Navigator>
   );

@@ -13,7 +13,7 @@ prepare_react_native_project!
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+#flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -21,7 +21,7 @@ if linkage != nil
   #use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'mobile' do
+target 'berryfarm' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -36,24 +36,24 @@ target 'mobile' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # Hermes is now enabled by default. Disable by setting this flag to false.
-    # Upcoming versions of React Native may rely on get_default_flags(), but
-    # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => flags[:hermes_enabled],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    #     :hermes_enabled => flags[:hermes_enabled],
+    :hermes_enabled => config[:name] == 'Release',
     :fabric_enabled => flags[:fabric_enabled],
-    # Enables Flipper.
-    #
-    # Note that if you have use_frameworks! enabled, Flipper will not work and
-    # you should disable the next line.
-    :flipper_configuration => flipper_config,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'mobileTests' do
+  target 'berryfarmTests' do
     inherit! :complete
     # Pods for testing
   end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  use_flipper!()
 
   post_install do |installer|
     react_native_post_install(

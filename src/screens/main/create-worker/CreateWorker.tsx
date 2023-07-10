@@ -7,27 +7,37 @@ import styles from 'src/screens/main/create-worker/styles';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
-import {CreateWorkerRequest} from 'src/stores/requests/create-worker.request';
-import {Toast} from 'src/components/toast';
+import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {DrawerStackParamList} from 'src/navigation/drawer.stack';
-import {createWorker, findWorker} from 'src/stores/services/firestore.service';
+import {createWorker, getWorkerByParams} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
+import {v4 as uuid} from 'uuid';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {IWorker, setWorker} from 'src/stores/slices/worker.slice';
+import {ScenariosEnum} from 'src/enums/scenarios.enum';
+import {colors} from 'src/styles/colors';
+import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
+import {Loader} from 'src/components/loader';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {firebase} from '@react-native-firebase/firestore';
+import {capitalizeFirstLowercaseRest} from 'src/helpers/worker.helper';
+
+type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
 
 const CreateWorker = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<DrawerStackParamList>>();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
-  const [errorMessage, setError] = useState('');
+  const [loader, setLoader] = useState(false);
   const {
     control,
     handleSubmit,
     reset,
     formState: {errors, isDirty, isValid},
-  } = useForm<CreateWorkerRequest>({
+  } = useForm<WorkerRequest>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -39,31 +49,56 @@ const CreateWorker = () => {
   });
 
   const handleCreateWorker = useCallback(
-    async (data: CreateWorkerRequest) => {
-      setError('');
+    async (data: WorkerRequest) => {
+      setLoader(true);
       try {
-        const result = await findWorker(data, firestorePrefix);
+        const formattedParams = {
+          firstName: capitalizeFirstLowercaseRest(data.firstName),
+          lastName: capitalizeFirstLowercaseRest(data.lastName),
+          middleName: capitalizeFirstLowercaseRest(data.middleName),
+          birthDate: firebase.firestore.Timestamp.fromDate(data.birthDate),
+          status: data.status,
+        };
 
-        if (!result) {
-          await createWorker(data, firestorePrefix);
+        let worker: IWorker | null = await getWorkerByParams(
+          formattedParams.firstName,
+          formattedParams.lastName,
+          formattedParams.middleName,
+          formattedParams.birthDate,
+          firestorePrefix,
+        );
+
+        if (worker === null) {
+          worker = {...formattedParams, uuid: uuid()};
+
+          createWorker(worker, firestorePrefix);
         }
 
+        dispatch(setWorker(worker));
         reset();
-        navigation.navigate('ScanQrCode');
+        navigation.navigate('ScanQrCode', {
+          scenario: ScenariosEnum.createWorker,
+        });
+        setLoader(false);
       } catch (error: any) {
-        console.log(error);
+        setLoader(false);
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(strings.incorrectUsername));
+        } else {
+          console.error(error);
         }
       }
     },
-    [firestorePrefix, navigation, reset],
+    [dispatch, firestorePrefix, navigation, reset],
   );
 
+  if (loader) {
+    return <Loader />;
+  }
+
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View style={styles.wrapper}>
           <View>
             <Text variant="titleMedium">{strings.worker}</Text>
@@ -73,6 +108,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.firstName)}
                     label={strings.firstName}
                     mode="outlined"
@@ -93,6 +129,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.lastName)}
                     label={strings.lastName}
                     mode="outlined"
@@ -113,6 +150,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.middleName)}
                     label={strings.middleName}
                     mode="outlined"
@@ -133,9 +171,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="birthDate"
-              render={({field: {value, onChange}}) => (
-                <BirthPicker onChange={onChange} value={value} />
-              )}
+              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value} />}
             />
           </View>
           <View style={{alignItems: 'center'}}>

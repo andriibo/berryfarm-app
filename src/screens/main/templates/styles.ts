@@ -2,13 +2,13 @@ import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
-  container: {
-    backgroundColor: colors.background,
-    borderColor: colors.black,
-    borderRadius: 10,
-    borderWidth: 1,
+  surface: {
+    padding: 8,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+    justifyContent: 'center',
+    backgroundColor: colors.secondaryContainer,
   },
   titleWrapper: {
     margin: 10,

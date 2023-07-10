@@ -5,6 +5,7 @@ import {colors} from 'src/styles/colors';
 
 export type AuthStackParamList = {
   ChooseFarm: undefined;
+  InternetNotConnected: undefined;
   Login: undefined;
 };
 
@@ -18,7 +19,7 @@ const options = {
   headerShadowVisible: false,
 };
 
-export const AuthStack = () => {
+const AuthStack = () => {
   return (
     <AuthStackComponent.Navigator initialRouteName="ChooseFarm">
       <AuthStackComponent.Screen
@@ -27,10 +28,11 @@ export const AuthStack = () => {
         options={{...options, headerShown: false}}
       />
       <AuthStackComponent.Screen
-        component={Screens.Login}
-        name="Login"
-        options={{...options}}
+        component={Screens.InternetNotConnected}
+        name="InternetNotConnected"
+        options={{...options, headerShown: false}}
       />
+      <AuthStackComponent.Screen component={Screens.Login} name="Login" options={{...options}} />
     </AuthStackComponent.Navigator>
   );
 };
