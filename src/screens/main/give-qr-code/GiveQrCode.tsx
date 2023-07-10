@@ -76,22 +76,24 @@ const GiveQrCode = () => {
     async (name: string) => {
       setSearchQuery(name);
       setCanScanQrCode(false);
-      if (name === '' && name.length < 2) {
+      if (name === '' || name.length < 2) {
         setFoundWorkers([]);
 
         return;
       }
 
       try {
-        const result = workers.filter(worker => {
-          return (
-            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.middleName?.toLowerCase().includes(name.toLowerCase())
-          );
-        });
+        setTimeout(() => {
+          const result = workers.filter(worker => {
+            return (
+              worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
+              worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
+              worker.middleName?.toLowerCase().includes(name.toLowerCase())
+            );
+          });
 
-        setFoundWorkers(result);
+          setFoundWorkers(result);
+        }, 500);
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));
