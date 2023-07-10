@@ -10,7 +10,7 @@ export type Worker = {
   lastName: string;
   middleName: string;
   birthDate: Date;
-  status: WorkerStatus;
+  status?: WorkerStatus;
   createdTimestamp: Date;
   syncTimestamp: Date;
 };
