@@ -108,6 +108,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.firstName)}
                     label={strings.firstName}
                     mode="outlined"
@@ -128,6 +129,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.lastName)}
                     label={strings.lastName}
                     mode="outlined"
@@ -148,6 +150,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.middleName)}
                     label={strings.middleName}
                     mode="outlined"

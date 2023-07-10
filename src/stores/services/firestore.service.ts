@@ -174,34 +174,6 @@ export const getWorkerByParams = async (
   return null;
 };
 
-export const getWorkersByName = async (name: string, prefix: string) => {
-  const collection = sprintf(workersCollection, prefix);
-
-  const snapshot = await firestore()
-    .collection(collection)
-    .where(
-      firebase.firestore.Filter.or(
-        firebase.firestore.Filter('firstName', '==', name),
-        firebase.firestore.Filter('lastName', '==', name),
-        firebase.firestore.Filter('middleName', '==', name),
-      ),
-    )
-    .get()
-    .catch(error => {
-      throw new FirestoreServiceError(error);
-    });
-
-  const workers: Worker[] = [];
-
-  snapshot.docs.forEach(doc => {
-    if (doc.data()) {
-      workers.push(doc.data() as Worker);
-    }
-  });
-
-  return workers;
-};
-
 export const getWorkerByUuid = async (uuid: string, prefix: string) => {
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
