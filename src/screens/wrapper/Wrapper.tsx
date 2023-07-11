@@ -1,12 +1,12 @@
 import {useFocusEffect} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {AvoidSoftInput} from 'react-native-avoid-softinput';
-
 import AuthStack from 'src/navigation/auth.stack';
 import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated, useIsLoadedData} from 'src/stores/slices/auth.slice';
 import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {firebase} from '@react-native-firebase/firestore';
 
 const Wrapper = () => {
   const isAuth = useIsAuthenticated();
@@ -28,8 +28,12 @@ const Wrapper = () => {
   useFocusEffect(onFocusEffect); // register callback to focus events
 
   if (!netState.isConnected && !isLoadedData) {
+    firebase.firestore().disableNetwork().then();
+
     return <InternetNotConnected />;
   }
+
+  firebase.firestore().enableNetwork().then();
 
   if (!isAuth) {
     return <AuthStack />;

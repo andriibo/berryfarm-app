@@ -241,7 +241,7 @@ const HandOverHarvest = () => {
                     }}
                     style={{width: '100%'}}
                     testID="weightTotal"
-                    value={weightTotal ? `${weightTotal}` : ''}
+                    value={`${weightTotal}`}
                   />
                   <HelperText type="error" visible={Boolean(errors.weightTotal)}>
                     {errors.weightTotal?.message}
