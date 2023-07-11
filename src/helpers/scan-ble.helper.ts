@@ -27,7 +27,7 @@ export const startScanBle = async (dispatch: Dispatch, devices: Device[], connec
       {
         allowDuplicates: false,
       },
-      (error, device) => {
+      (error: any, device: any) => {
         if (error) {
           stopScanBle(dispatch);
 

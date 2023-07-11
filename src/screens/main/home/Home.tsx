@@ -1,12 +1,14 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Snackbar, Surface, Text} from 'react-native-paper';
+import {IconButton, Snackbar, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
+import {deviceLabelStyle} from 'src/helpers/device-label-style';
 
 const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
@@ -31,9 +33,15 @@ const HomeButton = ({title, destination}: {title: string; destination: string}) 
 
 const Home = () => {
   const netState = useNetInfo();
+  const isDeviceConnected = useIsDeviceConnected();
+  const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+      <TouchableOpacity disabled={isDeviceConnected} onPress={() => {}} style={styles.deviceStateWrapper}>
+        <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
+        <Text style={styles.deviceState}>{deviceState.title}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
         {buttons.map(({title, destination}) => {
           return (

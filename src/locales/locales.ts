@@ -66,5 +66,7 @@ export const strings = new LocalizedStrings({
     parameters: 'Настройки',
     technowagyNeedsBluetooth: 'Чтобы использовать Technowagy надо включить Bluetooth.',
     turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
+    scalesConnected: 'Весы подключены.',
+    scalesNotConnected: 'Весы не подключены.',
   },
 });
