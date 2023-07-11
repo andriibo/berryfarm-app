@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Snackbar, Text} from 'react-native-paper';
+import {Snackbar, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useNavigation} from '@react-navigation/native';
@@ -12,17 +12,19 @@ const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
   {title: strings.giveQrCode, destination: 'GiveQrCodeStack'},
   {title: strings.templates, destination: 'HandOverHarvestStack'},
-  // {title: strings.qrCodeInformation, destination: ''},
+  {title: strings.qrCodeInfo, destination: 'GetQrCodeInfoStack'},
 ];
 
 const HomeButton = ({title, destination}: {title: string; destination: string}) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate(destination as never)} style={styles.wrapper}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.titleText}>{title}</Text>
-      </View>
+    <TouchableOpacity onPress={() => navigation.navigate(destination as never)}>
+      <Surface elevation={4} style={styles.surface}>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.titleText}>{title}</Text>
+        </View>
+      </Surface>
     </TouchableOpacity>
   );
 };

@@ -26,7 +26,7 @@ const SuccessPage = () => {
       <View style={{marginTop: '20%'}}>
         {scenario === ScenariosEnum.handOverHarvest && (
           <>
-            <Button mode="outlined" onPress={() => navigation.navigate('HandOverHarvestStack')} style={styles.btn}>
+            <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
               {strings.toTemplates}
             </Button>
             <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
@@ -34,25 +34,26 @@ const SuccessPage = () => {
             </Button>
           </>
         )}
+        {scenario !== ScenariosEnum.handOverHarvest && (
+          <Button
+            mode="outlined"
+            onPress={() => {
+              navigation.popToTop();
+              navigation.navigate('HomeStack');
+            }}
+            style={styles.btn}>
+            {strings.toMain}
+          </Button>
+        )}
         {scenario === ScenariosEnum.createWorker && (
-          <>
-            <Button mode="outlined" onPress={() => navigation.navigate('HomeStack')} style={styles.btn}>
-              {strings.toMain}
-            </Button>
-            <Button mode="contained" onPress={() => navigation.navigate('CreateWorkerStack')} style={styles.btn}>
-              {strings.registerMore}
-            </Button>
-          </>
+          <Button mode="contained" onPress={() => navigation.popToTop()} style={styles.btn}>
+            {strings.registerMore}
+          </Button>
         )}
         {scenario === ScenariosEnum.giveQrCode && (
-          <>
-            <Button mode="outlined" onPress={() => navigation.navigate('HomeStack')} style={styles.btn}>
-              {strings.toMain}
-            </Button>
-            <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
-              {strings.giveAnotherQrCode}
-            </Button>
-          </>
+          <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
+            {strings.giveAnotherQrCode}
+          </Button>
         )}
       </View>
     </SafeAreaView>

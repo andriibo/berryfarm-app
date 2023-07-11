@@ -3,7 +3,6 @@ import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Button, Divider, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/give-qr-code/styles';
-import {Toast} from 'src/components/toast';
 import {strings} from 'src/locales/locales';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {getWorkers} from 'src/stores/services/firestore.service';
@@ -18,6 +17,8 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {debounce} from 'lodash';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -36,8 +37,37 @@ const GiveQrCode = () => {
   const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
-  const [errorMessage, setError] = useState('');
   const {firestorePrefix} = useFarm();
+  const handleGetWorker = async (name: string) => {
+    if (name === '' || name.length < 2) {
+      setFoundWorkers([]);
+
+      return;
+    }
+
+    setCanScanQrCode(false);
+
+    try {
+      const result = workers.filter(worker => {
+        return (
+          worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
+          worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
+          worker.middleName?.toLowerCase().includes(name.toLowerCase())
+        );
+      });
+
+      setFoundWorkers(result);
+    } catch (error: any) {
+      if (error instanceof FirestoreServiceError) {
+        dispatch(addErrorNotification(error.message));
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const changeTextDebouncer = useCallback(debounce(handleGetWorker, 500), []);
 
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
@@ -59,51 +89,18 @@ const GiveQrCode = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setError('');
       getWorkers(firestorePrefix)
-        .then(res => {
-          setWorkers(res);
+        .then(response => {
+          setWorkers(response);
         })
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
-            setError(error.message);
+            dispatch(addErrorNotification(error.message));
           } else {
             console.error(error);
           }
         });
-    }, [firestorePrefix]),
-  );
-
-  const handleGetWorker = useCallback(
-    async (name: string) => {
-      setError('');
-      setSearchQuery(name);
-      setCanScanQrCode(false);
-      if (name === '') {
-        setFoundWorkers([]);
-
-        return;
-      }
-
-      try {
-        const result = workers.filter(worker => {
-          return (
-            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.middleName?.toLowerCase().includes(name.toLowerCase())
-          );
-        });
-
-        setFoundWorkers(result);
-      } catch (error: any) {
-        if (error instanceof FirestoreServiceError) {
-          setError(error.message);
-        } else {
-          console.error(error);
-        }
-      }
-    },
-    [workers],
+    }, [dispatch, firestorePrefix]),
   );
 
   if (!workers.length) {
@@ -113,12 +110,14 @@ const GiveQrCode = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View>
           <Text variant="headlineSmall">{strings.worker}</Text>
           <View style={styles.wrapper}>
             <Searchbar
-              onChangeText={handleGetWorker}
+              onChangeText={name => {
+                setSearchQuery(name);
+                changeTextDebouncer(name);
+              }}
               placeholder={strings.firstName}
               style={styles.searchBar}
               testID="getName"

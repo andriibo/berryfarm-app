@@ -1,7 +1,9 @@
+import {WorkerStatus} from 'src/stores/types/worker.type';
+
 export type CreateWorkerRequest = {
-  uuid: string;
   firstName: string;
   lastName: string;
-  middleName: string;
-  birthDate: Date;
+  middleName: string | undefined;
+  birthDate: Date | undefined;
+  status: WorkerStatus;
 };

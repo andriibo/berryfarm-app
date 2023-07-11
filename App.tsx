@@ -8,6 +8,7 @@ import {persistor} from 'src/stores/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import 'react-native-gesture-handler';
 import {StatusBar} from 'react-native';
+import {SnackBar} from 'src/components/snackbar';
 
 const theme = {
   ...DefaultTheme,
@@ -22,6 +23,7 @@ function App() {
           <SafeAreaProvider>
             <StatusBar barStyle={'dark-content'} />
             <Wrapper />
+            <SnackBar />
           </SafeAreaProvider>
         </NavigationContainer>
       </PersistGate>

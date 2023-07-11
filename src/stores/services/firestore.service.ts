@@ -1,15 +1,13 @@
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import firestore, {firebase, FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {FarmsEnum} from 'src/enums/farms.enum';
 import {User} from 'src/stores/types/user.type';
 import {Farm} from 'src/stores/types/farm.type';
-import {Worker} from 'src/stores/types/worker.type';
+import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
-import {validate as uuidValidate} from 'uuid';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -38,10 +36,6 @@ export const getFarms = async () => {
       throw new FirestoreServiceError(err);
     });
 
-  if (!snapshot.docs.length) {
-    throw new FirestoreServiceError('Farms not found.');
-  }
-
   const farms: Farm[] = [];
 
   snapshot.docs.forEach(doc => {
@@ -55,6 +49,7 @@ export const getFarms = async () => {
 
 export const getTemplates = async (prefix: string) => {
   const collection = sprintf(harvestTemplatesCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
     .get()
@@ -95,6 +90,7 @@ export const getQrCodes = async (prefix: string) => {
 
 export const getUserByUsername = async (username: string, prefix: string) => {
   const collection = sprintf(usersCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
     .where('username', '==', username.trim())
@@ -110,14 +106,20 @@ export const getUserByUsername = async (username: string, prefix: string) => {
   return snapshot.docs[0].data() as User;
 };
 
-export const createWorker = async (data: CreateWorkerRequest, prefix: string) => {
-  if (!uuidValidate(data.uuid)) {
-    return null;
-  }
-
+export const createWorker = (
+  data: {
+    uuid: string;
+    firstName: string;
+    lastName: string;
+    middleName: string | null;
+    birthDate: FirebaseFirestoreTypes.Timestamp | null;
+    status: WorkerStatus;
+  },
+  prefix: string,
+) => {
   const collection = sprintf(workersCollection, prefix);
 
-  await firestore()
+  firestore()
     .collection(collection)
     .doc(data.uuid)
     .set({
@@ -130,14 +132,10 @@ export const createWorker = async (data: CreateWorkerRequest, prefix: string) =>
     });
 };
 
-export const createHarvest = async (data: CreateHarvestRequest, prefix: string) => {
-  if (!uuidValidate(data.uuid)) {
-    return null;
-  }
-
+export const createHarvest = (data: CreateHarvestRequest, prefix: string) => {
   const collection = sprintf(harvestCollection, prefix);
 
-  await firestore()
+  firestore()
     .collection(collection)
     .doc(data.uuid)
     .set({
@@ -153,17 +151,23 @@ export const createHarvest = async (data: CreateHarvestRequest, prefix: string) 
 export const getWorkerByParams = async (
   firstName: string,
   lastName: string,
-  middleName: string,
-  birthDate: Date,
+  middleName: string | null,
+  birthDate: FirebaseFirestoreTypes.Timestamp | null,
   prefix: string,
 ) => {
   const collection = sprintf(workersCollection, prefix);
+
   const snapshot = await firestore()
     .collection(collection)
-    .where('firstName', '==', firstName)
-    .where('lastName', '==', lastName)
-    .where('middleName', '==', middleName)
-    .where('birthDate', '==', birthDate)
+    .where(
+      firebase.firestore.Filter.and(
+        firebase.firestore.Filter('firstName', '==', firstName),
+        firebase.firestore.Filter('lastName', '==', lastName),
+        firebase.firestore.Filter('middleName', '==', middleName),
+        firebase.firestore.Filter('birthDate', '==', birthDate),
+      ),
+    )
+    .where('status', '==', WorkerStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);
@@ -177,10 +181,6 @@ export const getWorkerByParams = async (
 };
 
 export const getWorkerByUuid = async (uuid: string, prefix: string) => {
-  if (!uuidValidate(uuid)) {
-    return null;
-  }
-
   const collection = sprintf(workersCollection, prefix);
   const snapshot = await firestore()
     .collection(collection)
@@ -194,10 +194,6 @@ export const getWorkerByUuid = async (uuid: string, prefix: string) => {
 };
 
 export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
-  if (!uuidValidate(uuid)) {
-    return null;
-  }
-
   const collection = sprintf(qrCodesCollection, prefix);
 
   const snapshot = await firestore()
@@ -211,14 +207,10 @@ export const getQrCodeByUuid = async (uuid: string, prefix: string) => {
   return snapshot.data() ? (snapshot.data() as QrCode) : null;
 };
 
-export const updateQrCode = async (qrCode: QrCode, prefix: string) => {
-  if (!uuidValidate(qrCode.uuid)) {
-    return null;
-  }
-
+export const updateQrCode = (qrCode: QrCode, prefix: string) => {
   const collection = sprintf(qrCodesCollection, prefix);
 
-  await firestore()
+  firestore()
     .collection(collection)
     .doc(qrCode.uuid)
     .set({
@@ -236,6 +228,7 @@ export const getWorkers = async (prefix: string) => {
 
   const snapshot = await firestore()
     .collection(collection)
+    .where('status', '==', WorkerStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);

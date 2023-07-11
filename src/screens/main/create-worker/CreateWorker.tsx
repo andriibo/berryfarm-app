@@ -8,11 +8,10 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
-import {Toast} from 'src/components/toast';
 import {BirthPicker} from 'src/components/birth-picker';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {createWorker, getWorkerByParams, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {createWorker, getWorkerByParams} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {v4 as uuid} from 'uuid';
@@ -21,62 +20,64 @@ import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
-
-type WorkerRequest = Omit<CreateWorkerRequest, 'uuid'>;
+import {Loader} from 'src/components/loader';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {firebase} from '@react-native-firebase/firestore';
+import {capitalizeFirstLowercaseRest} from 'src/helpers/worker.helper';
 
 const CreateWorker = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<CreateWorkerStackParamList>>();
   const {firestorePrefix} = useFarm();
-  const [errorMessage, setError] = useState('');
+  const [loader, setLoader] = useState(false);
   const {
     control,
     handleSubmit,
     reset,
     formState: {errors, isDirty, isValid},
-  } = useForm<WorkerRequest>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      birthDate: '' as unknown as Date,
-    },
+  } = useForm<CreateWorkerRequest>({
     mode: 'onChange',
     resolver: yupResolver(validation.createWorker),
   });
 
   const handleCreateWorker = useCallback(
-    async (data: WorkerRequest) => {
-      setError('');
+    async (data: CreateWorkerRequest) => {
+      setLoader(true);
       try {
-        let worker = await getWorkerByParams(
-          data.firstName,
-          data.lastName,
-          data.middleName,
-          data.birthDate,
+        const formattedParams = {
+          firstName: capitalizeFirstLowercaseRest(data.firstName),
+          lastName: capitalizeFirstLowercaseRest(data.lastName),
+          middleName: data.middleName ? capitalizeFirstLowercaseRest(data.middleName) : null,
+          birthDate: data.birthDate ? firebase.firestore.Timestamp.fromDate(data.birthDate) : null,
+          status: data.status,
+        };
+
+        const worker = await getWorkerByParams(
+          formattedParams.firstName,
+          formattedParams.lastName,
+          formattedParams.middleName,
+          formattedParams.birthDate,
           firestorePrefix,
         );
 
-        if (!worker) {
-          const workerUuid = uuid();
+        if (worker === null) {
+          const newWorker = {...formattedParams, uuid: uuid()};
 
-          await createWorker({...data, uuid: workerUuid}, firestorePrefix);
-          worker = await getWorkerByUuid(workerUuid, firestorePrefix);
-          if (!worker) {
-            setError(strings.workerNotFound);
-
-            return;
-          }
+          createWorker(newWorker, firestorePrefix);
+          dispatch(setWorker(newWorker));
+        } else {
+          dispatch(setWorker(worker));
         }
 
-        dispatch(setWorker(worker));
         reset();
         navigation.navigate('ScanQrCode', {
           scenario: ScenariosEnum.createWorker,
         });
+        setLoader(false);
       } catch (error: any) {
+        setLoader(false);
         if (error instanceof FirestoreServiceError) {
-          setError(error.message);
+          dispatch(addErrorNotification(strings.incorrectUsername));
         } else {
           console.error(error);
         }
@@ -85,10 +86,13 @@ const CreateWorker = () => {
     [dispatch, firestorePrefix, navigation, reset],
   );
 
+  if (loader) {
+    return <Loader />;
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
-        {errorMessage && <Toast error={errorMessage} />}
         <View style={styles.wrapper}>
           <View>
             <Text variant="titleMedium">{strings.worker}</Text>
@@ -98,6 +102,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.firstName)}
                     label={strings.firstName}
                     mode="outlined"
@@ -118,6 +123,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.lastName)}
                     label={strings.lastName}
                     mode="outlined"
@@ -138,6 +144,7 @@ const CreateWorker = () => {
               render={({field: {value, onChange}}) => (
                 <View>
                   <TextInput
+                    autoCapitalize="words"
                     error={Boolean(errors.middleName)}
                     label={strings.middleName}
                     mode="outlined"
