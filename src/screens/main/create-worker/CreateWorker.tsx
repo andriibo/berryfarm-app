@@ -9,7 +9,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 import {BirthPicker} from 'src/components/birth-picker';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createWorker, getWorkerByParams} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
@@ -34,25 +34,11 @@ const CreateWorker = () => {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: {errors, isDirty, isValid},
   } = useForm<CreateWorkerRequest>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      birthDate: '' as unknown as Date,
-    },
     mode: 'onChange',
     resolver: yupResolver(validation.createWorker),
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      setValue('middleName', undefined, {shouldTouch: false});
-      setValue('birthDate', undefined, {shouldTouch: false});
-    }, [setValue]),
-  );
 
   const handleCreateWorker = useCallback(
     async (data: CreateWorkerRequest) => {
@@ -179,7 +165,7 @@ const CreateWorker = () => {
             <Controller
               control={control}
               name="birthDate"
-              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value ?? new Date()} />}
+              render={({field: {value, onChange}}) => <BirthPicker onChange={onChange} value={value} />}
             />
           </View>
           <View style={{alignItems: 'center'}}>

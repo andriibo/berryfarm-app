@@ -8,19 +8,17 @@ export const validation = {
       username: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.username),
     })
     .required(),
-  createWorker: yup
-    .object({
-      firstName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.firstName),
-      lastName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.lastName),
-      middleName: yup.string().optional().max(20, errorMessages.middleName),
-      birthDate: yup.date().optional(),
-      status: yup
-        .mixed<WorkerStatus>()
-        .oneOf(Object.values(WorkerStatus))
-        .required(errorMessages.required)
-        .default(WorkerStatus.active),
-    })
-    .required(),
+  createWorker: yup.object({
+    firstName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.firstName),
+    lastName: yup.string().required(errorMessages.required).min(1).max(20, errorMessages.lastName),
+    middleName: yup.string().optional().max(20, errorMessages.middleName),
+    birthDate: yup.date().optional(),
+    status: yup
+      .mixed<WorkerStatus>()
+      .oneOf(Object.values(WorkerStatus))
+      .required(errorMessages.required)
+      .default(WorkerStatus.active),
+  }),
   createHarvest: yup
     .object({
       qty: yup.number().required(errorMessages.required),
