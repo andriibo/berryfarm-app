@@ -20,7 +20,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
-import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {addErrorNotification, addWarningNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {connectToWiFiScales} from 'src/stores/services/scales-wifi.service';
 import {Buffer} from 'buffer';
@@ -97,12 +97,11 @@ const HandOverHarvest = () => {
 
             scalesWiFi.on('error', function () {
               scalesWiFi.destroy();
-              setLoader(false);
             });
           }
         })
-        .catch(error => {
-          console.error(error);
+        .catch(() => {
+          dispatch(addWarningNotification(strings.scalesNotConnected));
         })
         .finally(() => {
           if (harvest.workerUuid) {
@@ -119,9 +118,11 @@ const HandOverHarvest = () => {
                 if (error instanceof FirestoreServiceError) {
                   dispatch(addErrorNotification(error.message));
                 } else {
-                  setLoader(false);
                   console.error(error);
                 }
+              })
+              .finally(() => {
+                setLoader(false);
               });
           } else {
             setLoader(false);

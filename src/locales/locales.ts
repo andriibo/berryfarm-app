@@ -74,5 +74,6 @@ export const strings = new LocalizedStrings({
     unitOfScaleMeasurementMustBeKg: 'Единица измерения весов должна быть кг.',
     couldNotGetDataFromScales: 'Не удалось получить данные с весов',
     enterDataManually: 'Ввести данные вручную',
+    scalesNotConnected: 'Весы не подключены.',
   },
 });

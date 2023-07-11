@@ -57,7 +57,7 @@ const notificationSlice = createSlice({
     addSuccessNotification: (state, {payload}: PayloadAction<string>) => {
       notificationsAdapter.addOne(state, {id: `${nanoid()}`, type: 'success', message: payload});
     },
-    addWarnNotification: (state, {payload}: PayloadAction<string>) => {
+    addWarningNotification: (state, {payload}: PayloadAction<string>) => {
       notificationsAdapter.addOne(state, {id: `${nanoid()}`, type: 'warning', message: payload});
     },
     removeNotification: notificationsAdapter.removeOne,
@@ -72,7 +72,7 @@ export const {
     addErrorNotification,
     addInfoNotification,
     addSuccessNotification,
-    addWarnNotification,
+    addWarningNotification,
   },
 } = notificationSlice;
 
