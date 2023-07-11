@@ -5,7 +5,7 @@ import {strings} from 'src/locales/locales';
 import {styles} from './styles';
 import {colors} from 'src/styles/colors';
 
-const DatePickerInput = memo(({value, onPress}: {value: string; onPress: () => void}) => {
+const DatePickerInput = memo(({value, onPress}: {value: string | undefined; onPress: () => void}) => {
   return (
     <TouchableOpacity activeOpacity={1} onPress={onPress} style={styles.inputContainer}>
       <Text style={value ? styles.input : [styles.input, styles.notActive]}>{value || strings.selectDate}</Text>

@@ -8,7 +8,6 @@ import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {CreateWorkerRequest} from 'src/stores/types/createWorkerRequest';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -108,7 +107,14 @@ export const getUserByUsername = async (username: string, prefix: string) => {
 };
 
 export const createWorker = (
-  data: Omit<CreateWorkerRequest, 'birthDate'> & {birthDate: FirebaseFirestoreTypes.Timestamp},
+  data: {
+    uuid: string;
+    firstName: string;
+    lastName: string;
+    middleName: string | null;
+    birthDate: FirebaseFirestoreTypes.Timestamp | null;
+    status: WorkerStatus;
+  },
   prefix: string,
 ) => {
   const collection = sprintf(workersCollection, prefix);
@@ -145,8 +151,8 @@ export const createHarvest = (data: CreateHarvestRequest, prefix: string) => {
 export const getWorkerByParams = async (
   firstName: string,
   lastName: string,
-  middleName: string,
-  birthDate: FirebaseFirestoreTypes.Timestamp,
+  middleName: string | null,
+  birthDate: FirebaseFirestoreTypes.Timestamp | null,
   prefix: string,
 ) => {
   const collection = sprintf(workersCollection, prefix);

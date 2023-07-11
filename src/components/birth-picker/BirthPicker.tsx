@@ -8,7 +8,7 @@ import {DatePickerInput} from '../date-picker-input';
 import {maxDATE} from 'src/constants/constants';
 
 type BirthPickerProps = {
-  value: Date;
+  value: Date | undefined;
   onChange: (value: string) => void;
 };
 

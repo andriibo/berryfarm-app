@@ -10,9 +10,9 @@ export type Worker = {
   uuid: string;
   firstName: string;
   lastName: string;
-  middleName: string;
-  birthDate: FirebaseFirestoreTypes.Timestamp;
-  status: WorkerStatus;
+  middleName: string | null;
+  birthDate: FirebaseFirestoreTypes.Timestamp | null;
+  status?: WorkerStatus;
   createdTimestamp: FirebaseFirestoreTypes.Timestamp;
-  syncTimestamp: FirebaseFirestoreTypes.Timestamp;
+  syncTimestamp: FirebaseFirestoreTypes.Timestamp | null;
 };

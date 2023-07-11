@@ -41,8 +41,7 @@ const HandOverHarvest = () => {
     if (worker) {
       return (
         <>
-          {getFullname(worker)}{' '}
-          {worker.status === WorkerStatus.inactive && <Badge size={30}>{strings.notActive}</Badge>}
+          {getFullname(worker)} {worker?.status !== WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
         </>
       );
     }

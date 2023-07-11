@@ -18,6 +18,7 @@ import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {debounce} from 'lodash';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -37,6 +38,36 @@ const GiveQrCode = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const {firestorePrefix} = useFarm();
+  const handleGetWorker = async (name: string) => {
+    if (name === '' || name.length < 2) {
+      setFoundWorkers([]);
+
+      return;
+    }
+
+    setCanScanQrCode(false);
+
+    try {
+      const result = workers.filter(worker => {
+        return (
+          worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
+          worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
+          worker.middleName?.toLowerCase().includes(name.toLowerCase())
+        );
+      });
+
+      setFoundWorkers(result);
+    } catch (error: any) {
+      if (error instanceof FirestoreServiceError) {
+        dispatch(addErrorNotification(error.message));
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const changeTextDebouncer = useCallback(debounce(handleGetWorker, 500), []);
 
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
@@ -72,37 +103,6 @@ const GiveQrCode = () => {
     }, [dispatch, firestorePrefix]),
   );
 
-  const handleGetWorker = useCallback(
-    async (name: string) => {
-      setSearchQuery(name);
-      setCanScanQrCode(false);
-      if (name === '' && name.length < 2) {
-        setFoundWorkers([]);
-
-        return;
-      }
-
-      try {
-        const result = workers.filter(worker => {
-          return (
-            worker.firstName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.lastName?.toLowerCase().includes(name.toLowerCase()) ||
-            worker.middleName?.toLowerCase().includes(name.toLowerCase())
-          );
-        });
-
-        setFoundWorkers(result);
-      } catch (error: any) {
-        if (error instanceof FirestoreServiceError) {
-          dispatch(addErrorNotification(error.message));
-        } else {
-          console.error(error);
-        }
-      }
-    },
-    [dispatch, workers],
-  );
-
   if (!workers.length) {
     return <Loader />;
   }
@@ -114,7 +114,10 @@ const GiveQrCode = () => {
           <Text variant="headlineSmall">{strings.worker}</Text>
           <View style={styles.wrapper}>
             <Searchbar
-              onChangeText={handleGetWorker}
+              onChangeText={name => {
+                setSearchQuery(name);
+                changeTextDebouncer(name);
+              }}
               placeholder={strings.firstName}
               style={styles.searchBar}
               testID="getName"
