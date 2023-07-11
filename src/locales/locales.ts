@@ -72,5 +72,7 @@ export const strings = new LocalizedStrings({
     locationPermissionRequiredForWiFiConnections: 'Для подключения WiFi требуется разрешение на местоположение.',
     pleaseProvide: 'Просьба предоставить',
     unitOfScaleMeasurementMustBeKg: 'Единица измерения весов должна быть кг.',
+    couldNotGetDataFromScales: 'Не удалось получить данные с весов',
+    enterDataManually: 'Ввести данные вручную',
   },
 });

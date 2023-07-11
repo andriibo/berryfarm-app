@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {TouchableOpacity, ScrollView, View} from 'react-native';
-import {Button, HelperText, Text, IconButton, TextInput} from 'react-native-paper';
+import {Button, HelperText, Text, IconButton, TextInput, Badge} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -74,31 +74,15 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (harvest.workerUuid) {
-        getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-          .then(data => {
-            if (data) {
-              setWorker(data);
-            } else {
-              dispatch(addErrorNotification(strings.workerNotFound));
-            }
-          })
-          .catch(error => {
-            if (error instanceof FirestoreServiceError) {
-              dispatch(addErrorNotification(error.message));
-            } else {
-              console.error(error);
-            }
-          });
-      }
+      setLoader(true);
       connectToWiFiScales()
         .then(scalesWiFi => {
           if (scalesWiFi) {
-            scalesWiFi.on('data', function (data) {
+            scalesWiFi.on('data', function (data: any) {
               const weight = (data as Buffer).toString();
 
               if (weight.includes(wifiScalesLb)) {
-                setError(strings.unitOfScaleMeasurementMustBeKg);
+                dispatch(addErrorNotification(strings.unitOfScaleMeasurementMustBeKg));
 
                 return;
               }
@@ -109,14 +93,36 @@ const HandOverHarvest = () => {
               setValue('weightTotal', formattedWeight, options);
               setWeightFromScales(true);
               scalesWiFi.destroy();
-              setLoader(false);
             });
 
-            scalesWiFi.on('error', function (error) {
+            scalesWiFi.on('error', function () {
               scalesWiFi.destroy();
-              console.error(error);
               setLoader(false);
             });
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        })
+        .finally(() => {
+          if (harvest.workerUuid) {
+            getWorkerByUuid(harvest.workerUuid, firestorePrefix)
+              .then(data => {
+                if (data) {
+                  setWorker(data);
+                  setLoader(false);
+                } else {
+                  dispatch(addErrorNotification(strings.workerNotFound));
+                }
+              })
+              .catch(error => {
+                if (error instanceof FirestoreServiceError) {
+                  dispatch(addErrorNotification(error.message));
+                } else {
+                  setLoader(false);
+                  console.error(error);
+                }
+              });
           } else {
             setLoader(false);
           }
@@ -200,7 +206,7 @@ const HandOverHarvest = () => {
           {!manualInput && !weightFromScales && (
             <View style={{alignItems: 'center'}}>
               <Text style={{alignItems: 'center'}} variant="headlineSmall">
-                Не удалось получить данные с весов
+                {strings.couldNotGetDataFromScales}
               </Text>
               <IconButton icon="alert-circle-check-outline" size={50} />
               <TouchableOpacity onPress={() => setManualInput(true)}>
@@ -211,36 +217,38 @@ const HandOverHarvest = () => {
                     textDecorationStyle: 'solid',
                   }}
                   variant="headlineSmall">
-                  Ввести данные вручную
+                  {strings.enterDataManually}
                 </Text>
               </TouchableOpacity>
             </View>
           )}
-          <Controller
-            control={control}
-            name="weightTotal"
-            render={({field}) => (
-              <View>
-                <TextInput
-                  {...field}
-                  disabled={!manualInput}
-                  error={Boolean(errors.weightTotal)}
-                  inputMode="decimal"
-                  keyboardType="decimal-pad"
-                  mode="flat"
-                  onChangeText={text => {
-                    field.onChange(text);
-                  }}
-                  style={{width: '100%'}}
-                  testID="weightTotal"
-                  value={weightTotal ? `${weightTotal}` : ''}
-                />
-                <HelperText type="error" visible={Boolean(errors.weightTotal)}>
-                  {errors.weightTotal?.message}
-                </HelperText>
-              </View>
-            )}
-          />
+          {(manualInput || weightFromScales) && (
+            <Controller
+              control={control}
+              name="weightTotal"
+              render={({field}) => (
+                <View>
+                  <TextInput
+                    {...field}
+                    disabled={!manualInput}
+                    error={Boolean(errors.weightTotal)}
+                    inputMode="decimal"
+                    keyboardType="decimal-pad"
+                    mode="flat"
+                    onChangeText={text => {
+                      field.onChange(text);
+                    }}
+                    style={{width: '100%'}}
+                    testID="weightTotal"
+                    value={weightTotal ? `${weightTotal}` : ''}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                    {errors.weightTotal?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View style={{alignItems: 'center'}}>
           <Button
