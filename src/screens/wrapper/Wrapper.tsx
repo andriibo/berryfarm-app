@@ -6,7 +6,6 @@ import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated, useIsLoadedData} from 'src/stores/slices/auth.slice';
 import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
 import {useNetInfo} from '@react-native-community/netinfo';
-import {firebase} from '@react-native-firebase/firestore';
 
 const Wrapper = () => {
   const isAuth = useIsAuthenticated();
@@ -27,13 +26,9 @@ const Wrapper = () => {
 
   useFocusEffect(onFocusEffect); // register callback to focus events
 
-  if (!netState.isConnected && !isLoadedData) {
-    firebase.firestore().disableNetwork().then();
-
+  if (!netState.isInternetReachable && !isLoadedData) {
     return <InternetNotConnected />;
   }
-
-  firebase.firestore().enableNetwork().then();
 
   if (!isAuth) {
     return <AuthStack />;

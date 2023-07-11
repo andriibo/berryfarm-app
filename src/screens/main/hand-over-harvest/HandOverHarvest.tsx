@@ -74,7 +74,29 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setLoader(true);
+      if (harvest.workerUuid) {
+        setLoader(true);
+        getWorkerByUuid(harvest.workerUuid, firestorePrefix)
+          .then(data => {
+            if (data) {
+              setWorker(data);
+              setLoader(false);
+            } else {
+              dispatch(addErrorNotification(strings.workerNotFound));
+            }
+          })
+          .catch(error => {
+            if (error instanceof FirestoreServiceError) {
+              dispatch(addErrorNotification(error.message));
+            } else {
+              console.error(error);
+            }
+          })
+          .finally(() => {
+            setLoader(false);
+          });
+      }
+
       connectToWiFiScales()
         .then(scalesWiFi => {
           if (scalesWiFi) {
@@ -102,31 +124,6 @@ const HandOverHarvest = () => {
         })
         .catch(() => {
           dispatch(addWarningNotification(strings.scalesNotConnected));
-        })
-        .finally(() => {
-          if (harvest.workerUuid) {
-            getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-              .then(data => {
-                if (data) {
-                  setWorker(data);
-                  setLoader(false);
-                } else {
-                  dispatch(addErrorNotification(strings.workerNotFound));
-                }
-              })
-              .catch(error => {
-                if (error instanceof FirestoreServiceError) {
-                  dispatch(addErrorNotification(error.message));
-                } else {
-                  console.error(error);
-                }
-              })
-              .finally(() => {
-                setLoader(false);
-              });
-          } else {
-            setLoader(false);
-          }
         });
     }, [dispatch, setValue, firestorePrefix, harvest]),
   );
