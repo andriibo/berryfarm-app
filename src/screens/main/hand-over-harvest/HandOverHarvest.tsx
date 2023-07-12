@@ -185,7 +185,7 @@ const HandOverHarvest = () => {
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
-            Вес
+            {strings.weightKg}
           </Text>
           <Controller
             control={control}

@@ -68,5 +68,6 @@ export const strings = new LocalizedStrings({
     turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
     scalesConnected: 'Весы подключены.',
     scalesNotConnected: 'Весы не подключены.',
+    weightKg: 'Вес, кг',
   },
 });

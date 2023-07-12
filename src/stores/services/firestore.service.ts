@@ -186,8 +186,8 @@ export const getWorkerByUuid = async (uuid: string, prefix: string) => {
     .collection(collection)
     .doc(uuid)
     .get()
-    .catch(err => {
-      throw new FirestoreServiceError(err);
+    .catch(error => {
+      throw new FirestoreServiceError(error);
     });
 
   return snapshot.data() ? (snapshot.data() as Worker) : null;

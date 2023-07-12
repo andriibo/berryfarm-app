@@ -51,7 +51,7 @@ const Home = () => {
           );
         })}
       </View>
-      <Snackbar onDismiss={() => {}} visible={!netState.isConnected}>
+      <Snackbar onDismiss={() => {}} visible={!netState.isInternetReachable}>
         <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
       </Snackbar>
     </SafeAreaView>

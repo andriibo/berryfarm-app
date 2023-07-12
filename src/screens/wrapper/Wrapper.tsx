@@ -27,7 +27,7 @@ const Wrapper = () => {
 
   useFocusEffect(onFocusEffect); // register callback to focus events
 
-  if (!netState.isConnected && !isLoadedData) {
+  if (!netState.isInternetReachable && !isLoadedData) {
     return <InternetNotConnected />;
   }
 
