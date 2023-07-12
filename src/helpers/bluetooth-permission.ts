@@ -1,6 +1,7 @@
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {isIOS, systemAlert} from 'src/constants/constants';
 import {PermissionsAndroid} from 'react-native';
+import {strings} from 'src/locales/locales';
 
 const message =
   'To connect to a scales, we need access to your Bluetooth. Go to settings to enable the Bluetooth permission.';
@@ -8,9 +9,7 @@ const message =
 export async function requestBluetoothPermission() {
   try {
     if (isIOS) {
-      const isAlreadyGrantedIOS = await check(
-        PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL,
-      );
+      const isAlreadyGrantedIOS = await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
 
       if (isAlreadyGrantedIOS === RESULTS.GRANTED) {
         return true;
@@ -22,15 +21,11 @@ export async function requestBluetoothPermission() {
         return true;
       }
 
-      systemAlert('Request Bluetooth', message);
+      systemAlert(strings.bluetoothPermissionRequest, message);
     }
 
-    const isAlreadyGrantedScan = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-    );
-    const isAlreadyGrantedConnect = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-    );
+    const isAlreadyGrantedScan = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);
+    const isAlreadyGrantedConnect = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
 
     if (isAlreadyGrantedScan && isAlreadyGrantedConnect) {
       return true;
@@ -48,7 +43,7 @@ export async function requestBluetoothPermission() {
       return true;
     }
 
-    systemAlert('Request Bluetooth', message);
+    systemAlert(strings.bluetoothPermissionRequest, message);
   } catch (err) {
     console.warn(err);
 

@@ -80,5 +80,12 @@ export const strings = new LocalizedStrings({
     doYouWantToDisconnectScale: 'Вы хотите отключить устройство',
     disconnected: 'отсоединен',
     unableConnectScales: 'Не удается подключиться к весам. Пожалуйста, попробуйте еще раз.',
+    bluetoothPermissionRequest: 'Запрос разрешения Bluetooth',
+    locationPermissionRequest: 'Запрос на разрешение местоположения',
+    toConnectToScaleWeNeedAccessToYourLocation:
+      'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',
+    locationPermissionForBluetoothScanning: 'Разрешение местоположения для сканирования Bluetooth',
+    pleaseProvide: 'Пожалуйста предоставьте',
+    askMeLater: 'Спросите меня позже',
   },
 });

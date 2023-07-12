@@ -52,9 +52,6 @@ const ConnectBle = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectingDeviceId, setConnectingDeviceId] = useState<string | null>(null);
 
-  // const navigationState = useNavigationState((state) => state)
-  // const currentRoute = navigationState && navigationState.routes[navigationState.index].name
-
   const handleSearch = async () => {
     if (!isSearch) {
       dispatch(setDevices([]));
@@ -132,15 +129,6 @@ const ConnectBle = () => {
     disconnectDevice(dispatch, item);
     await startScanBle(dispatch, devices, connectedDevices);
   };
-
-  // useEffect(() => {
-  //   console.log(currentRoute)
-  //   setTimeout(() => {
-  //     if (isConnecting && !isPeripheralConnected && currentRoute === 'ConnectBle') {
-  //       handleSearch().then()
-  //     }
-  //   }, 30000)
-  // }, [currentRoute, isConnecting, isPeripheralConnected])
 
   const pairWithDevice = async (item: Device) => {
     bleManager.stopDeviceScan();
