@@ -65,7 +65,7 @@ export const strings = new LocalizedStrings({
     cancel: 'Отмена',
     yes: 'Да',
     settings: 'Настройки',
-    technowagyNeedsBluetooth: 'Чтобы использовать Technowagy надо включить Bluetooth.',
+    toConnectScaleNeedsTurnOnBluetooth: 'Чтобы подключить весы надо включить Bluetooth.',
     turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
     scalesConnected: 'Весы подключены.',
     scalesNotConnected: 'Весы не подключены.',
