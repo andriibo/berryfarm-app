@@ -42,19 +42,12 @@ const GiveQrCode = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true);
       setSearchQuery('');
       setCanScanQrCode(false);
       setFoundWorkers([]);
-    }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      setLoader(true);
       getWorkers(firestorePrefix)
-        .then(response => {
-          setWorkers(response);
-        })
+        .then(data => setWorkers(data))
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
             dispatch(addErrorNotification(error.message));
@@ -94,9 +87,7 @@ const GiveQrCode = () => {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const changeTextDebouncer = useCallback(debounce(handleGetWorker, 500), []);
-
+  const changeTextDebouncer = debounce(handleGetWorker, 500);
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
       setSearchQuery(getFullname(worker));
