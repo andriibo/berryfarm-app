@@ -23,8 +23,8 @@ export const maxDATE = dayjs().subtract(1, 'day').toDate();
 export const systemAlert = (title: string, message: string) =>
   Alert.alert(title, message, [
     {
-      text: 'Cancel',
+      text: strings.cancel,
       style: 'cancel',
     },
-    {text: 'Settings', onPress: openSettings},
+    {text: strings.settings, onPress: openSettings},
   ]);

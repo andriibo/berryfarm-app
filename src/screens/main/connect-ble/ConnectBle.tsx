@@ -113,7 +113,7 @@ const ConnectBle = () => {
             style: 'cancel',
           },
           {
-            text: strings.parameters,
+            text: strings.settings,
             onPress: () => {
               isIOS ? Linking.openURL(iosBLE) : Linking.sendIntent(androidBLE);
             },

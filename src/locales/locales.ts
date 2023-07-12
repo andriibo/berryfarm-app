@@ -64,7 +64,7 @@ export const strings = new LocalizedStrings({
     issueQrCodeDate: 'Дата выдачи кода',
     cancel: 'Отмена',
     yes: 'Да',
-    parameters: 'Настройки',
+    settings: 'Настройки',
     technowagyNeedsBluetooth: 'Чтобы использовать Technowagy надо включить Bluetooth.',
     turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
     scalesConnected: 'Весы подключены.',
