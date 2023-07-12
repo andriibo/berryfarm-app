@@ -8,6 +8,7 @@ import {IconButton} from 'react-native-paper';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
 import {HeaderLeft} from 'src/components/header-left';
+import {strings} from 'src/locales/locales';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -46,7 +47,7 @@ export const HomeStack = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          title: 'Connect Device',
+          title: strings.connectScale,
           headerLeft: () => <HeaderLeft />,
         }}
       />

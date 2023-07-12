@@ -9,6 +9,8 @@ import {colors} from 'src/styles/colors';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {HomeStackParamList} from 'src/navigation/home.stack';
 
 const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
@@ -35,10 +37,14 @@ const Home = () => {
   const netState = useNetInfo();
   const isDeviceConnected = useIsDeviceConnected();
   const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
-      <TouchableOpacity disabled={isDeviceConnected} onPress={() => {}} style={styles.deviceStateWrapper}>
+      <TouchableOpacity
+        disabled={isDeviceConnected}
+        onPress={() => navigation.navigate('ConnectBle')}
+        style={styles.deviceStateWrapper}>
         <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
         <Text style={styles.deviceState}>{deviceState.title}</Text>
       </TouchableOpacity>

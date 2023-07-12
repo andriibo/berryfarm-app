@@ -76,7 +76,7 @@ const ConnectBle = () => {
       if (!isInternetConnected) {
         dispatch(setIsEnabledScreens(true));
       }
-    }, [connectedDevices, devices, dispatch, isInternetConnected, isPeripheralConnected]),
+    }, [dispatch, isInternetConnected]),
   );
 
   useEffect(() => {
@@ -86,13 +86,13 @@ const ConnectBle = () => {
       handleSearch().then();
       setIsConnecting(false);
     }
-  }, [connectedDevices, devices, dispatch, handleSearch, isPeripheralConnected]);
+  }, [connectedDevices, isPeripheralConnected]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={handleSearch}>
-          <Text>{isSearch ? 'Searching' : 'Search'}</Text>
+          <Text style={{color: colors.white, fontSize: 17}}>{isSearch ? 'Searching...' : 'Search'}</Text>
         </TouchableOpacity>
       ),
     });
@@ -151,11 +151,11 @@ const ConnectBle = () => {
       if (isDeviceConnected) {
         Alert.alert('Disconnect', `Do you want to disconnect device ${item.name}`, [
           {
-            text: 'Cancel',
+            text: strings.cancel,
             style: 'cancel',
           },
           {
-            text: 'Yes',
+            text: strings.yes,
             onPress: () => handleDisconnectByTap(item),
           },
         ]);
@@ -168,10 +168,10 @@ const ConnectBle = () => {
         setTimeout(() => navigation.navigate('Home'), 2000);
       }
     } catch (err) {
-      if (err === `Device ${item.id} was disconnected`) {
+      if (err === `Device ${item.id} was disconnected.`) {
         Alert.alert('Error', 'Unable to connect to the device. Please try again.', [
           {
-            text: 'OK',
+            text: strings.ok,
             style: 'default',
           },
         ]);
