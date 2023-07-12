@@ -28,7 +28,7 @@ export const useStartScanBle = (
 
           if (state === 'PoweredOff') {
             bleManager.stopDeviceScan();
-            Alert.alert(strings.toConnectScaleNeedsTurnOnBluetooth, strings.turnOnBluetoothInParameters, [
+            Alert.alert(strings.toConnectScalesNeedsTurnOnBluetooth, strings.turnOnBluetoothInParameters, [
               {
                 text: strings.cancel,
                 style: 'cancel',

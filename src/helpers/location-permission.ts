@@ -3,7 +3,7 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {isIOS, systemAlert} from 'src/constants/constants';
 import {strings} from 'src/locales/locales';
 
-const message = strings.toConnectToScaleWeNeedAccessToYourLocation;
+const message = strings.toConnectToScalesWeNeedAccessToYourLocation;
 
 export async function requestLocationPermission() {
   try {

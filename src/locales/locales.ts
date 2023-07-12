@@ -65,7 +65,7 @@ export const strings = new LocalizedStrings({
     cancel: 'Отмена',
     yes: 'Да',
     settings: 'Настройки',
-    toConnectScaleNeedsTurnOnBluetooth: 'Чтобы подключить весы надо включить Bluetooth.',
+    toConnectScalesNeedsTurnOnBluetooth: 'Чтобы подключить весы надо включить Bluetooth.',
     turnOnBluetoothInParameters: 'Вы можете включить Bluetooth в параметрах.',
     scalesConnected: 'Весы подключены.',
     scalesNotConnected: 'Весы не подключены.',
@@ -77,12 +77,12 @@ export const strings = new LocalizedStrings({
     connecting: 'Подключение...',
     connected: 'Подключен',
     disconnect: 'Отключить',
-    doYouWantToDisconnectScale: 'Вы хотите отключить устройство',
+    doYouWantToDisconnectScales: 'Вы хотите отключить весы',
     disconnected: 'отсоединен',
     unableConnectScales: 'Не удается подключиться к весам. Пожалуйста, попробуйте еще раз.',
     bluetoothPermissionRequest: 'Запрос разрешения Bluetooth',
     locationPermissionRequest: 'Запрос на разрешение местоположения',
-    toConnectToScaleWeNeedAccessToYourLocation:
+    toConnectToScalesWeNeedAccessToYourLocation:
       'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',
     locationPermissionForBluetoothScanning: 'Разрешение местоположения для сканирования Bluetooth',
     pleaseProvide: 'Пожалуйста предоставьте',

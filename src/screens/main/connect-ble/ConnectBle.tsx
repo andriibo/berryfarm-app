@@ -104,7 +104,7 @@ const ConnectBle = () => {
 
       if (state === 'PoweredOff') {
         stopDeviceScan(dispatch);
-        Alert.alert(strings.technowagyNeedsBluetooth, strings.turnOnBluetoothInParameters, [
+        Alert.alert(strings.toConnectScalesNeedsTurnOnBluetooth, strings.turnOnBluetoothInParameters, [
           {
             text: strings.cancel,
             style: 'cancel',
@@ -137,7 +137,7 @@ const ConnectBle = () => {
       const isDeviceConnected = await bleManager.isDeviceConnected(item.id);
 
       if (isDeviceConnected) {
-        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScale} ${item.name} - ${item.id}`, [
+        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${item.name} - ${item.id}`, [
           {
             text: strings.cancel,
             style: 'cancel',
