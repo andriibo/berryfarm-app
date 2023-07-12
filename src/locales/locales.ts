@@ -62,5 +62,6 @@ export const strings = new LocalizedStrings({
     notActive: 'не активен',
     qrCodeNotIssuedToWorker: 'Данный QR код не выдан работнику.',
     issueQrCodeDate: 'Дата выдачи кода',
+    weightKg: 'Вес, кг',
   },
 });
