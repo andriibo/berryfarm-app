@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
+import {Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -23,6 +23,7 @@ import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -31,6 +32,8 @@ const HandOverHarvest = () => {
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
+  const isDeviceConnected = useIsDeviceConnected();
+  const [loader, setLoader] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const workerName = useMemo(() => {
     if (worker) {
@@ -65,6 +68,7 @@ const HandOverHarvest = () => {
   useFocusEffect(
     useCallback(() => {
       if (harvest.workerUuid) {
+        setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
@@ -79,7 +83,8 @@ const HandOverHarvest = () => {
             } else {
               console.error(error);
             }
-          });
+          })
+          .finally(() => setLoader(false));
       }
     }, [dispatch, firestorePrefix, harvest]),
   );
@@ -109,7 +114,7 @@ const HandOverHarvest = () => {
     [dispatch, firestorePrefix, harvest, navigation, reset],
   );
 
-  if (!harvest.qrCodeUuid && !worker) {
+  if (loader) {
     return <Loader />;
   }
 
@@ -119,6 +124,9 @@ const HandOverHarvest = () => {
         contentContainerStyle={styles.container}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled">
+        <View style={styles.weightIcon}>
+          <IconButton icon="weight-kilogram" iconColor={isDeviceConnected ? colors.primary : colors.error} size={30} />
+        </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.worker}

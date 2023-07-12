@@ -92,7 +92,7 @@ const ConnectBle = () => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={handleSearch}>
-          <Text style={{color: colors.white, fontSize: 17}}>{isSearch ? 'Searching...' : 'Search'}</Text>
+          <Text style={{color: colors.white, fontSize: 17}}>{isSearch ? strings.searching : strings.search}</Text>
         </TouchableOpacity>
       ),
     });
@@ -149,7 +149,7 @@ const ConnectBle = () => {
       const isDeviceConnected = await bleManager.isDeviceConnected(item.id);
 
       if (isDeviceConnected) {
-        Alert.alert('Disconnect', `Do you want to disconnect device ${item.name}`, [
+        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScale} ${item.name} - ${item.id}`, [
           {
             text: strings.cancel,
             style: 'cancel',
@@ -164,12 +164,10 @@ const ConnectBle = () => {
         await setIsConnecting(true);
         await connectDevice(dispatch, item, deviceConnectionListener);
         setConnectingDeviceId(null);
-
-        setTimeout(() => navigation.navigate('Home'), 2000);
       }
     } catch (err) {
-      if (err === `Device ${item.id} was disconnected.`) {
-        Alert.alert('Error', 'Unable to connect to the device. Please try again.', [
+      if (err === `${item.id} ${strings.disconnected}.`) {
+        Alert.alert(strings.error, strings.unableConnectScales, [
           {
             text: strings.ok,
             style: 'default',
@@ -191,11 +189,11 @@ const ConnectBle = () => {
   const sections = useMemo(
     () => [
       {
-        title: 'Connected',
+        title: '',
         data: connectedDevices,
       },
       {
-        title: 'Other',
+        title: '',
         data: devices.filter(item => item?.id !== connectedDevices[0]?.id),
       },
     ],
@@ -210,9 +208,11 @@ const ConnectBle = () => {
       onPress={() => pairWithDevice(item)}
       style={styles.itemWrapper}>
       <View style={styles.item}>
-        <Text style={styles.itemText}>{item.name}</Text>
-        {connectingDeviceId === item.id && isConnecting && <Text>Connecting</Text>}
-        {activeDeviceId === item.id && !isConnecting && <Text>Connected</Text>}
+        <Text style={styles.itemText}>
+          {item.name} - {item.id}
+        </Text>
+        {connectingDeviceId === item.id && isConnecting && <Text>{strings.connecting}</Text>}
+        {activeDeviceId === item.id && !isConnecting && <Text>{strings.connected}</Text>}
       </View>
       <IconButton icon="bluetooth" iconColor={activeDeviceId === item.id ? colors.primary : colors.black} size={20} />
     </TouchableOpacity>

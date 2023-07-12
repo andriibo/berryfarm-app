@@ -47,7 +47,7 @@ export const HomeStack = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          title: strings.connectScale,
+          title: strings.scales,
           headerLeft: () => <HeaderLeft />,
         }}
       />

@@ -18,7 +18,7 @@ export const useAutoReconnect = (dispatch: Dispatch, devices: Device[], isDevice
             connectDevice(dispatch, device, deviceConnectionListener).then();
           } catch (error) {
             disconnectDevice(dispatch, device);
-            console.log('Device is off or not available');
+            console.log('Device is off or unavailable');
           }
         }
       }

@@ -7,6 +7,10 @@ export default StyleSheet.create({
     paddingHorizontal: '7%',
     justifyContent: 'space-evenly',
   },
+  weightIcon: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   label: {
     fontWeight: 'bold',
     color: colors.outline,
