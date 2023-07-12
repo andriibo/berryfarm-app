@@ -32,6 +32,7 @@ const HandOverHarvest = () => {
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const [loader, setLoader] = useState(false);
   const workerName = useMemo(() => {
     if (worker) {
       return (
@@ -65,6 +66,7 @@ const HandOverHarvest = () => {
   useFocusEffect(
     useCallback(() => {
       if (harvest.workerUuid) {
+        setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
@@ -79,7 +81,8 @@ const HandOverHarvest = () => {
             } else {
               console.error(error);
             }
-          });
+          })
+          .finally(() => setLoader(false));
       }
     }, [dispatch, firestorePrefix, harvest]),
   );
@@ -109,7 +112,7 @@ const HandOverHarvest = () => {
     [dispatch, firestorePrefix, harvest, navigation, reset],
   );
 
-  if (!harvest.qrCodeUuid && !worker) {
+  if (loader) {
     return <Loader />;
   }
 

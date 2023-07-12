@@ -38,6 +38,34 @@ const GiveQrCode = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const {firestorePrefix} = useFarm();
+  const [loader, setLoader] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearchQuery('');
+      setCanScanQrCode(false);
+      setFoundWorkers([]);
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoader(true);
+      getWorkers(firestorePrefix)
+        .then(response => {
+          setWorkers(response);
+        })
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            dispatch(addErrorNotification(error.message));
+          } else {
+            console.error(error);
+          }
+        })
+        .finally(() => setLoader(false));
+    }, [dispatch, firestorePrefix]),
+  );
+
   const handleGetWorker = async (name: string) => {
     if (name === '' || name.length < 2) {
       setFoundWorkers([]);
@@ -79,31 +107,7 @@ const GiveQrCode = () => {
     [dispatch],
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      setSearchQuery('');
-      setCanScanQrCode(false);
-      setFoundWorkers([]);
-    }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      getWorkers(firestorePrefix)
-        .then(response => {
-          setWorkers(response);
-        })
-        .catch(error => {
-          if (error instanceof FirestoreServiceError) {
-            dispatch(addErrorNotification(error.message));
-          } else {
-            console.error(error);
-          }
-        });
-    }, [dispatch, firestorePrefix]),
-  );
-
-  if (!workers.length) {
+  if (loader) {
     return <Loader />;
   }
 
