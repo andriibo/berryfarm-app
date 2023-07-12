@@ -1232,7 +1232,7 @@ PODS:
   - RNFBApp (18.0.0):
     - Firebase/CoreOnly (= 10.10.0)
     - React-Core
-  - RNFBFirestore (18.0.0):
+  - RNFBFirestore (18.1.0):
     - Firebase/Firestore (= 10.10.0)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
@@ -1578,7 +1578,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 7ecd54a97fc3749f38c3c89a171f6cbd52f3c142
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: 10aa0ab560e30186c39a9756846945cac6499ea7
-  RNFBFirestore: 1e207f58ce1e95cb9e90ea6d5f4d7db4a674a83d
+  RNFBFirestore: c16550a6e9f77dcd786e84ea53223a5a4b807c7c
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
   RNReanimated: ed60b6926aa075306cc69de64690d0c5e0c5a4be
