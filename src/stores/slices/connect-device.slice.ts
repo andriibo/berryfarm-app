@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Device} from 'react-native-ble-plx';
-
+import {useAppSelector} from '../hooks/hooks';
 import {RootState} from '../store';
-import {useAppSelector} from 'src/stores/hooks/hooks';
 
 interface IConnectDevice {
+  isInternetConnected: boolean;
+  isEnabledScreens: boolean;
   isSearching?: boolean;
   isDeviceConnected?: boolean;
   activeDeviceId?: string | null;
@@ -13,6 +14,8 @@ interface IConnectDevice {
 }
 
 const initialState: IConnectDevice = {
+  isInternetConnected: true,
+  isEnabledScreens: false,
   isSearching: true,
   isDeviceConnected: false,
   activeDeviceId: null,
@@ -24,6 +27,12 @@ const connectDeviceSlice = createSlice({
   name: 'ConnectDevice',
   initialState,
   reducers: {
+    setIsEnabledScreens: (state, action: PayloadAction<boolean>) => {
+      state.isEnabledScreens = action.payload;
+    },
+    setIsInternetConnection: (state, action: PayloadAction<boolean>) => {
+      state.isInternetConnected = action.payload;
+    },
     setIsSearching: (state, {payload}: PayloadAction<boolean>) => {
       state.isSearching = payload;
     },
@@ -42,11 +51,16 @@ const connectDeviceSlice = createSlice({
   },
 });
 
+export const selectIsEnabledScreens = (state: RootState) => state.connectDevice.isEnabledScreens;
+export const selectIsInternetConnection = (state: RootState) => state.connectDevice.isInternetConnected;
 export const selectIsSearching = (state: RootState) => state.connectDevice.isSearching;
 export const selectIsDeviceConnected = (state: RootState) => state.connectDevice.isDeviceConnected;
 export const selectActiveDeviceId = (state: RootState) => state.connectDevice.activeDeviceId;
 export const selectDevices = (state: RootState) => state.connectDevice.devices;
 export const selectConnectedDevices = (state: RootState) => state.connectDevice.connectedDevices;
+
+export const useIsEnabledScreens = () => useAppSelector(selectIsEnabledScreens);
+export const useIsInternetConnected = () => useAppSelector(selectIsInternetConnection);
 export const useIsSearching = () => useAppSelector(selectIsSearching);
 export const useIsDeviceConnected = () => useAppSelector(selectIsDeviceConnected);
 export const useActiveDeviceId = () => useAppSelector(selectActiveDeviceId);
@@ -55,5 +69,13 @@ export const useConnectedDevices = () => useAppSelector(selectConnectedDevices);
 
 export const {
   reducer: connectDeviceReducer,
-  actions: {setIsSearching, setIsDeviceConnected, setActiveDeviceId, setDevices, setConnectedDevices},
+  actions: {
+    setIsSearching,
+    setIsDeviceConnected,
+    setActiveDeviceId,
+    setDevices,
+    setConnectedDevices,
+    setIsInternetConnection,
+    setIsEnabledScreens,
+  },
 } = connectDeviceSlice;

@@ -8,6 +8,10 @@ import CreateWorkerStack from 'src/navigation/createWorker.stack';
 import HomeStack from 'src/navigation/home.stack';
 import {strings} from 'src/locales/locales';
 import GetQrCodeInfoStack from 'src/navigation/getQrCodeInfo.stack';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {useConnectedDevices, useDevices, useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
+import {useStartScanBle} from 'src/stores/hooks/use-start-scan-ble';
+import {useAutoReconnect} from 'src/stores/hooks/use-auto-reconect';
 
 export type DrawerStackParamList = {
   HomeStack: undefined;
@@ -27,6 +31,14 @@ export const drawerOptions = {
 };
 
 const DrawerStack = () => {
+  const dispatch = useAppDispatch();
+  const devices = useDevices();
+  const connectedDevices = useConnectedDevices();
+  const isConnected = useIsDeviceConnected();
+
+  useStartScanBle(dispatch, devices, connectedDevices, isConnected);
+  useAutoReconnect(dispatch, devices, isConnected);
+
   return (
     <DrawerComponent.Navigator
       drawerContent={Logout}

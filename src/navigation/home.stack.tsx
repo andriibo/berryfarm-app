@@ -7,9 +7,11 @@ import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
+import {HeaderLeft} from 'src/components/header-left';
 
 export type HomeStackParamList = {
   Home: undefined;
+  ConnectBle: undefined;
 };
 
 const HomeStackComponent = createNativeStackNavigator<HomeStackParamList>();
@@ -33,6 +35,19 @@ export const HomeStack = () => {
           headerLeft: () => (
             <IconButton icon="menu" iconColor={colors.white} onPress={navigation.openDrawer} size={20} />
           ),
+        }}
+      />
+      <HomeStackComponent.Screen
+        component={Screens.ConnectBle}
+        name="ConnectBle"
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: 'Connect Device',
+          headerLeft: () => <HeaderLeft />,
         }}
       />
     </HomeStackComponent.Navigator>

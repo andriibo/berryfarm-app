@@ -9,6 +9,7 @@ import {SuccessPage} from 'src/screens/main/success-page';
 import {HandOverHarvest} from 'src/screens/main/hand-over-harvest';
 import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
 import {QrCodeInfo} from 'src/screens/main/qr-code-info';
+import {ConnectBle} from 'src/screens/main/connect-ble';
 
 export const Screens = {
   ChooseFarm,
@@ -22,4 +23,5 @@ export const Screens = {
   ScanQrCode,
   SuccessPage,
   QrCodeInfo,
+  ConnectBle,
 };
