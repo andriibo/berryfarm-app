@@ -25,7 +25,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     position: 'absolute',
     bottom: 0,
     justifyContent: 'center',
