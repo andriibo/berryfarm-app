@@ -1,7 +1,6 @@
 import {useFocusEffect} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {AvoidSoftInput} from 'react-native-avoid-softinput';
-
 import AuthStack from 'src/navigation/auth.stack';
 import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated, useIsLoadedData} from 'src/stores/slices/auth.slice';

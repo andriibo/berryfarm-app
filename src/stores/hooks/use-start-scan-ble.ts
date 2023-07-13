@@ -22,7 +22,7 @@ export const useStartScanBle = (
       if (deviceId) {
         const subscription = bleManager.onStateChange(state => {
           if (state === 'PoweredOn' && !isDeviceConnected) {
-            startScanBle(dispatch, devices, connectedDevices);
+            startScanBle(dispatch, devices, connectedDevices).then();
             subscription.remove();
           }
 
