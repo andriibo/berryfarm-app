@@ -43,19 +43,20 @@ const Templates = () => {
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
+    setLoader(true);
     getTemplates(firestorePrefix)
-      .then(data => {
-        setTemplates(data);
-      })
+      .then(data => setTemplates(data))
       .catch(error => {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));
         } else {
           console.error(error);
         }
-      });
+      })
+      .finally(() => setLoader(false));
   }, [dispatch, firestorePrefix]);
 
   const scanQrCode = useCallback(
@@ -76,7 +77,7 @@ const Templates = () => {
     [dispatch, navigation],
   );
 
-  if (!templates.length) {
+  if (loader) {
     return <Loader />;
   }
 

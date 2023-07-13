@@ -38,6 +38,27 @@ const GiveQrCode = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [canScanQrCode, setCanScanQrCode] = useState(false);
   const {firestorePrefix} = useFarm();
+  const [loader, setLoader] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoader(true);
+      setSearchQuery('');
+      setCanScanQrCode(false);
+      setFoundWorkers([]);
+      getWorkers(firestorePrefix)
+        .then(data => setWorkers(data))
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            dispatch(addErrorNotification(error.message));
+          } else {
+            console.error(error);
+          }
+        })
+        .finally(() => setLoader(false));
+    }, [dispatch, firestorePrefix]),
+  );
+
   const handleGetWorker = async (name: string) => {
     if (name === '' || name.length < 2) {
       setFoundWorkers([]);
@@ -66,9 +87,7 @@ const GiveQrCode = () => {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const changeTextDebouncer = useCallback(debounce(handleGetWorker, 500), []);
-
+  const changeTextDebouncer = debounce(handleGetWorker, 500);
   const handleSelectWorker = useCallback(
     (worker: Worker) => {
       setSearchQuery(getFullname(worker));
@@ -79,31 +98,7 @@ const GiveQrCode = () => {
     [dispatch],
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      setSearchQuery('');
-      setCanScanQrCode(false);
-      setFoundWorkers([]);
-    }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      getWorkers(firestorePrefix)
-        .then(response => {
-          setWorkers(response);
-        })
-        .catch(error => {
-          if (error instanceof FirestoreServiceError) {
-            dispatch(addErrorNotification(error.message));
-          } else {
-            console.error(error);
-          }
-        });
-    }, [dispatch, firestorePrefix]),
-  );
-
-  if (!workers.length) {
+  if (loader) {
     return <Loader />;
   }
 

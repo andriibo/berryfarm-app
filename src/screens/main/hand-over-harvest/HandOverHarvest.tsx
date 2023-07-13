@@ -35,6 +35,7 @@ const HandOverHarvest = () => {
   const isDeviceConnected = useIsDeviceConnected();
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const [loader, setLoader] = useState(false);
   const workerName = useMemo(() => {
     if (worker) {
       return (
