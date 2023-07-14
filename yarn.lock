@@ -7511,11 +7511,6 @@ react-native-avoid-softinput@^3.1.5:
   resolved "https://registry.yarnpkg.com/react-native-avoid-softinput/-/react-native-avoid-softinput-3.1.5.tgz#d7b6d4c8149832a66dbc687e571578607ac35e28"
   integrity sha512-VdGAdizlddl2hLUJF1WJohx0PLZo0hXSZzkSjkTHabh92aJYap7zeWlPkGB2w8ci/d/LoOBFqQTeZ2gnXjkSSQ==
 
-react-native-ble-manager@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-10.0.2.tgz#92c4d4063925f6efc89635a67f48b404c1a29b20"
-  integrity sha512-6KlaL/fBvAlk11Yt9zlTnZqfdtGLQCECUaX5Y3E+DZ5BE6LmQ4u7Zvy59bM4TdR2a5UcK+8mNK3XWLjke+QfKw==
-
 react-native-ble-plx@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-2.0.3.tgz#b0a746f33389dbf7fd7b158513330d487d5d0fbb"
@@ -7537,11 +7532,6 @@ react-native-codegen@^0.71.5:
     flow-parser "^0.185.0"
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
-
-react-native-config@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.5.1.tgz#73c94f511493e9b7ff9350cdf351d203a1b05acc"
-  integrity sha512-g1xNgt1tV95FCX+iWz6YJonxXkQX0GdD3fB8xQtR1GUBEqweB9zMROW77gi2TygmYmUkBI7LU4pES+zcTyK4HA==
 
 react-native-fast-image@^8.6.3:
   version "8.6.3"
