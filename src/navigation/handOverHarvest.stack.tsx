@@ -5,6 +5,9 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {strings} from 'src/locales/locales';
 import {HeaderLeft} from 'src/components/header-left';
 import {drawerOptions} from 'src/navigation/drawer.stack';
+import {colors} from 'src/styles/colors';
+import {IconButton} from 'react-native-paper';
+import {useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 
 export type HandOverHarvestStackParamList = {
   Templates: undefined;
@@ -17,6 +20,8 @@ export type HandOverHarvestStackParamList = {
 const HandOverHarvestStackComponent = createNativeStackNavigator<HandOverHarvestStackParamList>();
 
 const HandOverHarvestStack = () => {
+  const isDeviceConnected = useIsDeviceConnected();
+
   return (
     <HandOverHarvestStackComponent.Navigator initialRouteName="Templates">
       <HandOverHarvestStackComponent.Screen
@@ -69,6 +74,8 @@ const HandOverHarvestStack = () => {
           },
           title: strings.hangOverHarvest,
           headerLeft: () => <HeaderLeft />,
+          headerRight: () =>
+            isDeviceConnected ? <IconButton icon="weight-kilogram" iconColor={colors.white} size={30} /> : null,
         }}
       />
       <HandOverHarvestStackComponent.Screen

@@ -12,7 +12,6 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   setConnectedDevices,
   setDevices,
-  setIsEnabledScreens,
   setIsSearching,
   useActiveDeviceId,
   useConnectedDevices,
@@ -31,7 +30,7 @@ import {IconButton} from 'react-native-paper';
 
 export const bleManager = new BleManager();
 const ItemSeparatorComponent = () => <View style={styles.separator} />;
-const ListEmptyComponent = () => <Text style={styles.boldTextStyle}>No Devices</Text>;
+const ListEmptyComponent = () => <Text style={styles.boldTextStyle}>{strings.noDevices}</Text>;
 
 const stopDeviceScan = (dispatch: Dispatch) => {
   dispatch(setIsSearching(false));
@@ -44,7 +43,7 @@ const ConnectBle = () => {
   const dispatch = useAppDispatch();
   const devices = useDevices();
   const connectedDevices = useConnectedDevices();
-  const isSearch = useIsSearching();
+  const isSearching = useIsSearching();
   const activeDeviceId = useActiveDeviceId();
   const isPeripheralConnected = useIsDeviceConnected();
   const deviceConnectionListener = useRef<Subscription>();
@@ -53,7 +52,7 @@ const ConnectBle = () => {
   const [connectingDeviceId, setConnectingDeviceId] = useState<string | null>(null);
 
   const handleSearch = async () => {
-    if (!isSearch) {
+    if (!isSearching) {
       dispatch(setDevices([]));
       dispatch(setIsSearching(true));
       await startScanBle(dispatch, devices, connectedDevices);
@@ -68,10 +67,6 @@ const ConnectBle = () => {
       if (!isPeripheralConnected) {
         dispatch(setIsSearching(true));
         startScanBle(dispatch, devices, connectedDevices).then();
-      }
-
-      if (!isInternetConnected) {
-        dispatch(setIsEnabledScreens(true));
       }
     }, [dispatch, isInternetConnected]),
   );
@@ -89,7 +84,7 @@ const ConnectBle = () => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={handleSearch}>
-          <Text style={{color: colors.white, fontSize: 17}}>{isSearch ? strings.searching : strings.search}</Text>
+          <Text style={{color: colors.white, fontSize: 17}}>{isSearching ? strings.searching : strings.search}</Text>
         </TouchableOpacity>
       ),
     });
@@ -137,7 +132,7 @@ const ConnectBle = () => {
       const isDeviceConnected = await bleManager.isDeviceConnected(item.id);
 
       if (isDeviceConnected) {
-        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${item.name} - ${item.id}`, [
+        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${item.id} ${item.name}?`, [
           {
             text: strings.cancel,
             style: 'cancel',
@@ -197,7 +192,7 @@ const ConnectBle = () => {
       style={styles.itemWrapper}>
       <View style={styles.item}>
         <Text style={styles.itemText}>
-          {item.name} - {item.id}
+          {item.id} {item.name}
         </Text>
         {connectingDeviceId === item.id && isConnecting && <Text>{strings.connecting}</Text>}
         {activeDeviceId === item.id && !isConnecting && <Text>{strings.connected}</Text>}

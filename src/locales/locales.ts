@@ -87,5 +87,8 @@ export const strings = new LocalizedStrings({
     locationPermissionForBluetoothScanning: 'Разрешение местоположения для сканирования Bluetooth',
     pleaseProvide: 'Пожалуйста предоставьте',
     askMeLater: 'Спросите меня позже',
+    noDevices: 'Нет устройств',
+    couldNotGetDataFromScales: 'Не удалось получить данные с весов',
+    enterDataManually: 'Ввести данные вручную',
   },
 });
