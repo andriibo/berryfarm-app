@@ -37,25 +37,27 @@ export async function requestLocationPermission() {
       }
     }
 
-    const isAlreadyGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+    if (!isIOS) {
+      const isAlreadyGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
 
-    if (isAlreadyGranted) {
-      return true;
+      if (isAlreadyGranted) {
+        return true;
+      }
+
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+        title: strings.locationPermissionForBluetoothScanning,
+        message: strings.pleaseProvide,
+        buttonNeutral: strings.askMeLater,
+        buttonNegative: strings.cancel,
+        buttonPositive: strings.ok,
+      });
+
+      if (granted) {
+        return true;
+      }
+
+      systemAlert(strings.locationPermissionRequest, message);
     }
-
-    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-      title: strings.locationPermissionForBluetoothScanning,
-      message: strings.pleaseProvide,
-      buttonNeutral: strings.askMeLater,
-      buttonNegative: strings.cancel,
-      buttonPositive: strings.ok,
-    });
-
-    if (granted) {
-      return true;
-    }
-
-    systemAlert(strings.locationPermissionRequest, message);
 
     return false;
   } catch (err) {
