@@ -150,8 +150,14 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
+          <Text variant="headlineSmall">{harvest.harvestPackage.title}</Text>
+        </View>
+        <View>
+          <Text style={styles.label} variant="headlineSmall">
+            {strings.numberOfBoxes}
+          </Text>
           <Text variant="headlineSmall">
-            {harvest.harvestPackage.title} / {harvest.qty} {strings.items}
+            {harvest.qty} {strings.items}
           </Text>
         </View>
         <View>
