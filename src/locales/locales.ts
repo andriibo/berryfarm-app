@@ -48,6 +48,7 @@ export const strings = new LocalizedStrings({
     location: 'Локация',
     quality: 'Качество',
     package: 'Упаковка',
+    numberOfBoxes: 'Количество ящиков',
     product: 'Продукт',
     harvestTemporarilyFixedForWorkerQrCode: 'Урожай временно зафиксирован за QR кодом работника',
     couldNotConnectToServer: 'Не удалось установить соединение с сервером. Приложение работает в автономном режиме.',
