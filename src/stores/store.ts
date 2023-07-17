@@ -5,6 +5,7 @@ import {persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import {authReducer, cleanUser} from './slices/auth.slice';
+import {connectDeviceReducer} from 'src/stores/slices/connect-device.slice';
 import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
 import {cleanFarm} from 'src/stores/slices/auth.slice';
 import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   harvest: harvestReducer,
   qrCode: qrCodeReducer,
   notifications: notificationsReducer,
+  connectDevice: connectDeviceReducer,
 });
 
 export const store = configureStore({

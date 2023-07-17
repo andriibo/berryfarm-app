@@ -11,6 +11,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
+  deviceStateWrapper: {
+    height: 30,
+    flexDirection: 'row',
+    paddingLeft: 17,
+    alignItems: 'center',
+  },
+  deviceState: {
+    fontSize: 17,
+  },
   surface: {
     padding: 8,
     width,

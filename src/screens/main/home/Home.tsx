@@ -1,12 +1,15 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Snackbar, Surface, Text} from 'react-native-paper';
+import {IconButton, Snackbar, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
-import {useNetInfo} from '@react-native-community/netinfo';
+import {useIsDeviceConnected, useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {deviceLabelStyle} from 'src/helpers/device-label-style';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {HomeStackParamList} from 'src/navigation/home.stack';
 
 const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
@@ -30,10 +33,20 @@ const HomeButton = ({title, destination}: {title: string; destination: string}) 
 };
 
 const Home = () => {
-  const netState = useNetInfo();
+  const isInternetConnected = useIsInternetConnected();
+  const isDeviceConnected = useIsDeviceConnected();
+  const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+      <TouchableOpacity
+        // disabled={isDeviceConnected}
+        onPress={() => navigation.navigate('ConnectBle')}
+        style={styles.deviceStateWrapper}>
+        <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
+        <Text style={styles.deviceState}>{deviceState.title}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
         {buttons.map(({title, destination}) => {
           return (
@@ -43,7 +56,7 @@ const Home = () => {
           );
         })}
       </View>
-      <Snackbar onDismiss={() => {}} visible={!netState.isInternetReachable}>
+      <Snackbar onDismiss={() => {}} visible={!isInternetConnected}>
         <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
       </Snackbar>
     </SafeAreaView>

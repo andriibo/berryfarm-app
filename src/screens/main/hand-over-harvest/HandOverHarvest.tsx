@@ -1,6 +1,6 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {Badge, Button, HelperText, Text, TextInput} from 'react-native-paper';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -23,6 +23,14 @@ import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
+import {
+  setWeight,
+  useActiveDeviceId,
+  useConnectedDevices,
+  useIsDeviceConnected,
+  useWeight,
+} from 'src/stores/slices/connect-device.slice';
+import {Buffer} from 'buffer';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -31,8 +39,14 @@ const HandOverHarvest = () => {
   const [worker, setWorker] = useState<Worker | null>(null);
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
+  const isDeviceConnected = useIsDeviceConnected();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const [loader, setLoader] = useState(false);
+  const connectedDevices = useConnectedDevices();
+  const activeDeviceId = useActiveDeviceId();
+  const weightFromScales = useWeight();
+  const [manualInput, setManualInput] = useState(false);
+  const [isWeightFromScales, setIsWeightFromScales] = useState(false);
   const workerName = useMemo(() => {
     if (worker) {
       return (
@@ -49,6 +63,8 @@ const HandOverHarvest = () => {
     control,
     handleSubmit,
     reset,
+    setValue,
+    getValues,
     formState: {errors, isDirty, isValid},
   } = useForm<HarvestRequest>({
     defaultValues: {
@@ -65,6 +81,8 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
+      dispatch(setWeight(null));
+
       if (harvest.workerUuid) {
         setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
@@ -84,8 +102,37 @@ const HandOverHarvest = () => {
           })
           .finally(() => setLoader(false));
       }
-    }, [dispatch, firestorePrefix, harvest]),
+
+      if (isDeviceConnected) {
+        connectedDevices.forEach(connectedDevice => {
+          if (connectedDevice.id === activeDeviceId) {
+            connectedDevice.discoverAllServicesAndCharacteristics().then(device => {
+              device.services().then(services => {
+                if (services.length) {
+                  services[services.length - 1].characteristics().then(async characteristics => {
+                    characteristics.forEach(characteristic => {
+                      if (characteristic.isWritableWithResponse) {
+                        const encodedString = Buffer.from('G::W\r\n').toString('base64');
+
+                        characteristic.writeWithResponse(encodedString).then();
+                      }
+                    });
+                  });
+                }
+              });
+            });
+          }
+        });
+      }
+    }, [activeDeviceId, connectedDevices, dispatch, firestorePrefix, harvest.workerUuid, isDeviceConnected]),
   );
+
+  useEffect(() => {
+    if (weightFromScales !== null) {
+      setValue('weightTotal', weightFromScales, {shouldDirty: true, shouldValidate: true});
+      setIsWeightFromScales(true);
+    }
+  }, [setValue, weightFromScales]);
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
@@ -111,6 +158,8 @@ const HandOverHarvest = () => {
     },
     [dispatch, firestorePrefix, harvest, navigation, reset],
   );
+
+  const {weightTotal} = getValues();
 
   if (loader) {
     return <Loader />;
@@ -164,34 +213,56 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.weightKg}
           </Text>
-          <Controller
-            control={control}
-            name="weightTotal"
-            render={({field}) => (
-              <View>
-                <TextInput
-                  {...field}
-                  error={Boolean(errors.weightTotal)}
-                  inputMode="decimal"
-                  keyboardType="decimal-pad"
-                  mode="flat"
-                  onChangeText={text => {
-                    field.onChange(text);
+          {!manualInput && !isWeightFromScales && (
+            <View style={{alignItems: 'center'}}>
+              <Text style={{alignItems: 'center'}} variant="headlineSmall">
+                {strings.couldNotGetDataFromScales}
+              </Text>
+              <IconButton icon="alert-circle-check-outline" size={40} />
+              <TouchableOpacity onPress={() => setManualInput(true)}>
+                <Text
+                  style={{
+                    alignItems: 'center',
+                    textDecorationLine: 'underline',
+                    textDecorationStyle: 'solid',
                   }}
-                  style={{width: '100%'}}
-                  testID="weightTotal"
-                  value={field.value ? `${field.value}` : ''}
-                />
-                <HelperText type="error" visible={Boolean(errors.weightTotal)}>
-                  {errors.weightTotal?.message}
-                </HelperText>
-              </View>
-            )}
-          />
+                  variant="headlineSmall">
+                  {strings.enterDataManually}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {(manualInput || isWeightFromScales) && (
+            <Controller
+              control={control}
+              name="weightTotal"
+              render={({field}) => (
+                <View>
+                  <TextInput
+                    {...field}
+                    disabled={!manualInput}
+                    error={Boolean(errors.weightTotal)}
+                    inputMode="decimal"
+                    keyboardType="decimal-pad"
+                    mode="flat"
+                    onChangeText={text => {
+                      field.onChange(text);
+                    }}
+                    style={{width: '100%'}}
+                    testID="weightTotal"
+                    value={manualInput && weightTotal === 0 ? '' : `${weightTotal}`}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                    {errors.weightTotal?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View style={{alignItems: 'center'}}>
           <Button
-            disabled={!isDirty || !isValid}
+            disabled={!isDirty || !isValid || !weightTotal}
             mode="contained"
             onPress={handleSubmit(handleSave)}
             style={styles.btn}>

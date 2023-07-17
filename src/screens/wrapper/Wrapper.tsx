@@ -1,17 +1,19 @@
 import {useFocusEffect} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {AvoidSoftInput} from 'react-native-avoid-softinput';
-
 import AuthStack from 'src/navigation/auth.stack';
 import DrawerStack from 'src/navigation/drawer.stack';
 import {useIsAuthenticated, useIsLoadedData} from 'src/stores/slices/auth.slice';
 import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
-import {useNetInfo} from '@react-native-community/netinfo';
+import {useCheckInternetConnection} from 'src/stores/hooks/use-check-internet-connection';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 
 const Wrapper = () => {
   const isAuth = useIsAuthenticated();
-  const netState = useNetInfo();
   const isLoadedData = useIsLoadedData();
+  const isInternetConnected = useIsInternetConnected();
+
+  useCheckInternetConnection();
 
   const onFocusEffect = useCallback(() => {
     // This should be run when screen gains focus - enable the module where it's needed
@@ -27,7 +29,7 @@ const Wrapper = () => {
 
   useFocusEffect(onFocusEffect); // register callback to focus events
 
-  if (!netState.isInternetReachable && !isLoadedData) {
+  if (!isInternetConnected && !isLoadedData) {
     return <InternetNotConnected />;
   }
 
