@@ -10,7 +10,6 @@ import {HomeStackParamList} from 'src/navigation/home.stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   setConnectedDevices,
-  setDevices,
   useActiveDeviceId,
   useConnectedDevices,
   useDevices,
@@ -79,38 +78,34 @@ const ConnectBle = () => {
   const handleDisconnectByTap = async (item: Device) => {
     stopScanBle(dispatch);
     await AsyncStorage.removeItem('deviceId');
-    dispatch(setDevices([]));
-    dispatch(setConnectedDevices([]));
     disconnectDevice(dispatch, item);
     await startScanBle(dispatch, devices, connectedDevices, isBleScanning);
   };
 
-  const pairWithDevice = async (item: Device) => {
+  const pairWithDevice = async (device: Device) => {
     bleManager.stopDeviceScan();
     try {
-      const isConnected = await bleManager.isDeviceConnected(item.id);
+      const isConnected = await bleManager.isDeviceConnected(device.id);
 
       if (isConnected) {
-        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${item.id} ${item.name}?`, [
+        Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${device.id} ${device.name}?`, [
           {
             text: strings.cancel,
             style: 'cancel',
           },
           {
             text: strings.yes,
-            onPress: () => handleDisconnectByTap(item),
+            onPress: () => handleDisconnectByTap(device),
           },
         ]);
       } else {
-        setConnectingDeviceId(item.id);
+        setConnectingDeviceId(device.id);
         setIsConnecting(true);
-        await connectDevice(dispatch, item, deviceConnectionListener);
-        dispatch(setConnectedDevices([]));
-        setConnectingDeviceId(null);
+        await connectDevice(dispatch, device, deviceConnectionListener);
         setTimeout(() => navigation.navigate('Home'), 2000);
       }
     } catch (err) {
-      if (err === `${item.id} ${strings.disconnected}.`) {
+      if (err === `${device.id} ${strings.disconnected}.`) {
         Alert.alert(strings.error, strings.unableConnectScales, [
           {
             text: strings.ok,
@@ -120,7 +115,7 @@ const ConnectBle = () => {
       }
 
       dispatch(setConnectedDevices([]));
-      disconnectDevice(dispatch, item);
+      disconnectDevice(dispatch, device);
       setIsConnecting(false);
       setConnectingDeviceId(null);
     } finally {

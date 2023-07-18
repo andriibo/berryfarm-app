@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -24,7 +24,6 @@ import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stac
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
-  setWeight,
   useActiveDeviceId,
   useConnectedDevices,
   useIsDeviceConnected,
@@ -47,17 +46,6 @@ const HandOverHarvest = () => {
   const weightFromScales = useWeight();
   const [manualInput, setManualInput] = useState(false);
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
-  const workerName = useMemo(() => {
-    if (worker) {
-      return (
-        <>
-          {getFullname(worker)} {worker?.status !== WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
-        </>
-      );
-    }
-
-    return strings.harvestTemporarilyFixedForWorkerQrCode;
-  }, [worker]);
 
   const {
     control,
@@ -79,10 +67,15 @@ const HandOverHarvest = () => {
     resolver: yupResolver(validation.createHarvest),
   });
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        isDeviceConnected ? <IconButton icon="weight-kilogram" iconColor={colors.white} size={30} /> : null,
+    });
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
-      dispatch(setWeight(null));
-
       if (harvest.workerUuid) {
         setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
@@ -124,7 +117,7 @@ const HandOverHarvest = () => {
           }
         });
       }
-    }, [activeDeviceId, connectedDevices, dispatch, firestorePrefix, harvest.workerUuid, isDeviceConnected]),
+    }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
 
   useEffect(() => {
@@ -175,7 +168,10 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.worker}
           </Text>
-          <Text variant="titleLarge">{workerName}</Text>
+          <Text variant="headlineSmall">
+            {worker && getFullname(worker)}{' '}
+            {worker && worker?.status !== WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
+          </Text>
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
