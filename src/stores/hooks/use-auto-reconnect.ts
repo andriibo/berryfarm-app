@@ -15,6 +15,7 @@ export const useAutoReconnect = (dispatch: Dispatch, devices: Device[], isDevice
 
         if (!isDeviceConnected && device) {
           try {
+            console.log('reconnected');
             connectDevice(dispatch, device, deviceConnectionListener).then();
           } catch (error) {
             disconnectDevice(dispatch, device);

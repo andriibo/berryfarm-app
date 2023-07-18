@@ -11,7 +11,7 @@ import GetQrCodeInfoStack from 'src/navigation/getQrCodeInfo.stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {useConnectedDevices, useDevices, useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 import {useStartScanBle} from 'src/stores/hooks/use-start-scan-ble';
-import {useAutoReconnect} from 'src/stores/hooks/use-auto-reconect';
+import {useAutoReconnect} from 'src/stores/hooks/use-auto-reconnect';
 
 export type DrawerStackParamList = {
   HomeStack: undefined;

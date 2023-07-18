@@ -74,7 +74,6 @@ export const strings = new LocalizedStrings({
     ok: 'OK',
     scales: 'Весы',
     searching: 'Идет поиск...',
-    search: 'Поиск',
     connecting: 'Подключение...',
     connected: 'Подключен',
     disconnect: 'Отключить',

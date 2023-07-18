@@ -5,7 +5,7 @@ import {RootState} from '../store';
 
 interface IConnectDevice {
   isInternetConnected: boolean;
-  isSearching?: boolean;
+  isBleScanning?: boolean;
   isDeviceConnected?: boolean;
   activeDeviceId?: string | null;
   devices: Device[];
@@ -15,7 +15,7 @@ interface IConnectDevice {
 
 const initialState: IConnectDevice = {
   isInternetConnected: true,
-  isSearching: true,
+  isBleScanning: false,
   isDeviceConnected: false,
   activeDeviceId: null,
   devices: [],
@@ -30,8 +30,8 @@ const connectDeviceSlice = createSlice({
     setIsInternetConnection: (state, action: PayloadAction<boolean>) => {
       state.isInternetConnected = action.payload;
     },
-    setIsSearching: (state, {payload}: PayloadAction<boolean>) => {
-      state.isSearching = payload;
+    setIsBleScanning: (state, {payload}: PayloadAction<boolean>) => {
+      state.isBleScanning = payload;
     },
     setDevices: (state, {payload}: PayloadAction<Device[]>) => {
       state.devices = payload;
@@ -52,14 +52,14 @@ const connectDeviceSlice = createSlice({
 });
 
 export const selectIsInternetConnection = (state: RootState) => state.connectDevice.isInternetConnected;
-export const selectIsSearching = (state: RootState) => state.connectDevice.isSearching;
+export const selectIsBleScanning = (state: RootState) => state.connectDevice.isBleScanning;
 export const selectIsDeviceConnected = (state: RootState) => state.connectDevice.isDeviceConnected;
 export const selectActiveDeviceId = (state: RootState) => state.connectDevice.activeDeviceId;
 export const selectDevices = (state: RootState) => state.connectDevice.devices;
 export const selectConnectedDevices = (state: RootState) => state.connectDevice.connectedDevices;
 export const selectWeight = (state: RootState) => state.connectDevice.weight;
 export const useIsInternetConnected = () => useAppSelector(selectIsInternetConnection);
-export const useIsSearching = () => useAppSelector(selectIsSearching);
+export const useIsBleScanning = () => useAppSelector(selectIsBleScanning);
 export const useIsDeviceConnected = () => useAppSelector(selectIsDeviceConnected);
 export const useActiveDeviceId = () => useAppSelector(selectActiveDeviceId);
 export const useDevices = () => useAppSelector(selectDevices);
@@ -69,7 +69,7 @@ export const useWeight = () => useAppSelector(selectWeight);
 export const {
   reducer: connectDeviceReducer,
   actions: {
-    setIsSearching,
+    setIsBleScanning,
     setIsDeviceConnected,
     setActiveDeviceId,
     setDevices,

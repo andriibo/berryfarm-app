@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {Dispatch} from '@reduxjs/toolkit';
-import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {Alert, Linking, SectionList, Text, TouchableOpacity, View} from 'react-native';
 import {BleManager, Device, Subscription} from 'react-native-ble-plx';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -12,13 +11,11 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   setConnectedDevices,
   setDevices,
-  setIsSearching,
   useActiveDeviceId,
   useConnectedDevices,
   useDevices,
+  useIsBleScanning,
   useIsDeviceConnected,
-  useIsInternetConnected,
-  useIsSearching,
 } from 'src/stores/slices/connect-device.slice';
 import {connectDevice} from './helpers/connect-device';
 import {disconnectDevice} from './helpers/disconnect-device';
@@ -27,15 +24,11 @@ import styles from './styles';
 import {strings} from 'src/locales/locales';
 import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
+import {stopScanBle} from 'src/screens/main/connect-ble/helpers/stop-scan-ble';
 
 export const bleManager = new BleManager();
 const ItemSeparatorComponent = () => <View style={styles.separator} />;
 const ListEmptyComponent = () => <Text style={styles.boldTextStyle}>{strings.noDevices}</Text>;
-
-const stopDeviceScan = (dispatch: Dispatch) => {
-  dispatch(setIsSearching(false));
-  bleManager.stopDeviceScan();
-};
 
 const ConnectBle = () => {
   const insets = useSafeAreaInsets();
@@ -43,62 +36,28 @@ const ConnectBle = () => {
   const dispatch = useAppDispatch();
   const devices = useDevices();
   const connectedDevices = useConnectedDevices();
-  const isSearching = useIsSearching();
+  const isBleScanning = useIsBleScanning();
   const activeDeviceId = useActiveDeviceId();
-  const isPeripheralConnected = useIsDeviceConnected();
   const deviceConnectionListener = useRef<Subscription>();
-  const isInternetConnected = useIsInternetConnected();
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectingDeviceId, setConnectingDeviceId] = useState<string | null>(null);
-
-  const handleSearch = async () => {
-    if (!isSearching) {
-      dispatch(setDevices([]));
-      dispatch(setIsSearching(true));
-      await startScanBle(dispatch, devices, connectedDevices);
-    } else {
-      stopDeviceScan(dispatch);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(setDevices([]));
-      if (!isPeripheralConnected) {
-        dispatch(setIsSearching(true));
-        startScanBle(dispatch, devices, connectedDevices).then();
-      }
-    }, [dispatch, isInternetConnected]),
-  );
-
-  useEffect(() => {
-    if (connectedDevices.length && !isPeripheralConnected) {
-      disconnectDevice(dispatch, connectedDevices[0]);
-      dispatch(setDevices([...devices].filter(item => item.id !== connectedDevices[0].id)));
-      handleSearch().then();
-      setIsConnecting(false);
-    }
-  }, [connectedDevices, isPeripheralConnected]);
+  const isDeviceConnected = useIsDeviceConnected();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={handleSearch}>
-          <Text style={{color: colors.white, fontSize: 17}}>{isSearching ? strings.searching : strings.search}</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () => isBleScanning && <Text style={styles.searching}>{strings.searching}</Text>,
     });
   });
 
   useEffect(() => {
     const subscription = bleManager.onStateChange(state => {
       if (state === 'PoweredOn') {
-        startScanBle(dispatch, devices, connectedDevices).then();
+        startScanBle(dispatch, devices, connectedDevices, isBleScanning).then();
         subscription.remove();
       }
 
       if (state === 'PoweredOff') {
-        stopDeviceScan(dispatch);
+        stopScanBle(dispatch);
         Alert.alert(strings.toConnectScalesNeedsTurnOnBluetooth, strings.turnOnBluetoothInParameters, [
           {
             text: strings.cancel,
@@ -115,23 +74,23 @@ const ConnectBle = () => {
     }, true);
 
     return () => subscription.remove();
-  }, [connectedDevices, devices, dispatch]);
+  }, [connectedDevices, dispatch]);
 
   const handleDisconnectByTap = async (item: Device) => {
+    stopScanBle(dispatch);
     await AsyncStorage.removeItem('deviceId');
     dispatch(setDevices([]));
     dispatch(setConnectedDevices([]));
     disconnectDevice(dispatch, item);
-    await startScanBle(dispatch, devices, connectedDevices);
+    await startScanBle(dispatch, devices, connectedDevices, isBleScanning);
   };
 
   const pairWithDevice = async (item: Device) => {
     bleManager.stopDeviceScan();
-    dispatch(setIsSearching(false));
     try {
-      const isDeviceConnected = await bleManager.isDeviceConnected(item.id);
+      const isConnected = await bleManager.isDeviceConnected(item.id);
 
-      if (isDeviceConnected) {
+      if (isConnected) {
         Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${item.id} ${item.name}?`, [
           {
             text: strings.cancel,
@@ -143,10 +102,12 @@ const ConnectBle = () => {
           },
         ]);
       } else {
-        await setConnectingDeviceId(item.id);
-        await setIsConnecting(true);
+        setConnectingDeviceId(item.id);
+        setIsConnecting(true);
         await connectDevice(dispatch, item, deviceConnectionListener);
+        dispatch(setConnectedDevices([]));
         setConnectingDeviceId(null);
+        setTimeout(() => navigation.navigate('Home'), 2000);
       }
     } catch (err) {
       if (err === `${item.id} ${strings.disconnected}.`) {
@@ -162,7 +123,6 @@ const ConnectBle = () => {
       disconnectDevice(dispatch, item);
       setIsConnecting(false);
       setConnectingDeviceId(null);
-      handleSearch().then();
     } finally {
       setIsConnecting(false);
       setConnectingDeviceId(null);
@@ -194,10 +154,14 @@ const ConnectBle = () => {
         <Text style={styles.itemText}>
           {item.id} {item.name}
         </Text>
-        {connectingDeviceId === item.id && isConnecting && <Text>{strings.connecting}</Text>}
-        {activeDeviceId === item.id && !isConnecting && <Text>{strings.connected}</Text>}
+        {connectingDeviceId === item.id && !isDeviceConnected && isConnecting && <Text>{strings.connecting}</Text>}
+        {activeDeviceId === item.id && isDeviceConnected && <Text>{strings.connected}</Text>}
       </View>
-      <IconButton icon="bluetooth" iconColor={activeDeviceId === item.id ? colors.primary : colors.black} size={20} />
+      <IconButton
+        icon="bluetooth"
+        iconColor={activeDeviceId === item.id && isDeviceConnected ? colors.primary : colors.black}
+        size={20}
+      />
     </TouchableOpacity>
   );
 
