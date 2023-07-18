@@ -9,6 +9,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  searching: {color: colors.white, fontSize: 17},
   item: {
     alignItems: 'flex-start',
     justifyContent: 'center',

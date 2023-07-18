@@ -11,6 +11,7 @@ import {
 import {bleManager} from '../ConnectBle';
 import {Config} from 'react-native-config';
 import {Buffer} from 'buffer';
+import {disconnectDevice} from 'src/screens/main/connect-ble/helpers/disconnect-device';
 
 type FilteredCharacteristic = Characteristic[];
 const defaultFilteredCharacteristic: FilteredCharacteristic = [];
@@ -24,10 +25,10 @@ export const connectDevice = async (
     return;
   }
 
-  const deviceObject = await bleManager.connectToDevice(device.id, {autoConnect: false, requestMTU: 100});
+  const deviceObject = await bleManager.connectToDevice(device.id, {autoConnect: true});
 
   await deviceObject.onDisconnected(() => {
-    dispatch(setIsDeviceConnected(false));
+    disconnectDevice(dispatch, device);
     deviceConnectionListener.current && deviceConnectionListener.current?.remove();
     deviceConnectionListener.current = undefined;
   });
@@ -37,7 +38,6 @@ export const connectDevice = async (
   if (isDeviceConnected) {
     dispatch(setIsDeviceConnected(true));
     dispatch(setActiveDeviceId(device.id));
-    dispatch(setConnectedDevices([]));
     dispatch(setConnectedDevices([device]));
     await AsyncStorage.setItem('deviceId', device.id);
 
