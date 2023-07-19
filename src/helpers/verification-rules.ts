@@ -21,7 +21,7 @@ export const validation = {
   }),
   createHarvest: yup
     .object({
-      qty: yup.number().required(errorMessages.required),
+      qty: yup.number().typeError(errorMessages.number).required(errorMessages.required).min(1, errorMessages.minQty),
       harvestPackageId: yup.number().required(errorMessages.required),
       locationId: yup.number().required(errorMessages.required),
       productId: yup.number().required(errorMessages.required),
