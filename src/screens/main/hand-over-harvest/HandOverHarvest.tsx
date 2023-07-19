@@ -169,8 +169,14 @@ const HandOverHarvest = () => {
             {strings.worker}
           </Text>
           <Text variant="headlineSmall">
-            {worker && getFullname(worker)}{' '}
-            {worker && worker?.status !== WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
+            {worker && getFullname(worker)}
+            {worker && worker?.status !== WorkerStatus.active && (
+              <>
+                {' '}
+                <Badge size={30}>{strings.notActive}</Badge>
+              </>
+            )}
+            {!worker && strings.harvestTemporarilyFixedForWorkerQrCode}
           </Text>
         </View>
         <View>
@@ -242,7 +248,7 @@ const HandOverHarvest = () => {
                     keyboardType="decimal-pad"
                     mode="flat"
                     onChangeText={text => {
-                      field.onChange(Number(text));
+                      field.onChange(text);
                     }}
                     style={{width: '100%'}}
                     testID="weightTotal"
