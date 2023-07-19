@@ -241,7 +241,7 @@ const HandOverHarvest = () => {
                     inputMode="decimal"
                     keyboardType="decimal-pad"
                     mode="flat"
-                    onChange={text => {
+                    onChangeText={text => {
                       field.onChange(Number(text));
                     }}
                     style={{width: '100%'}}
