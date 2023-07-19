@@ -242,7 +242,7 @@ const HandOverHarvest = () => {
                     keyboardType="decimal-pad"
                     mode="flat"
                     onChangeText={text => {
-                      field.onChange(text);
+                      field.onChange(Number(text));
                     }}
                     style={{width: '100%'}}
                     testID="weightTotal"
