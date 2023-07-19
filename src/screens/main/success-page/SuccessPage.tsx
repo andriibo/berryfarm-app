@@ -29,7 +29,7 @@ const SuccessPage = () => {
             <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
               {strings.toTemplates}
             </Button>
-            <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
+            <Button mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
               {strings.hangOverAnotherHarvest}
             </Button>
           </>
