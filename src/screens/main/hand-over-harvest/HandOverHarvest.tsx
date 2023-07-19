@@ -169,8 +169,14 @@ const HandOverHarvest = () => {
             {strings.worker}
           </Text>
           <Text variant="headlineSmall">
-            {worker && getFullname(worker)}{' '}
-            {worker && worker?.status !== WorkerStatus.active && <Badge size={30}>{strings.notActive}</Badge>}
+            {worker && getFullname(worker)}
+            {worker && worker?.status !== WorkerStatus.active && (
+              <>
+                {' '}
+                <Badge size={30}>{strings.notActive}</Badge>
+              </>
+            )}
+            {!worker && strings.harvestTemporarilyFixedForWorkerQrCode}
           </Text>
         </View>
         <View>
