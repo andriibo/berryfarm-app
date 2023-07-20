@@ -51,7 +51,7 @@ const ConnectBle = () => {
   useEffect(() => {
     const subscription = bleManager.onStateChange(state => {
       if (state === 'PoweredOn') {
-        startScanBle(dispatch, devices, connectedDevices, isBleScanning).then();
+        startScanBle(dispatch, devices, connectedDevices, isBleScanning, navigation).then();
         subscription.remove();
       }
 
@@ -61,6 +61,7 @@ const ConnectBle = () => {
           {
             text: strings.cancel,
             style: 'cancel',
+            onPress: () => navigation.goBack(),
           },
           {
             text: strings.settings,
@@ -79,7 +80,7 @@ const ConnectBle = () => {
     stopScanBle(dispatch);
     await AsyncStorage.removeItem('deviceId');
     disconnectDevice(dispatch, item);
-    await startScanBle(dispatch, devices, connectedDevices, isBleScanning);
+    await startScanBle(dispatch, devices, connectedDevices, isBleScanning, navigation);
   };
 
   const pairWithDevice = async (device: Device) => {

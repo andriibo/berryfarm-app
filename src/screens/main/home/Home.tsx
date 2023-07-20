@@ -40,10 +40,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
-      <TouchableOpacity
-        // disabled={isDeviceConnected}
-        onPress={() => navigation.navigate('ConnectBle')}
-        style={styles.deviceStateWrapper}>
+      <TouchableOpacity onPress={() => navigation.navigate('ConnectBle')} style={styles.deviceStateWrapper}>
         <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
         <Text style={styles.deviceState}>{deviceState.title}</Text>
       </TouchableOpacity>

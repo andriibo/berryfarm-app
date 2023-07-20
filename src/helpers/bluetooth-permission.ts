@@ -2,11 +2,11 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {isIOS, systemAlert} from 'src/constants/constants';
 import {PermissionsAndroid} from 'react-native';
 import {strings} from 'src/locales/locales';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const message =
-  'To connect to a scales, we need access to your Bluetooth. Go to settings to enable the Bluetooth permission.';
+const message = strings.toConnectToScalesWeNeedAccessToYourBluetooth;
 
-export async function requestBluetoothPermission() {
+export async function requestBluetoothPermission(navigation?: NativeStackNavigationProp<any>) {
   try {
     if (isIOS) {
       const isAlreadyGrantedIOS = await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
@@ -24,7 +24,7 @@ export async function requestBluetoothPermission() {
           return true;
         }
 
-        systemAlert(strings.bluetoothPermissionRequest, message);
+        systemAlert(strings.bluetoothPermissionRequest, message, navigation);
       });
     }
 
@@ -36,19 +36,19 @@ export async function requestBluetoothPermission() {
         return true;
       }
 
-      const perm = await PermissionsAndroid.requestMultiple([
+      const permission = await PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
       ]);
 
       if (
-        perm['android.permission.BLUETOOTH_CONNECT'] === 'granted' &&
-        perm['android.permission.BLUETOOTH_SCAN'] === 'granted'
+        permission['android.permission.BLUETOOTH_CONNECT'] === 'granted' &&
+        permission['android.permission.BLUETOOTH_SCAN'] === 'granted'
       ) {
         return true;
       }
 
-      systemAlert(strings.bluetoothPermissionRequest, message);
+      systemAlert(strings.bluetoothPermissionRequest, message, navigation);
     }
   } catch (err) {
     console.warn(err);

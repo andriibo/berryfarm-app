@@ -82,11 +82,15 @@ export const strings = new LocalizedStrings({
     unableConnectScales: 'Не удается подключиться к весам. Пожалуйста, попробуйте еще раз.',
     bluetoothPermissionRequest: 'Запрос разрешения Bluetooth',
     locationPermissionRequest: 'Запрос на разрешение местоположения',
+    cameraPermissionRequest: 'Запрос использования камеры',
     toConnectToScalesWeNeedAccessToYourLocation:
       'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',
+    toConnectToScalesWeNeedAccessToYourBluetooth:
+      'Для подключения к весам нам нужен доступ к Bluetooth. Перейдите в настройки, чтобы включить разрешение на использование Bluetooth.',
+    toScanQrCodeWeNeedAccessToYourCamera:
+      'Для сканирования QR кода нам нужен доступ к камере. Перейдите в настройки, чтобы включить разрешение на использование камеры.',
     locationPermissionForBluetoothScanning: 'Разрешение местоположения для сканирования Bluetooth',
     pleaseProvide: 'Пожалуйста предоставьте',
-    askMeLater: 'Спросите меня позже',
     noDevices: 'Нет устройств',
     couldNotGetDataFromScales: 'Не удалось получить данные с весов',
     enterDataManually: 'Ввести данные вручную',
