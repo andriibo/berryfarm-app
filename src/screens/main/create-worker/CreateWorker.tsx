@@ -73,14 +73,14 @@ const CreateWorker = () => {
         navigation.navigate('ScanQrCode', {
           scenario: ScenariosEnum.createWorker,
         });
-        setLoader(false);
       } catch (error: any) {
-        setLoader(false);
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(strings.incorrectUsername));
         } else {
           console.error(error);
         }
+      } finally {
+        setLoader(false);
       }
     },
     [dispatch, firestorePrefix, navigation, reset],
