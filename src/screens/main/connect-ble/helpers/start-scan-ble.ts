@@ -6,6 +6,7 @@ import {setDevices, setIsBleScanning} from 'src/stores/slices/connect-device.sli
 import {bleManager} from '../ConnectBle';
 import {bleTechnowagy} from 'src/constants/constants';
 import {stopScanBle} from 'src/screens/main/connect-ble/helpers/stop-scan-ble';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 let timeout: number | ReturnType<typeof setTimeout> = 0;
 
@@ -14,9 +15,10 @@ export const startScanBle = async (
   devices: Device[],
   connectedDevices: Device[],
   isBleScanning?: boolean,
+  navigation?: NativeStackNavigationProp<any>,
 ) => {
-  const isGrantedLocation = await requestLocationPermission();
-  const isGrantedBluetooth = await requestBluetoothPermission();
+  const isGrantedLocation = await requestLocationPermission(navigation);
+  const isGrantedBluetooth = await requestBluetoothPermission(navigation);
 
   clearTimeout(timeout);
 
