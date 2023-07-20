@@ -7,7 +7,7 @@ import {HeaderLeft} from 'src/components/header-left';
 import {drawerOptions, DrawerStackParamList} from 'src/navigation/drawer.stack';
 import {IconButton} from 'react-native-paper';
 import {colors} from 'src/styles/colors';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 
 export type GetQrCodeInfoStackParamList = {
   ScanQrCode: {scenario: ScenariosEnum};
@@ -49,7 +49,15 @@ const GetQrCodeInfoStack = () => {
             <IconButton
               icon="arrow-left"
               iconColor={colors.white}
-              onPress={() => navigation.navigate('HomeStack')}
+              onPress={() => {
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [{name: 'ScanQrCode'}],
+                  }),
+                );
+                navigation.navigate('HomeStack');
+              }}
               size={20}
             />
           ),
