@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import styles from 'src/screens/main/scan-qr-code/styles';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {getQrCodeByUuid, updateQrCode} from 'src/stores/services/firestore.service';
-import {RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useFocusEffect, useNavigation, useRoute} from '@react-navigation/native';
 import {useWorker} from 'src/stores/slices/worker.slice';
 import {strings} from 'src/locales/locales';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,6 +19,7 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
 import {setQrCode} from 'src/stores/slices/qrCode.slice';
 import {requestCameraPermission} from 'src/helpers/camera-permission';
+import {Loader} from 'src/components/loader';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const ScanQrCode = () => {
   const worker = useWorker();
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
-  const focus = useIsFocused();
+  const [loader, setLoader] = useState(false);
   const {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
@@ -41,15 +42,11 @@ const ScanQrCode = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true);
       scanner.current?.reactivate();
-    }, []),
+      requestCameraPermission(navigation).then(() => setLoader(false));
+    }, [navigation]),
   );
-
-  useEffect(() => {
-    if (focus) {
-      requestCameraPermission(navigation).then();
-    }
-  });
 
   const showAlert = useCallback(
     (message: string) => {
@@ -142,6 +139,10 @@ const ScanQrCode = () => {
     },
     [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
   );
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <QRCodeScanner
