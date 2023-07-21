@@ -11,8 +11,9 @@ export const errorMessages = {
   firstName: strings.maxFirstNameCharacters,
   lastName: strings.maxLastNameCharacters,
   middleName: strings.maxMiddleNameCharacters,
-  minWeight: strings.minWeight,
-  maxWeight: strings.maxWeight,
+  minWeight: strings.minValue01,
+  maxWeight: strings.maxValue999999,
+  minQty: strings.minValue1,
 } as const;
 
 export const isIOS = Platform.OS === 'ios';

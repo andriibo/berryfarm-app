@@ -15,6 +15,11 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: colors.outline,
   },
+  labelManual: {
+    alignItems: 'center',
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'solid',
+  },
   btn: {
     width: Dimensions.get('window').width - 100,
   },

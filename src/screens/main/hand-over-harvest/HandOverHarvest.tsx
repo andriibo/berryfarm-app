@@ -207,9 +207,32 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.numberOfBoxes}
           </Text>
-          <Text variant="headlineSmall">
-            {harvest.qty} {strings.items}
-          </Text>
+          {harvest.qty !== null && <Text variant="headlineSmall">{harvest.qty}</Text>}
+          {harvest.qty === null && (
+            <Controller
+              control={control}
+              name="qty"
+              render={({field}) => (
+                <View>
+                  <TextInput
+                    error={Boolean(errors.qty)}
+                    inputMode="numeric"
+                    keyboardType="numeric"
+                    mode="outlined"
+                    onChangeText={text => {
+                      field.onChange(text);
+                    }}
+                    style={{width: '100%'}}
+                    testID="createWorkerQty"
+                    value={field.value === null ? '' : `${field.value}`}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.qty)}>
+                    {errors.qty?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
@@ -222,13 +245,7 @@ const HandOverHarvest = () => {
               </Text>
               <IconButton icon="alert-circle-check-outline" size={40} />
               <TouchableOpacity onPress={() => setManualInput(true)}>
-                <Text
-                  style={{
-                    alignItems: 'center',
-                    textDecorationLine: 'underline',
-                    textDecorationStyle: 'solid',
-                  }}
-                  variant="headlineSmall">
+                <Text style={styles.labelManual} variant="headlineSmall">
                   {strings.enterDataManually}
                 </Text>
               </TouchableOpacity>
@@ -241,18 +258,17 @@ const HandOverHarvest = () => {
               render={({field}) => (
                 <View>
                   <TextInput
-                    {...field}
                     disabled={!manualInput}
                     error={Boolean(errors.weightTotal)}
                     inputMode="decimal"
                     keyboardType="decimal-pad"
-                    mode="flat"
+                    mode="outlined"
                     onChangeText={text => {
                       field.onChange(text);
                     }}
                     style={{width: '100%'}}
                     testID="weightTotal"
-                    value={manualInput && weightTotal === 0 ? '' : `${weightTotal}`}
+                    value={manualInput && field.value === 0 ? '' : `${field.value}`}
                   />
                   <HelperText type="error" visible={Boolean(errors.weightTotal)}>
                     {errors.weightTotal?.message}
