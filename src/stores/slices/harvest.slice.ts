@@ -1,9 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {HarvestPackage} from 'src/stores/types/harvestPackage.type';
-import {Location} from 'src/stores/types/location.type';
 import {Product} from 'src/stores/types/product.type';
 import {ProductQuality} from 'src/stores/types/productQuality.type';
 
@@ -12,7 +10,10 @@ export type IHarvest = {
   workerUuid?: string;
   qrCodeUuid?: string;
   harvestPackage: HarvestPackage;
-  location: Location;
+  location: {
+    id: number;
+    title: string;
+  };
   product: Product;
   productQuality: ProductQuality;
 };

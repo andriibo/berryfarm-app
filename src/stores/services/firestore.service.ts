@@ -8,6 +8,7 @@ import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
+import {Location} from 'src/stores/types/location.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -15,6 +16,7 @@ const workersCollection = '%sworkers';
 const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
+const locationsCollection = '%slocations';
 
 export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
@@ -66,6 +68,27 @@ export const getTemplates = async (prefix: string) => {
   });
 
   return templates;
+};
+
+export const getLocations = async (prefix: string) => {
+  const collection = sprintf(locationsCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const locations: Location[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      locations.push(doc.data() as Location);
+    }
+  });
+
+  return locations;
 };
 
 export const getQrCodes = async (prefix: string) => {
@@ -251,6 +274,7 @@ export const initData = async (prefix: string) => {
     await getWorkers(prefix);
     await getQrCodes(prefix);
     await getTemplates(prefix);
+    await getLocations(prefix);
   } catch (error: any) {
     throw new FirestoreServiceError(error);
   }
