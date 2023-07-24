@@ -207,8 +207,9 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.numberOfBoxes}
           </Text>
-          {harvest.qty !== null && <Text variant="headlineSmall">{harvest.qty}</Text>}
-          {harvest.qty === null && (
+          {harvest.qty !== null ? (
+            <Text variant="headlineSmall">{harvest.qty}</Text>
+          ) : (
             <Controller
               control={control}
               name="qty"
@@ -219,9 +220,8 @@ const HandOverHarvest = () => {
                     inputMode="numeric"
                     keyboardType="numeric"
                     mode="outlined"
-                    onChangeText={text => {
-                      field.onChange(text);
-                    }}
+                    // @ts-ignore
+                    onChangeText={field.onChange}
                     style={{width: '100%'}}
                     testID="createWorkerQty"
                     value={field.value === null ? '' : `${field.value}`}
@@ -263,9 +263,8 @@ const HandOverHarvest = () => {
                     inputMode="decimal"
                     keyboardType="decimal-pad"
                     mode="outlined"
-                    onChangeText={text => {
-                      field.onChange(text);
-                    }}
+                    // @ts-ignore
+                    onChangeText={field.onChange}
                     style={{width: '100%'}}
                     testID="weightTotal"
                     value={manualInput && field.value === 0 ? '' : `${field.value}`}

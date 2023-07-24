@@ -6,32 +6,32 @@ import {strings} from 'src/locales/locales';
 import {HeaderLeft} from 'src/components/header-left';
 import {drawerOptions} from 'src/navigation/drawer.stack';
 
-export type GiveQrCodeStackParamList = {
-  GiveQrCode: undefined;
+export type AssignQrCodeStackParamList = {
+  AssignQrCode: undefined;
   CreateWorkerStack: undefined;
   ScanQrCode: {scenario?: ScenariosEnum};
   SuccessPage: {scenario: ScenariosEnum};
 };
 
-const GiveQrCodeStackComponent = createNativeStackNavigator<GiveQrCodeStackParamList>();
+const AssignQrCodeStackComponent = createNativeStackNavigator<AssignQrCodeStackParamList>();
 
-export const GiveQrCodeStack = () => {
+export const AssignQrCodeStack = () => {
   return (
-    <GiveQrCodeStackComponent.Navigator initialRouteName="GiveQrCode">
-      <GiveQrCodeStackComponent.Screen
-        component={Screens.GiveQrCode}
-        name="GiveQrCode"
+    <AssignQrCodeStackComponent.Navigator initialRouteName="AssignQrCode">
+      <AssignQrCodeStackComponent.Screen
+        component={Screens.AssignQrCode}
+        name="AssignQrCode"
         options={{
           ...drawerOptions,
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          title: strings.giveQrCode,
+          title: strings.assignQrCode,
           headerLeft: () => <HeaderLeft />,
         }}
       />
-      <GiveQrCodeStackComponent.Screen
+      <AssignQrCodeStackComponent.Screen
         component={Screens.ScanQrCode}
         name="ScanQrCode"
         options={{
@@ -44,7 +44,7 @@ export const GiveQrCodeStack = () => {
           headerLeft: () => <HeaderLeft />,
         }}
       />
-      <GiveQrCodeStackComponent.Screen
+      <AssignQrCodeStackComponent.Screen
         component={Screens.CreateWorker}
         name="CreateWorkerStack"
         options={{
@@ -56,7 +56,7 @@ export const GiveQrCodeStack = () => {
           title: strings.registration,
         }}
       />
-      <GiveQrCodeStackComponent.Screen
+      <AssignQrCodeStackComponent.Screen
         component={Screens.SuccessPage}
         name="SuccessPage"
         options={{
@@ -65,12 +65,12 @@ export const GiveQrCodeStack = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          title: strings.giveQrCode,
+          title: strings.assignQrCode,
           headerLeft: () => null,
         }}
       />
-    </GiveQrCodeStackComponent.Navigator>
+    </AssignQrCodeStackComponent.Navigator>
   );
 };
 
-export default GiveQrCodeStack;
+export default AssignQrCodeStack;
