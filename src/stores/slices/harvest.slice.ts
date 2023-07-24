@@ -1,18 +1,19 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
 import {useAppSelector} from 'src/stores/hooks/hooks';
 import {RootState} from 'src/stores/store';
 import {HarvestPackage} from 'src/stores/types/harvestPackage.type';
-import {Location} from 'src/stores/types/location.type';
 import {Product} from 'src/stores/types/product.type';
 import {ProductQuality} from 'src/stores/types/productQuality.type';
 
 export type IHarvest = {
-  qty: number;
+  qty: number | null;
   workerUuid?: string;
   qrCodeUuid?: string;
   harvestPackage: HarvestPackage;
-  location: Location;
+  location: {
+    id: number;
+    title: string;
+  } | null;
   product: Product;
   productQuality: ProductQuality;
 };
@@ -23,15 +24,12 @@ type IHarvestState = {
 
 const initialState: IHarvestState = {
   harvest: {
-    qty: 0,
+    qty: null,
     harvestPackage: {
       id: 0,
       title: '',
     },
-    location: {
-      id: 0,
-      title: '',
-    },
+    location: null,
     product: {
       id: 0,
       title: '',
@@ -57,17 +55,14 @@ const harvestSlice = createSlice({
       state.harvest.productQuality = payload.productQuality;
     },
     cleanHarvest: (state: IHarvestState) => {
-      state.harvest.qty = 0;
+      state.harvest.qty = null;
       state.harvest.workerUuid = undefined;
       state.harvest.qrCodeUuid = undefined;
       state.harvest.harvestPackage = {
         id: 0,
         title: '',
       };
-      state.harvest.location = {
-        id: 0,
-        title: '',
-      };
+      state.harvest.location = null;
       state.harvest.product = {
         id: 0,
         title: '',

@@ -47,7 +47,7 @@ const AssignQrCode = () => {
       setCanScanQrCode(false);
       setFoundWorkers([]);
       getWorkers(firestorePrefix)
-        .then(data => setWorkers(data))
+        .then(setWorkers)
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
             dispatch(addErrorNotification(error.message));

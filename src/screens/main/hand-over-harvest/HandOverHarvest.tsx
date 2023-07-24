@@ -11,7 +11,7 @@ import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
-import {createHarvest, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {createHarvest, getLocations, getWorkerByUuid} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
@@ -30,6 +30,7 @@ import {
   useWeight,
 } from 'src/stores/slices/connect-device.slice';
 import {Buffer} from 'buffer';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -46,6 +47,9 @@ const HandOverHarvest = () => {
   const weightFromScales = useWeight();
   const [manualInput, setManualInput] = useState(false);
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
+  const [openDropdownLocations, setOpenDropdownLocations] = useState(false);
+  const [locationId, setLocationId] = useState<number | null>(null);
+  const [locations, setLocations] = useState<Array<any>>([]);
 
   const {
     control,
@@ -56,9 +60,9 @@ const HandOverHarvest = () => {
     formState: {errors, isDirty, isValid},
   } = useForm<HarvestRequest>({
     defaultValues: {
-      qty: harvest.qty,
+      qty: harvest.qty ?? undefined,
       harvestPackageId: harvest.harvestPackage.id,
-      locationId: harvest.location.id,
+      locationId: harvest.location?.id,
       productId: harvest.product.id,
       productQualityId: harvest.productQuality.id,
       weightTotal: 0,
@@ -69,6 +73,7 @@ const HandOverHarvest = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () =>
         isDeviceConnected ? <IconButton icon="weight-kilogram" iconColor={colors.white} size={30} /> : null,
     });
@@ -76,8 +81,8 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true);
       if (harvest.workerUuid) {
-        setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
@@ -93,7 +98,36 @@ const HandOverHarvest = () => {
               console.error(error);
             }
           })
-          .finally(() => setLoader(false));
+          .finally(() => {
+            if (harvest.location || (!harvest.location && locations.length)) {
+              setLoader(false);
+            }
+          });
+      }
+
+      if (!harvest.location) {
+        getLocations(firestorePrefix)
+          .then(data => {
+            const items: any[] = [];
+
+            data.forEach(location => {
+              items.push({label: location.title, value: location.id});
+            });
+
+            setLocations(items);
+          })
+          .catch(error => {
+            if (error instanceof FirestoreServiceError) {
+              dispatch(addErrorNotification(error.message));
+            } else {
+              console.error(error);
+            }
+          })
+          .finally(() => {
+            if (!harvest.workerUuid || (harvest.workerUuid && worker)) {
+              setLoader(false);
+            }
+          });
       }
 
       if (isDeviceConnected) {
@@ -116,6 +150,10 @@ const HandOverHarvest = () => {
             });
           }
         });
+      }
+
+      if (!harvest.workerUuid && !harvest.location) {
+        setLoader(false);
       }
     }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
@@ -169,21 +207,54 @@ const HandOverHarvest = () => {
             {strings.worker}
           </Text>
           <Text variant="headlineSmall">
-            {worker && getFullname(worker)}
+            {worker ? getFullname(worker) : strings.harvestTemporarilyFixedForWorkerQrCode}
             {worker && worker?.status !== WorkerStatus.active && (
               <>
                 {' '}
                 <Badge size={30}>{strings.notActive}</Badge>
               </>
             )}
-            {!worker && strings.harvestTemporarilyFixedForWorkerQrCode}
           </Text>
         </View>
-        <View>
+        <View style={{zIndex: 1000}}>
           <Text style={styles.label} variant="headlineSmall">
             {strings.location}
           </Text>
-          <Text variant="headlineSmall">{harvest.location.title}</Text>
+          {harvest.location ? (
+            <Text variant="headlineSmall">{harvest.location?.title}</Text>
+          ) : (
+            <Controller
+              control={control}
+              name="locationId"
+              render={() => (
+                <View>
+                  <DropDownPicker
+                    items={locations}
+                    language="RU"
+                    listMode="MODAL"
+                    multiple={false}
+                    onChangeValue={value => {
+                      setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true});
+                    }}
+                    open={openDropdownLocations}
+                    searchable={true}
+                    setItems={setLocations}
+                    setOpen={setOpenDropdownLocations}
+                    setValue={setLocationId}
+                    style={{
+                      backgroundColor: colors.background,
+                      borderRadius: 4,
+                    }}
+                    textStyle={{fontSize: 18}}
+                    value={locationId}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.locationId)}>
+                    {errors.locationId?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
@@ -224,7 +295,7 @@ const HandOverHarvest = () => {
                     onChangeText={field.onChange}
                     style={{width: '100%'}}
                     testID="createWorkerQty"
-                    value={field.value === null ? '' : `${field.value}`}
+                    value={field.value == null ? '' : `${field.value}`}
                   />
                   <HelperText type="error" visible={Boolean(errors.qty)}>
                     {errors.qty?.message}

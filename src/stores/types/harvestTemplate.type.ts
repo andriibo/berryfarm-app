@@ -1,13 +1,15 @@
 import {HarvestPackage} from 'src/stores/types/harvestPackage.type';
-import {Location} from 'src/stores/types/location.type';
 import {Product} from 'src/stores/types/product.type';
 import {ProductQuality} from 'src/stores/types/productQuality.type';
 
 export type HarvestTemplate = {
   id: number;
-  qty: number;
+  qty: number | null;
   harvestPackage: HarvestPackage;
-  location: Location;
+  location: {
+    id: number;
+    title: string;
+  } | null;
   product: Product;
   productQuality: ProductQuality;
 };
