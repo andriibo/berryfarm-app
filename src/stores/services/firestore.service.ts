@@ -8,7 +8,7 @@ import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {Location} from 'src/stores/types/location.type';
+import {Location, LocationStatus} from 'src/stores/types/location.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -75,6 +75,7 @@ export const getLocations = async (prefix: string) => {
 
   const snapshot = await firestore()
     .collection(collection)
+    .where('status', '==', LocationStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);
