@@ -23,16 +23,18 @@ const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (t
     <Surface elevation={4} style={styles.surface}>
       <View style={styles.titleWrapper}>
         <Text variant="headlineLarge">{template.product.title}</Text>
-        <Text variant="headlineLarge">{template.location.title}</Text>
+        <Text variant="headlineLarge">{template.location?.title}</Text>
       </View>
       <View style={styles.titleWrapper}>
         <Text variant="titleLarge">{template.productQuality.title}</Text>
       </View>
       <View style={styles.titleWrapper}>
         <Text variant="titleLarge">{template.harvestPackage.title}</Text>
-        <Text variant="titleLarge">
-          {template.qty} {strings.items}
-        </Text>
+        {template.qty && (
+          <Text variant="titleLarge">
+            {template.qty} {strings.items}
+          </Text>
+        )}
       </View>
     </Surface>
   </TouchableOpacity>
@@ -48,7 +50,7 @@ const Templates = () => {
   useEffect(() => {
     setLoader(true);
     getTemplates(firestorePrefix)
-      .then(data => setTemplates(data))
+      .then(setTemplates)
       .catch(error => {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));

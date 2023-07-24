@@ -94,5 +94,6 @@ export const strings = new LocalizedStrings({
     noDevices: 'Нет устройств',
     couldNotGetDataFromScales: 'Не удалось получить данные с весов',
     enterDataManually: 'Ввести данные вручную',
+    items: 'шт.',
   },
 });

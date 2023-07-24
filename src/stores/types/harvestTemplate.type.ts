@@ -4,12 +4,12 @@ import {ProductQuality} from 'src/stores/types/productQuality.type';
 
 export type HarvestTemplate = {
   id: number;
-  qty: number;
+  qty: number | null;
   harvestPackage: HarvestPackage;
   location: {
     id: number;
     title: string;
-  };
+  } | null;
   product: Product;
   productQuality: ProductQuality;
 };
