@@ -13,7 +13,7 @@ import {HomeStackParamList} from 'src/navigation/home.stack';
 
 const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
-  {title: strings.giveQrCode, destination: 'GiveQrCodeStack'},
+  {title: strings.assignQrCode, destination: 'AssignQrCodeStack'},
   {title: strings.templates, destination: 'HandOverHarvestStack'},
   {title: strings.qrCodeInfo, destination: 'GetQrCodeInfoStack'},
 ];

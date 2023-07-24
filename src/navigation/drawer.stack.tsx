@@ -3,7 +3,7 @@ import React from 'react';
 import {colors} from 'src/styles/colors';
 import {Logout} from 'src/screens/main/logout';
 import HandOverHarvestStack from 'src/navigation/handOverHarvest.stack';
-import GiveQrCodeStack from 'src/navigation/giveQrCode.stack';
+import AssignQrCodeStack from 'src/navigation/assignQrCode.stack';
 import CreateWorkerStack from 'src/navigation/createWorker.stack';
 import HomeStack from 'src/navigation/home.stack';
 import {strings} from 'src/locales/locales';
@@ -13,7 +13,7 @@ import {useAutoBleReconnect} from 'src/stores/hooks/use-auto-ble-reconnect';
 export type DrawerStackParamList = {
   HomeStack: undefined;
   CreateWorkerStack: undefined;
-  GiveQrCodeStack: undefined;
+  AssignQrCodeStack: undefined;
   HandOverHarvestStack: undefined;
   GetQrCodeInfoStack: undefined;
 };
@@ -67,11 +67,11 @@ const DrawerStack = () => {
         }}
       />
       <DrawerComponent.Screen
-        component={GiveQrCodeStack}
-        name="GiveQrCodeStack"
+        component={AssignQrCodeStack}
+        name="AssignQrCodeStack"
         options={{
           headerShown: false,
-          title: strings.giveQrCode,
+          title: strings.assignQrCode,
         }}
       />
       <DrawerComponent.Screen

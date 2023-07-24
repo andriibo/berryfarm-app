@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Button, Divider, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import styles from 'src/screens/main/give-qr-code/styles';
+import styles from 'src/screens/main/assign-qr-code/styles';
 import {strings} from 'src/locales/locales';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {getWorkers} from 'src/stores/services/firestore.service';
@@ -16,7 +16,7 @@ import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
-import {GiveQrCodeStackParamList} from 'src/navigation/giveQrCode.stack';
+import {AssignQrCodeStackParamList} from 'src/navigation/assignQrCode.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {debounce} from 'lodash';
 
@@ -30,9 +30,9 @@ const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker
   );
 };
 
-const GiveQrCode = () => {
+const AssignQrCode = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<GiveQrCodeStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AssignQrCodeStackParamList>>();
   const [workers, setWorkers] = useState<Array<Worker>>([]);
   const [foundWorkers, setFoundWorkers] = useState<Array<Worker>>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -147,7 +147,7 @@ const GiveQrCode = () => {
           mode="contained"
           onPress={() =>
             navigation.navigate('ScanQrCode', {
-              scenario: ScenariosEnum.giveQrCode,
+              scenario: ScenariosEnum.assignQrCode,
             })
           }
           style={[styles.btn]}>
@@ -158,4 +158,4 @@ const GiveQrCode = () => {
   );
 };
 
-export {GiveQrCode};
+export {AssignQrCode};

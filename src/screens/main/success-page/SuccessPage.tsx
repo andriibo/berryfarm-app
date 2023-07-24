@@ -50,7 +50,7 @@ const SuccessPage = () => {
             {strings.registerMore}
           </Button>
         )}
-        {scenario === ScenariosEnum.giveQrCode && (
+        {scenario === ScenariosEnum.assignQrCode && (
           <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
             {strings.giveAnotherQrCode}
           </Button>
