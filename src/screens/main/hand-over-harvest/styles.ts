@@ -3,7 +3,7 @@ import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: '7%',
     justifyContent: 'space-evenly',
   },

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
@@ -19,6 +19,7 @@ import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
 import {setQrCode} from 'src/stores/slices/qrCode.slice';
 import {requestCameraPermission} from 'src/helpers/camera-permission';
+import {Loader} from 'src/components/loader';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const ScanQrCode = () => {
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const focus = useIsFocused();
+  const [loader, setLoader] = useState(false);
   const {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
@@ -47,9 +49,10 @@ const ScanQrCode = () => {
 
   useEffect(() => {
     if (focus) {
-      requestCameraPermission(navigation).then();
+      setLoader(true);
+      requestCameraPermission(navigation).then(() => setLoader(false));
     }
-  });
+  }, [focus]);
 
   const showAlert = useCallback(
     (message: string) => {
@@ -142,6 +145,10 @@ const ScanQrCode = () => {
     },
     [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
   );
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <QRCodeScanner

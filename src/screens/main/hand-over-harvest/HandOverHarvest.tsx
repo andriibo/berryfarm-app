@@ -31,6 +31,7 @@ import {
 } from 'src/stores/slices/connect-device.slice';
 import {Buffer} from 'buffer';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {Stack} from 'react-native-spacing-system';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -215,6 +216,7 @@ const HandOverHarvest = () => {
               </>
             )}
           </Text>
+          <Stack size={20} />
         </View>
         <View style={{zIndex: 1000}}>
           <Text style={styles.label} variant="headlineSmall">
@@ -255,24 +257,28 @@ const HandOverHarvest = () => {
               )}
             />
           )}
+          <Stack size={20} />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.product}
           </Text>
           <Text variant="headlineSmall">{harvest.product.title}</Text>
+          <Stack size={20} />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
           </Text>
           <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
+          <Stack size={20} />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
           <Text variant="headlineSmall">{harvest.harvestPackage.title}</Text>
+          <Stack size={20} />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
@@ -347,6 +353,7 @@ const HandOverHarvest = () => {
               )}
             />
           )}
+          <Stack size={20} />
         </View>
         <View style={{alignItems: 'center'}}>
           <Button
@@ -356,6 +363,7 @@ const HandOverHarvest = () => {
             style={styles.btn}>
             Сохранить
           </Button>
+          <Stack size={20} />
         </View>
       </ScrollView>
     </SafeAreaView>
