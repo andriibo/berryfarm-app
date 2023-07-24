@@ -82,8 +82,8 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setLoader(true);
       if (harvest.workerUuid) {
+        setLoader(true);
         getWorkerByUuid(harvest.workerUuid, firestorePrefix)
           .then(data => {
             if (data) {
@@ -99,14 +99,11 @@ const HandOverHarvest = () => {
               console.error(error);
             }
           })
-          .finally(() => {
-            if (harvest.location || (!harvest.location && locations.length)) {
-              setLoader(false);
-            }
-          });
+          .finally(() => setLoader(false));
       }
 
       if (!harvest.location) {
+        setLoader(true);
         getLocations(firestorePrefix)
           .then(data => {
             const items: any[] = [];
@@ -124,11 +121,7 @@ const HandOverHarvest = () => {
               console.error(error);
             }
           })
-          .finally(() => {
-            if (!harvest.workerUuid || (harvest.workerUuid && worker)) {
-              setLoader(false);
-            }
-          });
+          .finally(() => setLoader(false));
       }
 
       if (isDeviceConnected) {
@@ -151,10 +144,6 @@ const HandOverHarvest = () => {
             });
           }
         });
-      }
-
-      if (!harvest.workerUuid && !harvest.location) {
-        setLoader(false);
       }
     }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
