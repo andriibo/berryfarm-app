@@ -14,6 +14,7 @@ export default StyleSheet.create({
   label: {
     fontWeight: 'bold',
     color: colors.outline,
+    alignItems: 'center',
   },
   labelManual: {
     alignItems: 'center',

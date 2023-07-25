@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
+import {ActivityIndicator, Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
 import styles from 'src/screens/main/hand-over-harvest/styles';
@@ -43,6 +43,7 @@ const HandOverHarvest = () => {
   const isDeviceConnected = useIsDeviceConnected();
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
   const [loader, setLoader] = useState(false);
+  const [loaderWeight, setLoaderWeight] = useState(false);
   const connectedDevices = useConnectedDevices();
   const activeDeviceId = useActiveDeviceId();
   const weightFromScales = useWeight();
@@ -125,28 +126,37 @@ const HandOverHarvest = () => {
       }
 
       if (isDeviceConnected) {
-        connectedDevices.forEach(connectedDevice => {
-          if (connectedDevice.id === activeDeviceId) {
-            connectedDevice.discoverAllServicesAndCharacteristics().then(device => {
-              device.services().then(services => {
-                if (services.length) {
-                  services[services.length - 1].characteristics().then(async characteristics => {
-                    characteristics.forEach(characteristic => {
-                      if (characteristic.isWritableWithResponse) {
-                        const encodedString = Buffer.from('G::W\r\n').toString('base64');
-
-                        characteristic.writeWithResponse(encodedString).then();
-                      }
-                    });
-                  });
-                }
-              });
-            });
-          }
-        });
+        getWeightFromScales();
       }
     }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
+
+  const getWeightFromScales = useCallback(() => {
+    try {
+      connectedDevices.forEach(connectedDevice => {
+        if (connectedDevice.id === activeDeviceId) {
+          connectedDevice.discoverAllServicesAndCharacteristics().then(device => {
+            device.services().then(services => {
+              if (services.length) {
+                services[services.length - 1].characteristics().then(async characteristics => {
+                  characteristics.forEach(characteristic => {
+                    if (characteristic.isWritableWithResponse) {
+                      const encodedString = Buffer.from('G::W\r\n').toString('base64');
+
+                      characteristic.writeWithResponse(encodedString).then(() => setLoaderWeight(false));
+                    }
+                  });
+                });
+              }
+            });
+          });
+        }
+      });
+    } catch (error) {
+      setLoaderWeight(false);
+      console.error(error);
+    }
+  }, [activeDeviceId, connectedDevices]);
 
   useEffect(() => {
     if (weightFromScales !== null) {
@@ -212,7 +222,10 @@ const HandOverHarvest = () => {
             {strings.location}
           </Text>
           {harvest.location ? (
-            <Text variant="headlineSmall">{harvest.location?.title}</Text>
+            <>
+              <Text variant="headlineSmall">{harvest.location?.title}</Text>
+              <Stack size={20} />
+            </>
           ) : (
             <Controller
               control={control}
@@ -246,7 +259,6 @@ const HandOverHarvest = () => {
               )}
             />
           )}
-          <Stack size={20} />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
@@ -274,7 +286,10 @@ const HandOverHarvest = () => {
             {strings.numberOfBoxes}
           </Text>
           {harvest.qty !== null ? (
-            <Text variant="headlineSmall">{harvest.qty}</Text>
+            <>
+              <Text variant="headlineSmall">{harvest.qty}</Text>
+              <Stack size={20} />
+            </>
           ) : (
             <Controller
               control={control}
@@ -300,50 +315,74 @@ const HandOverHarvest = () => {
             />
           )}
         </View>
-        <View>
-          <Text style={styles.label} variant="headlineSmall">
-            {strings.weightKg}
-          </Text>
-          {!manualInput && !isWeightFromScales && (
-            <View style={{alignItems: 'center'}}>
-              <Text style={{alignItems: 'center'}} variant="headlineSmall">
-                {strings.couldNotGetDataFromScales}
+        {!loaderWeight ? (
+          <View style={{marginTop: -10}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.label} variant="headlineSmall">
+                {strings.weightKg}
               </Text>
-              <IconButton icon="alert-circle-check-outline" size={40} />
-              <TouchableOpacity onPress={() => setManualInput(true)}>
-                <Text style={styles.labelManual} variant="headlineSmall">
-                  {strings.enterDataManually}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {(manualInput || isWeightFromScales) && (
-            <Controller
-              control={control}
-              name="weightTotal"
-              render={({field}) => (
-                <View>
-                  <TextInput
-                    disabled={!manualInput}
-                    error={Boolean(errors.weightTotal)}
-                    inputMode="decimal"
-                    keyboardType="decimal-pad"
-                    mode="outlined"
-                    // @ts-ignore
-                    onChangeText={field.onChange}
-                    style={{width: '100%'}}
-                    testID="weightTotal"
-                    value={manualInput && field.value === 0 ? '' : `${field.value}`}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.weightTotal)}>
-                    {errors.weightTotal?.message}
-                  </HelperText>
-                </View>
+              {isDeviceConnected && (
+                <IconButton
+                  icon="reload"
+                  onPress={() => {
+                    setLoaderWeight(true);
+                    setTimeout(() => getWeightFromScales(), 1000);
+                  }}
+                  size={30}
+                />
               )}
-            />
-          )}
-          <Stack size={20} />
-        </View>
+            </View>
+            {!manualInput && !isWeightFromScales && (
+              <View style={{alignItems: 'center'}}>
+                <Text style={{alignItems: 'center'}} variant="headlineSmall">
+                  {strings.couldNotGetDataFromScales}
+                </Text>
+                <IconButton icon="alert-circle-check-outline" size={40} />
+                <TouchableOpacity onPress={() => setManualInput(true)}>
+                  <Text style={styles.labelManual} variant="headlineSmall">
+                    {strings.enterDataManually}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {(manualInput || isWeightFromScales) && !loaderWeight && (
+              <Controller
+                control={control}
+                name="weightTotal"
+                render={({field}) => (
+                  <View>
+                    <TextInput
+                      disabled={!manualInput}
+                      error={Boolean(errors.weightTotal)}
+                      inputMode="decimal"
+                      keyboardType="decimal-pad"
+                      mode="outlined"
+                      // @ts-ignore
+                      onChangeText={field.onChange}
+                      style={{width: '100%'}}
+                      testID="weightTotal"
+                      value={manualInput && field.value === 0 ? '' : `${field.value}`}
+                    />
+                    <HelperText type="error" visible={Boolean(errors.weightTotal)}>
+                      {errors.weightTotal?.message}
+                    </HelperText>
+                  </View>
+                )}
+              />
+            )}
+            <Stack size={20} />
+          </View>
+        ) : (
+          <>
+            <ActivityIndicator color={colors.primary} size="small" />
+            <Stack size={20} />
+          </>
+        )}
         <View style={{alignItems: 'center'}}>
           <Button
             disabled={!isDirty || !isValid || !weightTotal}
