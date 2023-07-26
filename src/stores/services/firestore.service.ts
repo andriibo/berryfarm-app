@@ -9,6 +9,7 @@ import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {Location, LocationStatus} from 'src/stores/types/location.type';
+import {ProductQualityPackages, ProductQualityPackagesStatus} from 'src/stores/types/productQualityPackages.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -17,6 +18,7 @@ const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 const locationsCollection = '%slocations';
+const productQualityPackagesCollection = '%sproduct_quality_packages';
 
 export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
@@ -90,6 +92,51 @@ export const getLocations = async (prefix: string) => {
   });
 
   return locations;
+};
+
+export const getProductQualityPackages = async (prefix: string) => {
+  const collection = sprintf(productQualityPackagesCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .where('status', '==', ProductQualityPackagesStatus.active)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const items: ProductQualityPackages[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      items.push(doc.data() as ProductQualityPackages);
+    }
+  });
+
+  return items;
+};
+
+export const getProductQualityPackagesByProductId = async (productId: number, prefix: string) => {
+  const collection = sprintf(productQualityPackagesCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .where('product.id', '==', productId)
+    .where('status', '==', ProductQualityPackagesStatus.active)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const items: ProductQualityPackages[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      items.push(doc.data() as ProductQualityPackages);
+    }
+  });
+
+  return items;
 };
 
 export const getQrCodes = async (prefix: string) => {
@@ -276,6 +323,7 @@ export const initData = async (prefix: string) => {
     await getQrCodes(prefix);
     await getTemplates(prefix);
     await getLocations(prefix);
+    await getProductQualityPackages(prefix);
   } catch (error: any) {
     throw new FirestoreServiceError(error);
   }
