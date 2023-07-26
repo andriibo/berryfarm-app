@@ -320,6 +320,7 @@ const HandOverHarvest = () => {
                     dropDownContainerStyle={{backgroundColor: colors.background}}
                     items={productQualities}
                     language="RU"
+                    listMode="SCROLLVIEW"
                     multiple={false}
                     onChangeValue={value => {
                       setValue('productQualityId', value as number, {shouldDirty: true, shouldValidate: true});
