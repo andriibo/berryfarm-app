@@ -81,6 +81,13 @@ const HandOverHarvest = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (weightFromScales !== null) {
+      setValue('weightTotal', weightFromScales, {shouldDirty: true, shouldValidate: true});
+      setIsWeightFromScales(true);
+    }
+  }, [setValue, weightFromScales]);
+
   useFocusEffect(
     useCallback(() => {
       if (harvest.workerUuid) {
@@ -157,13 +164,6 @@ const HandOverHarvest = () => {
       console.error(error);
     }
   }, [activeDeviceId, connectedDevices]);
-
-  useEffect(() => {
-    if (weightFromScales !== null) {
-      setValue('weightTotal', weightFromScales, {shouldDirty: true, shouldValidate: true});
-      setIsWeightFromScales(true);
-    }
-  }, [setValue, weightFromScales]);
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
