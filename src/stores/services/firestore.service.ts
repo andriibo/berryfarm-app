@@ -139,6 +139,34 @@ export const getProductQualityPackagesByProductId = async (productId: number, pr
   return items;
 };
 
+export const getProductQualityPackagesByProductIdAndProductQualityId = async (
+  productId: number,
+  productQualityId: number,
+  prefix: string,
+) => {
+  const collection = sprintf(productQualityPackagesCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .where('product.id', '==', productId)
+    .where('productQuality.id', '==', productQualityId)
+    .where('status', '==', ProductQualityPackagesStatus.active)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const items: ProductQualityPackages[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      items.push(doc.data() as ProductQualityPackages);
+    }
+  });
+
+  return items;
+};
+
 export const getQrCodes = async (prefix: string) => {
   const collection = sprintf(qrCodesCollection, prefix);
   const snapshot = await firestore()
