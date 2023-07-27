@@ -11,7 +11,12 @@ import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
-import {createHarvest, getLocations, getWorkerByUuid} from 'src/stores/services/firestore.service';
+import {
+  createHarvest,
+  getLocations,
+  getProductQualityPackagesByProductId,
+  getWorkerByUuid,
+} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
@@ -50,8 +55,11 @@ const HandOverHarvest = () => {
   const [manualInput, setManualInput] = useState(false);
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
   const [openDropdownLocations, setOpenDropdownLocations] = useState(false);
+  const [openDropdownProductQualities, setOpenDropdownProductQualities] = useState(false);
   const [locationId, setLocationId] = useState<number | null>(null);
+  const [productQualityId, setProductQualityId] = useState<number | null>(null);
   const [locations, setLocations] = useState<Array<any>>([]);
+  const [productQualities, setProductQualities] = useState<Array<any>>([]);
 
   const {
     control,
@@ -63,10 +71,10 @@ const HandOverHarvest = () => {
   } = useForm<HarvestRequest>({
     defaultValues: {
       qty: harvest.qty ?? undefined,
-      harvestPackageId: harvest.harvestPackage.id,
+      harvestPackageId: harvest.harvestPackage?.id,
       locationId: harvest.location?.id,
       productId: harvest.product.id,
-      productQualityId: harvest.productQuality.id,
+      productQualityId: harvest.productQuality?.id,
       weightTotal: 0,
     },
     mode: 'onChange',
@@ -121,6 +129,31 @@ const HandOverHarvest = () => {
             });
 
             setLocations(items);
+          })
+          .catch(error => {
+            if (error instanceof FirestoreServiceError) {
+              dispatch(addErrorNotification(error.message));
+            } else {
+              console.error(error);
+            }
+          })
+          .finally(() => setLoader(false));
+      }
+
+      if (!harvest.productQuality || !harvest.harvestPackage) {
+        setLoader(true);
+        getProductQualityPackagesByProductId(harvest.product.id, firestorePrefix)
+          .then(data => {
+            const qualities: any[] = [];
+
+            data.forEach(productQualityPackages => {
+              qualities.push({
+                label: productQualityPackages.productQuality.title,
+                value: productQualityPackages.productQuality.id,
+              });
+            });
+
+            setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
           })
           .catch(error => {
             if (error instanceof FirestoreServiceError) {
@@ -223,7 +256,7 @@ const HandOverHarvest = () => {
           </Text>
           {harvest.location ? (
             <>
-              <Text variant="headlineSmall">{harvest.location?.title}</Text>
+              <Text variant="headlineSmall">{harvest.location.title}</Text>
               <Stack size={20} />
             </>
           ) : (
@@ -267,18 +300,55 @@ const HandOverHarvest = () => {
           <Text variant="headlineSmall">{harvest.product.title}</Text>
           <Stack size={20} />
         </View>
-        <View>
+        <View style={{zIndex: 1000}}>
           <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
           </Text>
-          <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
-          <Stack size={20} />
+          {harvest.productQuality ? (
+            <>
+              <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
+              <Stack size={20} />
+            </>
+          ) : (
+            <Controller
+              control={control}
+              name="productQualityId"
+              render={() => (
+                <View>
+                  <DropDownPicker
+                    containerStyle={{backgroundColor: colors.background}}
+                    dropDownContainerStyle={{backgroundColor: colors.background}}
+                    items={productQualities}
+                    language="RU"
+                    listMode="SCROLLVIEW"
+                    multiple={false}
+                    onChangeValue={value => {
+                      setValue('productQualityId', value as number, {shouldDirty: true, shouldValidate: true});
+                    }}
+                    open={openDropdownProductQualities}
+                    setItems={setProductQualities}
+                    setOpen={setOpenDropdownProductQualities}
+                    setValue={setProductQualityId}
+                    style={{
+                      backgroundColor: colors.background,
+                      borderRadius: 4,
+                    }}
+                    textStyle={{fontSize: 18}}
+                    value={productQualityId}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.productQualityId)}>
+                    {errors.productQualityId?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
-          <Text variant="headlineSmall">{harvest.harvestPackage.title}</Text>
+          <Text variant="headlineSmall">{harvest.harvestPackage?.title}</Text>
           <Stack size={20} />
         </View>
         <View>

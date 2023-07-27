@@ -5,11 +5,11 @@ import {ProductQuality} from 'src/stores/types/productQuality.type';
 export type HarvestTemplate = {
   id: number;
   qty: number | null;
-  harvestPackage: HarvestPackage;
+  harvestPackage: HarvestPackage | null;
   location: {
     id: number;
     title: string;
   } | null;
   product: Product;
-  productQuality: ProductQuality;
+  productQuality: ProductQuality | null;
 };

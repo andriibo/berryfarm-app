@@ -9,13 +9,13 @@ export type IHarvest = {
   qty: number | null;
   workerUuid?: string;
   qrCodeUuid?: string;
-  harvestPackage: HarvestPackage;
+  harvestPackage: HarvestPackage | null;
   location: {
     id: number;
     title: string;
   } | null;
   product: Product;
-  productQuality: ProductQuality;
+  productQuality: ProductQuality | null;
 };
 
 type IHarvestState = {
@@ -25,19 +25,13 @@ type IHarvestState = {
 const initialState: IHarvestState = {
   harvest: {
     qty: null,
-    harvestPackage: {
-      id: 0,
-      title: '',
-    },
+    harvestPackage: null,
     location: null,
     product: {
       id: 0,
       title: '',
     },
-    productQuality: {
-      id: 0,
-      title: '',
-    },
+    productQuality: null,
   },
 };
 
@@ -58,19 +52,13 @@ const harvestSlice = createSlice({
       state.harvest.qty = null;
       state.harvest.workerUuid = undefined;
       state.harvest.qrCodeUuid = undefined;
-      state.harvest.harvestPackage = {
-        id: 0,
-        title: '',
-      };
+      state.harvest.harvestPackage = null;
       state.harvest.location = null;
       state.harvest.product = {
         id: 0,
         title: '',
       };
-      state.harvest.productQuality = {
-        id: 0,
-        title: '',
-      };
+      state.harvest.productQuality = null;
     },
   },
 });

@@ -26,10 +26,10 @@ const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (t
         <Text variant="headlineLarge">{template.location?.title}</Text>
       </View>
       <View style={styles.titleWrapper}>
-        <Text variant="titleLarge">{template.productQuality.title}</Text>
+        <Text variant="titleLarge">{template.productQuality?.title}</Text>
       </View>
       <View style={styles.titleWrapper}>
-        <Text variant="titleLarge">{template.harvestPackage.title}</Text>
+        <Text variant="titleLarge">{template.harvestPackage?.title}</Text>
         {template.qty && (
           <Text variant="titleLarge">
             {template.qty} {strings.items}
