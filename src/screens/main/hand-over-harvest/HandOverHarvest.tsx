@@ -15,6 +15,7 @@ import {
   createHarvest,
   getLocations,
   getProductQualityPackagesByProductId,
+  getProductQualityPackagesByProductIdAndProductQualityId,
   getWorkerByUuid,
 } from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
@@ -37,6 +38,7 @@ import {
 import {Buffer} from 'buffer';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Stack} from 'react-native-spacing-system';
+import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.type';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -56,10 +58,14 @@ const HandOverHarvest = () => {
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
   const [openDropdownLocations, setOpenDropdownLocations] = useState(false);
   const [openDropdownProductQualities, setOpenDropdownProductQualities] = useState(false);
+  const [openDropdownHarvestPackages, setOpenDropdownHarvestPackages] = useState(false);
   const [locationId, setLocationId] = useState<number | null>(null);
   const [productQualityId, setProductQualityId] = useState<number | null>(null);
+  const [harvestPackageId, setHarvestPackageId] = useState<number | null>(null);
   const [locations, setLocations] = useState<Array<any>>([]);
   const [productQualities, setProductQualities] = useState<Array<any>>([]);
+  const [harvestPackages, setHarvestPackages] = useState<Array<any>>([]);
+  const [productQualityPackages, setProductQualityPackages] = useState<Array<ProductQualityPackages>>([]);
 
   const {
     control,
@@ -98,30 +104,24 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
+      const promises = [];
+
+      setLoader(true);
       if (harvest.workerUuid) {
-        setLoader(true);
-        getWorkerByUuid(harvest.workerUuid, firestorePrefix)
-          .then(data => {
+        promises.push(
+          getWorkerByUuid(harvest.workerUuid, firestorePrefix).then(data => {
             if (data) {
               setWorker(data);
             } else {
               dispatch(addErrorNotification(strings.workerNotFound));
             }
-          })
-          .catch(error => {
-            if (error instanceof FirestoreServiceError) {
-              dispatch(addErrorNotification(error.message));
-            } else {
-              console.error(error);
-            }
-          })
-          .finally(() => setLoader(false));
+          }),
+        );
       }
 
       if (!harvest.location) {
-        setLoader(true);
-        getLocations(firestorePrefix)
-          .then(data => {
+        promises.push(
+          getLocations(firestorePrefix).then(data => {
             const items: any[] = [];
 
             data.forEach(location => {
@@ -129,41 +129,37 @@ const HandOverHarvest = () => {
             });
 
             setLocations(items);
-          })
-          .catch(error => {
-            if (error instanceof FirestoreServiceError) {
-              dispatch(addErrorNotification(error.message));
-            } else {
-              console.error(error);
-            }
-          })
-          .finally(() => setLoader(false));
+          }),
+        );
       }
 
       if (!harvest.productQuality || !harvest.harvestPackage) {
-        setLoader(true);
-        getProductQualityPackagesByProductId(harvest.product.id, firestorePrefix)
-          .then(data => {
+        promises.push(
+          getProductQualityPackagesByProductId(harvest.product.id, firestorePrefix).then(data => {
+            setProductQualityPackages(data);
             const qualities: any[] = [];
 
-            data.forEach(productQualityPackages => {
+            data.forEach(item => {
               qualities.push({
-                label: productQualityPackages.productQuality.title,
-                value: productQualityPackages.productQuality.id,
+                label: item.productQuality.title,
+                value: item.productQuality.id,
               });
             });
 
             setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
-          })
-          .catch(error => {
-            if (error instanceof FirestoreServiceError) {
-              dispatch(addErrorNotification(error.message));
-            } else {
-              console.error(error);
-            }
-          })
-          .finally(() => setLoader(false));
+          }),
+        );
       }
+
+      Promise.all(promises)
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            dispatch(addErrorNotification(error.message));
+          } else {
+            console.error(error);
+          }
+        })
+        .finally(() => setLoader(false));
 
       if (isDeviceConnected) {
         getWeightFromScales();
@@ -197,6 +193,35 @@ const HandOverHarvest = () => {
       console.error(error);
     }
   }, [activeDeviceId, connectedDevices]);
+
+  const onChangeProductQualityId = useCallback(
+    async (value: number) => {
+      setValue('productQualityId', value, {shouldDirty: true, shouldValidate: true});
+      if (!productQualityPackages.length) {
+        const data = await getProductQualityPackagesByProductIdAndProductQualityId(
+          harvest.product.id,
+          value,
+          firestorePrefix,
+        );
+
+        setProductQualityPackages(data);
+      }
+
+      const packages: any[] = [];
+
+      productQualityPackages.forEach(items => {
+        if (value === items.productQuality.id) {
+          packages.push({
+            label: items.harvestPackage.title,
+            value: items.harvestPackage.id,
+          });
+        }
+      });
+
+      setHarvestPackages(packages);
+    },
+    [firestorePrefix, harvest.product.id, productQualityPackages, setValue],
+  );
 
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
@@ -250,7 +275,7 @@ const HandOverHarvest = () => {
           </Text>
           <Stack size={20} />
         </View>
-        <View style={{zIndex: 1000}}>
+        <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.location}
           </Text>
@@ -270,9 +295,9 @@ const HandOverHarvest = () => {
                     language="RU"
                     listMode="MODAL"
                     multiple={false}
-                    onChangeValue={value => {
-                      setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true});
-                    }}
+                    onChangeValue={value =>
+                      setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true})
+                    }
                     open={openDropdownLocations}
                     searchable={true}
                     setItems={setLocations}
@@ -300,7 +325,7 @@ const HandOverHarvest = () => {
           <Text variant="headlineSmall">{harvest.product.title}</Text>
           <Stack size={20} />
         </View>
-        <View style={{zIndex: 1000}}>
+        <View style={{zIndex: 1001}}>
           <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
           </Text>
@@ -316,15 +341,14 @@ const HandOverHarvest = () => {
               render={() => (
                 <View>
                   <DropDownPicker
-                    containerStyle={{backgroundColor: colors.background}}
+                    containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
                     dropDownContainerStyle={{backgroundColor: colors.background}}
+                    dropDownDirection="BOTTOM"
                     items={productQualities}
                     language="RU"
                     listMode="SCROLLVIEW"
                     multiple={false}
-                    onChangeValue={value => {
-                      setValue('productQualityId', value as number, {shouldDirty: true, shouldValidate: true});
-                    }}
+                    onChangeValue={value => onChangeProductQualityId(value as number)}
                     open={openDropdownProductQualities}
                     setItems={setProductQualities}
                     setOpen={setOpenDropdownProductQualities}
@@ -344,12 +368,52 @@ const HandOverHarvest = () => {
             />
           )}
         </View>
-        <View>
+        <View style={{zIndex: 1000}}>
           <Text style={styles.label} variant="headlineSmall">
             {strings.package}
           </Text>
-          <Text variant="headlineSmall">{harvest.harvestPackage?.title}</Text>
-          <Stack size={20} />
+          {harvest.harvestPackage ? (
+            <>
+              <Text variant="headlineSmall">{harvest.harvestPackage.title}</Text>
+              <Stack size={20} />
+            </>
+          ) : (
+            <Controller
+              control={control}
+              name="harvestPackageId"
+              render={() => (
+                <View>
+                  <DropDownPicker
+                    containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
+                    disabled={!productQualityId}
+                    disabledStyle={{borderColor: colors.surfaceVariant}}
+                    dropDownContainerStyle={{backgroundColor: colors.background}}
+                    dropDownDirection="BOTTOM"
+                    items={harvestPackages}
+                    language="RU"
+                    listMode="SCROLLVIEW"
+                    multiple={false}
+                    onChangeValue={value => {
+                      setValue('harvestPackageId', value as number, {shouldDirty: true, shouldValidate: true});
+                    }}
+                    open={openDropdownHarvestPackages}
+                    setItems={setHarvestPackages}
+                    setOpen={setOpenDropdownHarvestPackages}
+                    setValue={setHarvestPackageId}
+                    style={{
+                      backgroundColor: colors.background,
+                      borderRadius: 4,
+                    }}
+                    textStyle={{fontSize: 18}}
+                    value={harvestPackageId}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.harvestPackageId)}>
+                    {errors.harvestPackageId?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
