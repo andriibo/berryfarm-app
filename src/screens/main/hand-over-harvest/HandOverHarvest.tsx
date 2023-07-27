@@ -104,9 +104,9 @@ const HandOverHarvest = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true);
       const promises = [];
 
-      setLoader(true);
       if (harvest.workerUuid) {
         promises.push(
           getWorkerByUuid(harvest.workerUuid, firestorePrefix).then(data => {
@@ -306,6 +306,7 @@ const HandOverHarvest = () => {
                     style={{
                       backgroundColor: colors.background,
                       borderRadius: 4,
+                      borderColor: colors.outline,
                     }}
                     textStyle={{fontSize: 18}}
                     value={locationId}
@@ -356,6 +357,7 @@ const HandOverHarvest = () => {
                     style={{
                       backgroundColor: colors.background,
                       borderRadius: 4,
+                      borderColor: colors.outline,
                     }}
                     textStyle={{fontSize: 18}}
                     value={productQualityId}
@@ -403,6 +405,7 @@ const HandOverHarvest = () => {
                     style={{
                       backgroundColor: colors.background,
                       borderRadius: 4,
+                      borderColor: colors.outline,
                     }}
                     textStyle={{fontSize: 18}}
                     value={harvestPackageId}
