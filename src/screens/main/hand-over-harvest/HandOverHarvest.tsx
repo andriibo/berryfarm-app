@@ -66,6 +66,7 @@ const HandOverHarvest = () => {
   const [productQualities, setProductQualities] = useState<Array<any>>([]);
   const [harvestPackages, setHarvestPackages] = useState<Array<any>>([]);
   const [productQualityPackages, setProductQualityPackages] = useState<Array<ProductQualityPackages>>([]);
+  const [harvestPackageWeight, setHarvestPackageWeight] = useState(0);
 
   const {
     control,
@@ -151,6 +152,10 @@ const HandOverHarvest = () => {
         );
       }
 
+      if (harvest.harvestPackage) {
+        setHarvestPackageWeight(harvest.harvestPackage.weight);
+      }
+
       Promise.all(promises)
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
@@ -164,7 +169,7 @@ const HandOverHarvest = () => {
       if (isDeviceConnected) {
         getWeightFromScales();
       }
-    }, [dispatch, firestorePrefix, harvest.workerUuid]),
+    }, [dispatch, firestorePrefix, harvest.workerUuid, harvestPackageWeight]),
   );
 
   const getWeightFromScales = useCallback(() => {
@@ -223,8 +228,26 @@ const HandOverHarvest = () => {
     [firestorePrefix, harvest.product.id, productQualityPackages, setValue],
   );
 
+  const onChangeHarvestPackageId = useCallback(
+    async (value: number) => {
+      setValue('harvestPackageId', value, {shouldDirty: true, shouldValidate: true});
+      productQualityPackages.forEach(item => {
+        if (productQualityId === item.productQuality.id && harvestPackageId === item.harvestPackage.id) {
+          setHarvestPackageWeight(item.harvestPackage.weight);
+        }
+      });
+    },
+    [harvestPackageId, productQualityId, productQualityPackages, setValue],
+  );
+
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
+      if (data.weightTotal * data.qty <= harvestPackageWeight) {
+        dispatch(addErrorNotification(strings.harvestWeightLessThenPackageWeight));
+
+        return;
+      }
+
       try {
         if (harvest.workerUuid) {
           data = {...data, workerUuid: harvest.workerUuid};
@@ -245,7 +268,7 @@ const HandOverHarvest = () => {
         }
       }
     },
-    [dispatch, firestorePrefix, harvest, navigation, reset],
+    [dispatch, firestorePrefix, harvest, navigation, reset, harvestPackageWeight],
   );
 
   const {weightTotal} = getValues();
@@ -395,9 +418,7 @@ const HandOverHarvest = () => {
                     language="RU"
                     listMode="SCROLLVIEW"
                     multiple={false}
-                    onChangeValue={value => {
-                      setValue('harvestPackageId', value as number, {shouldDirty: true, shouldValidate: true});
-                    }}
+                    onChangeValue={value => onChangeHarvestPackageId(value as number)}
                     open={openDropdownHarvestPackages}
                     setItems={setHarvestPackages}
                     setOpen={setOpenDropdownHarvestPackages}

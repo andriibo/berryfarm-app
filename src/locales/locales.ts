@@ -95,5 +95,6 @@ export const strings = new LocalizedStrings({
     couldNotGetDataFromScales: 'Не удалось получить данные с весов',
     enterDataManually: 'Ввести данные вручную',
     items: 'шт.',
+    harvestWeightLessThenPackageWeight: 'Вес урожая меньше веса упаковки.',
   },
 });
