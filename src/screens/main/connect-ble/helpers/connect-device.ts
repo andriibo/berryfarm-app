@@ -12,6 +12,8 @@ import {bleManager} from '../ConnectBle';
 import {Config} from 'react-native-config';
 import {Buffer} from 'buffer';
 import {disconnectDevice} from 'src/screens/main/connect-ble/helpers/disconnect-device';
+import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {strings} from 'src/locales/locales';
 
 type FilteredCharacteristic = Characteristic[];
 const defaultFilteredCharacteristic: FilteredCharacteristic = [];
@@ -81,6 +83,14 @@ export const connectDevice = async (
 
               if (typeof result?.value === 'string') {
                 const decodedValue = Buffer.from(result?.value, 'base64').toString();
+
+                if (decodedValue.includes('R::w')) {
+                  dispatch(addErrorNotification(strings.weightNotStabilized));
+                  dispatch(setWeight(null));
+
+                  return;
+                }
+
                 const arrayValues = decodedValue.split('R::W');
 
                 if (arrayValues.length > 1) {
