@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {ActivityIndicator, Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
@@ -27,7 +27,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
-import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {addErrorNotification, addWarnNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   useActiveDeviceId,
@@ -54,7 +54,6 @@ const HandOverHarvest = () => {
   const connectedDevices = useConnectedDevices();
   const activeDeviceId = useActiveDeviceId();
   const weightFromScales = useWeight();
-  const [manualInput, setManualInput] = useState(false);
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
   const [openDropdownLocations, setOpenDropdownLocations] = useState(false);
   const [openDropdownProductQualities, setOpenDropdownProductQualities] = useState(false);
@@ -165,11 +164,17 @@ const HandOverHarvest = () => {
           }
         })
         .finally(() => setLoader(false));
+    }, [dispatch, firestorePrefix, harvest.workerUuid, harvestPackageWeight]),
+  );
 
+  useFocusEffect(
+    useCallback(() => {
       if (isDeviceConnected) {
         getWeightFromScales();
+      } else {
+        dispatch(addWarnNotification(strings.couldNotGetDataFromScales));
       }
-    }, [dispatch, firestorePrefix, harvest.workerUuid, harvestPackageWeight]),
+    }, [dispatch]),
   );
 
   const getWeightFromScales = useCallback(() => {
@@ -495,27 +500,14 @@ const HandOverHarvest = () => {
                 />
               )}
             </View>
-            {!manualInput && !isWeightFromScales && (
-              <View style={{alignItems: 'center'}}>
-                <Text style={{alignItems: 'center'}} variant="headlineSmall">
-                  {strings.couldNotGetDataFromScales}
-                </Text>
-                <IconButton icon="alert-circle-check-outline" size={40} />
-                <TouchableOpacity onPress={() => setManualInput(true)}>
-                  <Text style={styles.labelManual} variant="headlineSmall">
-                    {strings.enterDataManually}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            {(manualInput || isWeightFromScales) && !loaderWeight && (
+            {!loaderWeight && (
               <Controller
                 control={control}
                 name="weightTotal"
                 render={({field}) => (
                   <View>
                     <TextInput
-                      disabled={!manualInput}
+                      disabled={isWeightFromScales}
                       error={Boolean(errors.weightTotal)}
                       inputMode="decimal"
                       keyboardType="decimal-pad"
@@ -524,7 +516,7 @@ const HandOverHarvest = () => {
                       onChangeText={field.onChange}
                       style={{width: '100%'}}
                       testID="weightTotal"
-                      value={manualInput && field.value === 0 ? '' : `${field.value}`}
+                      value={!isWeightFromScales && field.value === 0 ? '' : `${field.value}`}
                     />
                     <HelperText type="error" visible={Boolean(errors.weightTotal)}>
                       {errors.weightTotal?.message}
