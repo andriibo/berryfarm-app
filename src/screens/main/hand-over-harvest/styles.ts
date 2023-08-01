@@ -24,4 +24,8 @@ export default StyleSheet.create({
   btn: {
     width: Dimensions.get('window').width - 100,
   },
+  snackbar: {
+    textAlign: 'center',
+    color: colors.white,
+  },
 });
