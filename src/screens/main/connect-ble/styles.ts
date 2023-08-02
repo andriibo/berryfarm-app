@@ -22,7 +22,5 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
   },
-  icon: {width: 22, height: 25, color: colors.black},
   itemText: {color: 'black', fontSize: 18},
-  separator: {height: 1, backgroundColor: '#e0e0e0'},
 });

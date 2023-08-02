@@ -43,7 +43,8 @@ export const startScanBle = async (
         device?.name?.includes(bleTechnowagy) &&
         ![...connectedDevices, ...devices].find(item => item.id === device?.id)
       ) {
-        dispatch(setDevices([...devices, device]));
+        devices = [...devices, device];
+        dispatch(setDevices(devices));
       }
     },
   );

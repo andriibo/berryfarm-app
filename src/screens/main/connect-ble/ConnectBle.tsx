@@ -26,7 +26,6 @@ import {IconButton} from 'react-native-paper';
 import {stopScanBle} from 'src/screens/main/connect-ble/helpers/stop-scan-ble';
 
 export const bleManager = new BleManager();
-const ItemSeparatorComponent = () => <View style={styles.separator} />;
 const ListEmptyComponent = () => <Text style={styles.boldTextStyle}>{strings.noDevices}</Text>;
 
 const ConnectBle = () => {
@@ -44,6 +43,7 @@ const ConnectBle = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => isBleScanning && <Text style={styles.searching}>{strings.searching}</Text>,
     });
   });
@@ -76,19 +76,33 @@ const ConnectBle = () => {
     return () => subscription.remove();
   }, [connectedDevices, dispatch]);
 
-  const handleDisconnectByTap = async (item: Device) => {
+  const handleDisconnectByTap = async (device: Device) => {
     stopScanBle(dispatch);
     await AsyncStorage.removeItem('deviceId');
-    disconnectDevice(dispatch, item);
+    disconnectDevice(dispatch, device);
     await startScanBle(dispatch, devices, connectedDevices, isBleScanning, navigation);
   };
 
   const pairWithDevice = async (device: Device) => {
     bleManager.stopDeviceScan();
     try {
-      const isConnected = await bleManager.isDeviceConnected(device.id);
+      if (!isDeviceConnected) {
+        await handleConnectByTap(device);
+      }
 
-      if (isConnected) {
+      if (isDeviceConnected && activeDeviceId !== device.id) {
+        const deviceToDisconnect = connectedDevices.find(connectedDevice => {
+          return connectedDevice.id === activeDeviceId;
+        });
+
+        if (deviceToDisconnect) {
+          await handleDisconnectByTap(deviceToDisconnect);
+        }
+
+        await handleConnectByTap(device);
+      }
+
+      if (isDeviceConnected && activeDeviceId === device.id) {
         Alert.alert(strings.disconnect, `${strings.doYouWantToDisconnectScales} ${device.id} ${device.name}?`, [
           {
             text: strings.cancel,
@@ -99,11 +113,6 @@ const ConnectBle = () => {
             onPress: () => handleDisconnectByTap(device),
           },
         ]);
-      } else {
-        setConnectingDeviceId(device.id);
-        setIsConnecting(true);
-        await connectDevice(dispatch, device, deviceConnectionListener);
-        setTimeout(() => navigation.navigate('Home'), 2000);
       }
     } catch (err) {
       if (err === `${device.id} ${strings.disconnected}.`) {
@@ -123,6 +132,13 @@ const ConnectBle = () => {
       setIsConnecting(false);
       setConnectingDeviceId(null);
     }
+  };
+
+  const handleConnectByTap = async (device: Device) => {
+    setConnectingDeviceId(device.id);
+    setIsConnecting(true);
+    await connectDevice(dispatch, device, deviceConnectionListener);
+    setTimeout(() => navigation.navigate('Home'), 2000);
   };
 
   const sections = useMemo(
@@ -164,7 +180,6 @@ const ConnectBle = () => {
   return (
     <SafeAreaView style={[styles.container, {marginTop: -insets.top, marginBottom: -insets.bottom}]}>
       <SectionList
-        ItemSeparatorComponent={ItemSeparatorComponent}
         ListEmptyComponent={ListEmptyComponent}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
