@@ -1,6 +1,7 @@
 export enum ScenariosEnum {
   createWorker = 'createWorker',
   assignQrCode = 'assignQrCode',
-  handOverHarvest = 'handOverHarvest',
+  templates = 'templates',
   getQrCodeInfo = 'getQrCodeInfo',
+  handOverHarvest = 'handOverHarvest',
 }

@@ -10,6 +10,7 @@ import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {Location, LocationStatus} from 'src/stores/types/location.type';
 import {ProductQualityPackages, ProductQualityPackagesStatus} from 'src/stores/types/productQualityPackages.type';
+import {Product, ProductStatus} from 'src/stores/types/product.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -19,6 +20,7 @@ const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 const locationsCollection = '%slocations';
 const productQualityPackagesCollection = '%sproduct_quality_packages';
+const productsCollection = '%sproducts';
 
 export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
@@ -187,6 +189,27 @@ export const getQrCodes = async (prefix: string) => {
   return qrCodes;
 };
 
+export const getProducts = async (prefix: string) => {
+  const collection = sprintf(productsCollection, prefix);
+  const snapshot = await firestore()
+    .collection(collection)
+    .where('status', '==', ProductStatus.active)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const products: Product[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      products.push(doc.data() as Product);
+    }
+  });
+
+  return products;
+};
+
 export const getUserByUsername = async (username: string, prefix: string) => {
   const collection = sprintf(usersCollection, prefix);
 
@@ -351,6 +374,7 @@ export const initData = async (prefix: string) => {
     await getQrCodes(prefix);
     await getTemplates(prefix);
     await getLocations(prefix);
+    await getProducts(prefix);
     await getProductQualityPackages(prefix);
   } catch (error: any) {
     throw new FirestoreServiceError(error);

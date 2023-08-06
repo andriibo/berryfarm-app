@@ -10,12 +10,13 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {cleanHarvest, IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {
   createHarvest,
   getLocations,
   getProductQualityPackagesByProductId,
   getProductQualityPackagesByProductIdAndProductQualityId,
+  getProducts,
   getWorkerByUuid,
 } from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
@@ -26,7 +27,6 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
-import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {addErrorNotification, addWarnNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
@@ -39,6 +39,7 @@ import {Buffer} from 'buffer';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Stack} from 'react-native-spacing-system';
 import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.type';
+import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -48,19 +49,22 @@ const HandOverHarvest = () => {
   const harvest = useHarvest() as IHarvest;
   const {firestorePrefix} = useFarm();
   const isDeviceConnected = useIsDeviceConnected();
-  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
   const [loader, setLoader] = useState(false);
   const [loaderWeight, setLoaderWeight] = useState(false);
   const connectedDevices = useConnectedDevices();
   const activeDeviceId = useActiveDeviceId();
   const weightFromScales = useWeight();
   const [isWeightFromScales, setIsWeightFromScales] = useState(false);
+  const [openDropdownProducts, setOpenDropdownProducts] = useState(false);
   const [openDropdownLocations, setOpenDropdownLocations] = useState(false);
   const [openDropdownProductQualities, setOpenDropdownProductQualities] = useState(false);
   const [openDropdownHarvestPackages, setOpenDropdownHarvestPackages] = useState(false);
+  const [productId, setProductId] = useState<number | null>(null);
   const [locationId, setLocationId] = useState<number | null>(null);
   const [productQualityId, setProductQualityId] = useState<number | null>(null);
   const [harvestPackageId, setHarvestPackageId] = useState<number | null>(null);
+  const [products, setProducts] = useState<Array<any>>([]);
   const [locations, setLocations] = useState<Array<any>>([]);
   const [productQualities, setProductQualities] = useState<Array<any>>([]);
   const [harvestPackages, setHarvestPackages] = useState<Array<any>>([]);
@@ -79,7 +83,7 @@ const HandOverHarvest = () => {
       qty: harvest.qty ?? undefined,
       harvestPackageId: harvest.harvestPackage?.id,
       locationId: harvest.location?.id,
-      productId: harvest.product.id,
+      productId: harvest.product?.id,
       productQualityId: harvest.productQuality?.id,
       weightTotal: 0,
     },
@@ -119,6 +123,20 @@ const HandOverHarvest = () => {
         );
       }
 
+      if (!harvest.product) {
+        promises.push(
+          getProducts(firestorePrefix).then(data => {
+            const items: any[] = [];
+
+            data.forEach(product => {
+              items.push({label: product.title, value: product.id});
+            });
+
+            setProducts(items);
+          }),
+        );
+      }
+
       if (!harvest.location) {
         promises.push(
           getLocations(firestorePrefix).then(data => {
@@ -133,22 +151,8 @@ const HandOverHarvest = () => {
         );
       }
 
-      if (!harvest.productQuality || !harvest.harvestPackage) {
-        promises.push(
-          getProductQualityPackagesByProductId(harvest.product.id, firestorePrefix).then(data => {
-            setProductQualityPackages(data);
-            const qualities: any[] = [];
-
-            data.forEach(item => {
-              qualities.push({
-                label: item.productQuality.title,
-                value: item.productQuality.id,
-              });
-            });
-
-            setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
-          }),
-        );
+      if (harvest.product && (!harvest.productQuality || !harvest.harvestPackage)) {
+        promises.push(onChangeProductId(harvest.product.id));
       }
 
       if (harvest.harvestPackage) {
@@ -164,7 +168,7 @@ const HandOverHarvest = () => {
           }
         })
         .finally(() => setLoader(false));
-    }, [dispatch, firestorePrefix, harvest.workerUuid, harvestPackageWeight]),
+    }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
 
   useFocusEffect(
@@ -204,12 +208,36 @@ const HandOverHarvest = () => {
     }
   }, [activeDeviceId, connectedDevices]);
 
+  const onChangeProductId = useCallback(
+    async (value: number) => {
+      setProductId(value);
+      setValue('productId', value, {shouldDirty: true, shouldValidate: true});
+      setProductQualityId(null);
+      setHarvestPackageId(null);
+      getProductQualityPackagesByProductId(value, firestorePrefix).then(data => {
+        setProductQualityPackages(data);
+        const qualities: any[] = [];
+
+        data.forEach(item => {
+          qualities.push({
+            label: item.productQuality.title,
+            value: item.productQuality.id,
+          });
+        });
+
+        setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
+      });
+    },
+    [firestorePrefix, setValue],
+  );
+
   const onChangeProductQualityId = useCallback(
     async (value: number) => {
+      setProductQualityId(value);
       setValue('productQualityId', value, {shouldDirty: true, shouldValidate: true});
-      if (!productQualityPackages.length) {
+      if (!productQualityPackages.length && productQualityId) {
         const data = await getProductQualityPackagesByProductIdAndProductQualityId(
-          harvest.product.id,
+          productQualityId,
           value,
           firestorePrefix,
         );
@@ -230,11 +258,12 @@ const HandOverHarvest = () => {
 
       setHarvestPackages(packages);
     },
-    [firestorePrefix, harvest.product.id, productQualityPackages, setValue],
+    [firestorePrefix, productQualityId, productQualityPackages, setValue],
   );
 
   const onChangeHarvestPackageId = useCallback(
     async (value: number) => {
+      setHarvestPackageId(value);
       setValue('harvestPackageId', value, {shouldDirty: true, shouldValidate: true});
       productQualityPackages.forEach(item => {
         if (productQualityId === item.productQuality.id && harvestPackageId === item.harvestPackage.id) {
@@ -262,8 +291,9 @@ const HandOverHarvest = () => {
 
         createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
+        dispatch(cleanHarvest());
         navigation.navigate('SuccessPage', {
-          scenario: ScenariosEnum.handOverHarvest,
+          scenario: ScenariosEnum.templates,
         });
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
@@ -273,7 +303,7 @@ const HandOverHarvest = () => {
         }
       }
     },
-    [dispatch, firestorePrefix, harvest, navigation, reset, harvestPackageWeight],
+    [dispatch, firestorePrefix, harvest, navigation, harvestPackageWeight],
   );
 
   const {weightTotal} = getValues();
@@ -302,6 +332,48 @@ const HandOverHarvest = () => {
             )}
           </Text>
           <Stack size={20} />
+        </View>
+        <View>
+          <Text style={styles.label} variant="headlineSmall">
+            {strings.product}
+          </Text>
+          {harvest.product ? (
+            <>
+              <Text variant="headlineSmall">{harvest.product.title}</Text>
+              <Stack size={20} />
+            </>
+          ) : (
+            <Controller
+              control={control}
+              name="productId"
+              render={() => (
+                <View>
+                  <DropDownPicker
+                    items={products}
+                    language="RU"
+                    listMode="MODAL"
+                    multiple={false}
+                    onChangeValue={value => onChangeProductId(value as number)}
+                    open={openDropdownProducts}
+                    searchable={true}
+                    setItems={setProducts}
+                    setOpen={setOpenDropdownProducts}
+                    setValue={setProductId}
+                    style={{
+                      backgroundColor: colors.background,
+                      borderRadius: 4,
+                      borderColor: colors.outline,
+                    }}
+                    textStyle={{fontSize: 18}}
+                    value={productId}
+                  />
+                  <HelperText type="error" visible={Boolean(errors.productId)}>
+                    {errors.productId?.message}
+                  </HelperText>
+                </View>
+              )}
+            />
+          )}
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
@@ -347,13 +419,6 @@ const HandOverHarvest = () => {
             />
           )}
         </View>
-        <View>
-          <Text style={styles.label} variant="headlineSmall">
-            {strings.product}
-          </Text>
-          <Text variant="headlineSmall">{harvest.product.title}</Text>
-          <Stack size={20} />
-        </View>
         <View style={{zIndex: 1001}}>
           <Text style={styles.label} variant="headlineSmall">
             {strings.quality}
@@ -371,6 +436,7 @@ const HandOverHarvest = () => {
                 <View>
                   <DropDownPicker
                     containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
+                    disabled={!productId}
                     dropDownContainerStyle={{backgroundColor: colors.background}}
                     dropDownDirection="BOTTOM"
                     items={productQualities}

@@ -4,17 +4,15 @@ import {RootState} from 'src/stores/store';
 import {HarvestPackage} from 'src/stores/types/harvestPackage.type';
 import {Product} from 'src/stores/types/product.type';
 import {ProductQuality} from 'src/stores/types/productQuality.type';
+import {Location} from 'src/stores/types/location.type';
 
 export type IHarvest = {
   qty: number | null;
   workerUuid?: string;
   qrCodeUuid?: string;
   harvestPackage: HarvestPackage | null;
-  location: {
-    id: number;
-    title: string;
-  } | null;
-  product: Product;
+  location: Omit<Location, 'status'> | null;
+  product: Omit<Product, 'status'> | null;
   productQuality: ProductQuality | null;
 };
 
@@ -27,10 +25,7 @@ const initialState: IHarvestState = {
     qty: null,
     harvestPackage: null,
     location: null,
-    product: {
-      id: 0,
-      title: '',
-    },
+    product: null,
     productQuality: null,
   },
 };
@@ -54,10 +49,7 @@ const harvestSlice = createSlice({
       state.harvest.qrCodeUuid = undefined;
       state.harvest.harvestPackage = null;
       state.harvest.location = null;
-      state.harvest.product = {
-        id: 0,
-        title: '',
-      };
+      state.harvest.product = null;
       state.harvest.productQuality = null;
     },
   },

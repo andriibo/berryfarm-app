@@ -15,8 +15,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setHarvest} from 'src/stores/slices/harvest.slice';
-import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 
 const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
   <TouchableOpacity onPress={() => scanQrCode(template)}>
@@ -42,7 +42,7 @@ const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (t
 
 const Templates = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
   const [loader, setLoader] = useState(false);
@@ -73,7 +73,7 @@ const Templates = () => {
 
       dispatch(setHarvest(harvest));
       navigation.navigate('ScanQrCode', {
-        scenario: ScenariosEnum.handOverHarvest,
+        scenario: ScenariosEnum.templates,
       });
     },
     [dispatch, navigation],

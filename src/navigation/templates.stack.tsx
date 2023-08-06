@@ -9,23 +9,37 @@ import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-export type HandOverHarvestStackParamList = {
+export type TemplatesStackParamList = {
+  Templates: undefined;
   ScanQrCode: {scenario: ScenariosEnum};
   QrCodeInfo: undefined;
   HandOverHarvest: undefined;
   SuccessPage: {scenario: ScenariosEnum};
 };
 
-const HandOverHarvestStackComponent = createNativeStackNavigator<HandOverHarvestStackParamList>();
+const TemplatesStackComponent = createNativeStackNavigator<TemplatesStackParamList>();
 
-const HandOverHarvestStack = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+const TemplatesStack = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
 
   return (
-    <HandOverHarvestStackComponent.Navigator initialRouteName="ScanQrCode">
-      <HandOverHarvestStackComponent.Screen
+    <TemplatesStackComponent.Navigator initialRouteName="Templates">
+      <TemplatesStackComponent.Screen
+        component={Screens.Templates}
+        name="Templates"
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.templates,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerLeft: () => <HeaderLeft />,
+        }}
+      />
+      <TemplatesStackComponent.Screen
         component={Screens.ScanQrCode}
-        initialParams={{scenario: ScenariosEnum.handOverHarvest}}
         name="ScanQrCode"
         options={{
           ...drawerOptions,
@@ -38,7 +52,21 @@ const HandOverHarvestStack = () => {
           headerLeft: () => <HeaderLeft />,
         }}
       />
-      <HandOverHarvestStackComponent.Screen
+      <TemplatesStackComponent.Screen
+        component={Screens.QrCodeInfo}
+        name="QrCodeInfo"
+        options={{
+          ...drawerOptions,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          title: strings.qrCodeInfo,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerLeft: () => <HeaderLeft />,
+        }}
+      />
+      <TemplatesStackComponent.Screen
         component={Screens.HandOverHarvest}
         name="HandOverHarvest"
         options={{
@@ -52,7 +80,7 @@ const HandOverHarvestStack = () => {
           headerLeft: () => <HeaderLeft />,
         }}
       />
-      <HandOverHarvestStackComponent.Screen
+      <TemplatesStackComponent.Screen
         component={Screens.SuccessPage}
         name="SuccessPage"
         options={{
@@ -67,14 +95,14 @@ const HandOverHarvestStack = () => {
             <IconButton
               icon="arrow-left"
               iconColor={colors.white}
-              onPress={() => navigation.navigate('ScanQrCode', {scenario: ScenariosEnum.handOverHarvest})}
+              onPress={() => navigation.navigate('Templates')}
               size={20}
             />
           ),
         }}
       />
-    </HandOverHarvestStackComponent.Navigator>
+    </TemplatesStackComponent.Navigator>
   );
 };
 
-export default HandOverHarvestStack;
+export default TemplatesStack;

@@ -14,26 +14,30 @@ import {QrCode} from 'src/stores/types/qrCode.type';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {IHarvest, setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
-import {HandOverHarvestStackParamList} from 'src/navigation/handOverHarvest.stack';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
 import {setQrCode} from 'src/stores/slices/qrCode.slice';
 import {requestCameraPermission} from 'src/helpers/camera-permission';
 import {Loader} from 'src/components/loader';
+import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
   const harvest = useHarvest() as IHarvest;
   const worker = useWorker();
   const {firestorePrefix} = useFarm();
-  const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
   const focus = useIsFocused();
   const [loader, setLoader] = useState(false);
   const {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
   const scanText = useMemo(() => {
-    if (scenario === ScenariosEnum.handOverHarvest || scenario === ScenariosEnum.getQrCodeInfo) {
+    if (
+      scenario === ScenariosEnum.templates ||
+      scenario === ScenariosEnum.handOverHarvest ||
+      scenario === ScenariosEnum.getQrCodeInfo
+    ) {
       return strings.scanWorkerQrCodeWithCamera;
     }
 
@@ -52,7 +56,7 @@ const ScanQrCode = () => {
       setLoader(true);
       requestCameraPermission(navigation).then(() => setLoader(false));
     }
-  }, [focus]);
+  }, [focus, navigation]);
 
   const showAlert = useCallback(
     (message: string) => {
@@ -78,7 +82,11 @@ const ScanQrCode = () => {
 
   const assignQrCodeToWorker = useCallback(
     async (qrCode: QrCode) => {
-      if (scenario !== ScenariosEnum.handOverHarvest && qrCode.workerUuid !== undefined) {
+      if (
+        scenario !== ScenariosEnum.templates &&
+        scenario !== ScenariosEnum.handOverHarvest &&
+        qrCode.workerUuid !== undefined
+      ) {
         showAlert(strings.qrCodeGiven);
 
         return;
@@ -128,7 +136,7 @@ const ScanQrCode = () => {
           return;
         }
 
-        if (scenario === ScenariosEnum.handOverHarvest) {
+        if (scenario === ScenariosEnum.templates || scenario === ScenariosEnum.handOverHarvest) {
           handleHarvest(qrCode);
 
           return;

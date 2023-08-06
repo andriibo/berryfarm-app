@@ -24,7 +24,7 @@ const SuccessPage = () => {
         <IconButton icon="check-circle-outline" iconColor={colors.black} size={50} />
       </View>
       <View style={{marginTop: '20%'}}>
-        {scenario === ScenariosEnum.handOverHarvest && (
+        {scenario === ScenariosEnum.templates && (
           <>
             <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
               {strings.toTemplates}
@@ -34,7 +34,7 @@ const SuccessPage = () => {
             </Button>
           </>
         )}
-        {scenario !== ScenariosEnum.handOverHarvest && (
+        {scenario !== ScenariosEnum.templates && (
           <Button
             mode="outlined"
             onPress={() => {
