@@ -52,7 +52,7 @@ export async function requestLocationPermission(navigation?: NativeStackNavigati
         buttonPositive: strings.ok,
       });
 
-      if (permission === 'granted') {
+      if (permission === RESULTS.GRANTED) {
         return true;
       }
 

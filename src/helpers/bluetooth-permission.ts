@@ -42,8 +42,8 @@ export async function requestBluetoothPermission(navigation?: NativeStackNavigat
       ]);
 
       if (
-        permission['android.permission.BLUETOOTH_CONNECT'] === 'granted' &&
-        permission['android.permission.BLUETOOTH_SCAN'] === 'granted'
+        permission['android.permission.BLUETOOTH_CONNECT'] === RESULTS.GRANTED &&
+        permission['android.permission.BLUETOOTH_SCAN'] === RESULTS.GRANTED
       ) {
         return true;
       }

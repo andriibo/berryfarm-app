@@ -37,7 +37,7 @@ export async function requestCameraPermission(navigation?: NativeStackNavigation
 
       const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
 
-      if (permission === 'granted') {
+      if (permission === RESULTS.GRANTED) {
         return true;
       }
 
