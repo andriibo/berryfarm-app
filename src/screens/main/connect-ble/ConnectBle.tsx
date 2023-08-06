@@ -74,7 +74,7 @@ const ConnectBle = () => {
     }, true);
 
     return () => subscription.remove();
-  }, [connectedDevices, dispatch]);
+  }, [devices, connectedDevices, dispatch, isBleScanning, navigation]);
 
   const handleDisconnectByTap = async (device: Device) => {
     stopScanBle(dispatch);

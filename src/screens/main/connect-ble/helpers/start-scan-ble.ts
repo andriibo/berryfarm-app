@@ -22,32 +22,30 @@ export const startScanBle = async (
 
   clearTimeout(timeout);
 
-  if (!isGrantedLocation || !isGrantedBluetooth || isBleScanning) {
-    return;
+  if (isGrantedLocation && isGrantedBluetooth && !isBleScanning) {
+    dispatch(setIsBleScanning(true));
+    bleManager.startDeviceScan(
+      null,
+      {
+        allowDuplicates: false,
+      },
+      (error, device) => {
+        if (error) {
+          stopScanBle(dispatch);
+
+          return;
+        }
+
+        if (
+          device?.name?.includes(bleTechnowagy) &&
+          ![...connectedDevices, ...devices].find(item => item.id === device?.id)
+        ) {
+          devices = [...devices, device];
+          dispatch(setDevices(devices));
+        }
+      },
+    );
   }
-
-  dispatch(setIsBleScanning(true));
-  bleManager.startDeviceScan(
-    null,
-    {
-      allowDuplicates: false,
-    },
-    (error, device) => {
-      if (error) {
-        stopScanBle(dispatch);
-
-        return;
-      }
-
-      if (
-        device?.name?.includes(bleTechnowagy) &&
-        ![...connectedDevices, ...devices].find(item => item.id === device?.id)
-      ) {
-        devices = [...devices, device];
-        dispatch(setDevices(devices));
-      }
-    },
-  );
 
   timeout = setTimeout(() => stopScanBle(dispatch), 10 * 1000);
 
