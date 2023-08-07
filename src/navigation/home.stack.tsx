@@ -33,6 +33,7 @@ export const HomeStack = () => {
             fontWeight: 'bold',
           },
           title: farmName,
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <IconButton icon="menu" iconColor={colors.white} onPress={navigation.openDrawer} size={20} />
           ),
@@ -48,6 +49,7 @@ export const HomeStack = () => {
             fontWeight: 'bold',
           },
           title: strings.scales,
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />

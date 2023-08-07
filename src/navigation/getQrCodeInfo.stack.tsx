@@ -32,6 +32,7 @@ const GetQrCodeInfoStack = () => {
             fontWeight: 'bold',
           },
           title: '',
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />
@@ -45,6 +46,7 @@ const GetQrCodeInfoStack = () => {
             fontWeight: 'bold',
           },
           title: strings.qrCodeInfo,
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <IconButton
               icon="arrow-left"

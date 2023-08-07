@@ -1,20 +1,23 @@
-import React, {Fragment, useMemo} from 'react';
+import React, {Fragment, useCallback, useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {IconButton, Snackbar, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
 import {useIsDeviceConnected, useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'src/navigation/home.stack';
+import {cleanHarvest} from 'src/stores/slices/harvest.slice';
+import {useAppDispatch} from 'src/stores/hooks/hooks';
 
 const buttons = [
   {title: strings.registration, destination: 'CreateWorkerStack'},
   {title: strings.assignQrCode, destination: 'AssignQrCodeStack'},
-  {title: strings.templates, destination: 'HandOverHarvestStack'},
+  {title: strings.templates, destination: 'TemplatesStack'},
+  {title: strings.hangOverHarvest, destination: 'HandOverHarvestStack'},
   {title: strings.qrCodeInfo, destination: 'GetQrCodeInfoStack'},
 ];
 
@@ -37,6 +40,13 @@ const Home = () => {
   const isDeviceConnected = useIsDeviceConnected();
   const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+  const dispatch = useAppDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(cleanHarvest());
+    }, [dispatch]),
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>

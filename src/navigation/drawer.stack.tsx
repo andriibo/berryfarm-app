@@ -2,20 +2,22 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import React from 'react';
 import {colors} from 'src/styles/colors';
 import {Logout} from 'src/screens/main/logout';
-import HandOverHarvestStack from 'src/navigation/handOverHarvest.stack';
 import AssignQrCodeStack from 'src/navigation/assignQrCode.stack';
 import CreateWorkerStack from 'src/navigation/createWorker.stack';
+import TemplatesStack from 'src/navigation/templates.stack';
 import HomeStack from 'src/navigation/home.stack';
 import {strings} from 'src/locales/locales';
 import GetQrCodeInfoStack from 'src/navigation/getQrCodeInfo.stack';
 import {useAutoBleReconnect} from 'src/stores/hooks/use-auto-ble-reconnect';
+import HandOverHarvestStack from 'src/navigation/handOverHarvest.stack';
 
 export type DrawerStackParamList = {
   HomeStack: undefined;
   CreateWorkerStack: undefined;
   AssignQrCodeStack: undefined;
-  HandOverHarvestStack: undefined;
+  TemplatesStack: undefined;
   GetQrCodeInfoStack: undefined;
+  HandOverHarvestStack: undefined;
 };
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
@@ -59,19 +61,27 @@ const DrawerStack = () => {
         }}
       />
       <DrawerComponent.Screen
-        component={HandOverHarvestStack}
-        name="HandOverHarvestStack"
+        component={AssignQrCodeStack}
+        name="AssignQrCodeStack"
+        options={{
+          headerShown: false,
+          title: strings.assignQrCode,
+        }}
+      />
+      <DrawerComponent.Screen
+        component={TemplatesStack}
+        name="TemplatesStack"
         options={{
           headerShown: false,
           title: strings.templates,
         }}
       />
       <DrawerComponent.Screen
-        component={AssignQrCodeStack}
-        name="AssignQrCodeStack"
+        component={HandOverHarvestStack}
+        name="HandOverHarvestStack"
         options={{
           headerShown: false,
-          title: strings.assignQrCode,
+          title: strings.hangOverHarvest,
         }}
       />
       <DrawerComponent.Screen
