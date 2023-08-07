@@ -40,6 +40,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {Stack} from 'react-native-spacing-system';
 import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.type';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
+import NumericInput from 'react-native-numeric-input';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 
@@ -525,16 +526,12 @@ const HandOverHarvest = () => {
               name="qty"
               render={({field}) => (
                 <View>
-                  <TextInput
-                    error={Boolean(errors.qty)}
-                    inputMode="numeric"
-                    keyboardType="numeric"
-                    mode="outlined"
-                    // @ts-ignore
-                    onChangeText={field.onChange}
-                    style={{width: '100%'}}
-                    testID="createWorkerQty"
-                    value={field.value == null ? '' : `${field.value}`}
+                  <NumericInput
+                    leftButtonBackgroundColor={colors.primary}
+                    minValue={1}
+                    onChange={field.onChange}
+                    rightButtonBackgroundColor={colors.primary}
+                    rounded
                   />
                   <HelperText type="error" visible={Boolean(errors.qty)}>
                     {errors.qty?.message}
