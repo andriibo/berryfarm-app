@@ -45,6 +45,19 @@ const ConnectBle = () => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => isBleScanning && <Text style={styles.searching}>{strings.searching}</Text>,
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerLeft: () =>
+        !isConnecting && (
+          <IconButton
+            icon="arrow-left"
+            iconColor={colors.white}
+            onPress={() => {
+              navigation.goBack();
+              stopScanBle(dispatch);
+            }}
+            size={20}
+          />
+        ),
     });
   });
 
@@ -74,17 +87,15 @@ const ConnectBle = () => {
     }, true);
 
     return () => subscription.remove();
-  }, [devices, connectedDevices, dispatch, isBleScanning, navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [devices, dispatch, navigation]);
 
   const handleDisconnectByTap = async (device: Device) => {
-    stopScanBle(dispatch);
     await AsyncStorage.removeItem('deviceId');
     disconnectDevice(dispatch, device);
-    await startScanBle(dispatch, devices, connectedDevices, isBleScanning, navigation);
   };
 
   const pairWithDevice = async (device: Device) => {
-    bleManager.stopDeviceScan();
     try {
       if (!isDeviceConnected) {
         await handleConnectByTap(device);
@@ -126,8 +137,6 @@ const ConnectBle = () => {
 
       dispatch(setConnectedDevices([]));
       disconnectDevice(dispatch, device);
-      setIsConnecting(false);
-      setConnectingDeviceId(null);
     } finally {
       setIsConnecting(false);
       setConnectingDeviceId(null);
@@ -138,7 +147,8 @@ const ConnectBle = () => {
     setConnectingDeviceId(device.id);
     setIsConnecting(true);
     await connectDevice(dispatch, device, deviceConnectionListener);
-    setTimeout(() => navigation.navigate('Home'), 2000);
+    navigation.navigate('Home');
+    stopScanBle(dispatch);
   };
 
   const sections = useMemo(

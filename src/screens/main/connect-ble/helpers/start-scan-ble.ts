@@ -8,8 +8,6 @@ import {bleTechnowagy} from 'src/constants/constants';
 import {stopScanBle} from 'src/screens/main/connect-ble/helpers/stop-scan-ble';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-let timeout: number | ReturnType<typeof setTimeout> = 0;
-
 export const startScanBle = async (
   dispatch: Dispatch,
   devices: Device[],
@@ -19,8 +17,6 @@ export const startScanBle = async (
 ) => {
   const isGrantedLocation = await requestLocationPermission(navigation);
   const isGrantedBluetooth = await requestBluetoothPermission(navigation);
-
-  clearTimeout(timeout);
 
   if (isGrantedLocation && isGrantedBluetooth && !isBleScanning) {
     dispatch(setIsBleScanning(true));
@@ -46,8 +42,4 @@ export const startScanBle = async (
       },
     );
   }
-
-  timeout = setTimeout(() => stopScanBle(dispatch), 10 * 1000);
-
-  return () => clearTimeout(timeout);
 };

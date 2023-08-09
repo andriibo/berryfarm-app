@@ -28,6 +28,7 @@ export const AssignQrCodeStack = () => {
             fontWeight: 'bold',
           },
           title: strings.assignQrCode,
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />
@@ -41,6 +42,7 @@ export const AssignQrCodeStack = () => {
             fontWeight: 'bold',
           },
           title: '',
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />
