@@ -27,6 +27,7 @@ const CreateWorkerStack = () => {
             fontWeight: 'bold',
           },
           title: strings.registration,
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />
@@ -40,6 +41,7 @@ const CreateWorkerStack = () => {
             fontWeight: 'bold',
           },
           title: '',
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
       />

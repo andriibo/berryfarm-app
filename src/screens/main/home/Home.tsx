@@ -63,7 +63,7 @@ const Home = () => {
           );
         })}
       </View>
-      <Snackbar onDismiss={() => {}} visible={!isInternetConnected}>
+      <Snackbar onDismiss={() => {}} visible={!isInternetConnected} wrapperStyle={{position: 'relative'}}>
         <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
       </Snackbar>
     </SafeAreaView>
