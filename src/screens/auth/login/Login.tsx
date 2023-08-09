@@ -17,6 +17,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import {Loader} from 'src/components/loader';
 import {colors} from 'src/styles/colors';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const Login = () => {
   const isLoadedData = useIsLoadedData();
   const netState = useNetInfo();
   const [loader, setLoader] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   const {
     control,
@@ -72,7 +74,7 @@ const Login = () => {
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background, marginTop: -headerHeight}}>
       <View style={styles.container}>
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
         <Controller

@@ -16,7 +16,7 @@ export default StyleSheet.create({
     width: '90%',
   },
   btn: {
-    width: Dimensions.get('window').width - 100,
+    width: Dimensions.get('window').width - 50,
     marginBottom: 25,
     marginTop: 50,
   },
