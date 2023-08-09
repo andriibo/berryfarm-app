@@ -43,14 +43,14 @@ const ChooseFarm = () => {
 
       dispatch(setFarm(farm));
       navigation.navigate('Login');
-      setLoader(false);
     } catch (error: any) {
-      setLoader(false);
       if (error instanceof FirestoreServiceError) {
         dispatch(addErrorNotification(error.message));
       } else {
         console.error(error);
       }
+    } finally {
+      setLoader(false);
     }
   }, [selectedFarm, navigation, dispatch]);
 
