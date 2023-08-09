@@ -98,6 +98,7 @@ const HandOverHarvest = () => {
       headerRight: () =>
         isDeviceConnected ? <IconButton icon="weight-kilogram" iconColor={colors.white} size={30} /> : null,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -169,6 +170,7 @@ const HandOverHarvest = () => {
           }
         })
         .finally(() => setLoader(false));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
 
@@ -179,6 +181,7 @@ const HandOverHarvest = () => {
       } else {
         dispatch(addWarnNotification(strings.couldNotGetDataFromScales));
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]),
   );
 
@@ -304,6 +307,7 @@ const HandOverHarvest = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch, firestorePrefix, harvest, navigation, harvestPackageWeight],
   );
 
@@ -598,7 +602,7 @@ const HandOverHarvest = () => {
         )}
         <View style={{alignItems: 'center'}}>
           <Button
-            disabled={!isDirty || !isValid || !weightTotal}
+            disabled={!isDirty || !isValid || !weightTotal || loaderWeight}
             mode="contained"
             onPress={handleSubmit(handleSave)}
             style={styles.btn}>
