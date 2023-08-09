@@ -35,8 +35,7 @@ const ChooseFarm = () => {
       const farm = await getFarmByDoc(selectedFarm as FarmsEnum);
 
       if (!farm) {
-        dispatch(addErrorNotification(strings.incorrectUsername));
-        setLoader(false);
+        dispatch(addErrorNotification(strings.farmNotFound));
 
         return;
       }
