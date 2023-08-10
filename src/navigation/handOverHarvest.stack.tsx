@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 export type HandOverHarvestStackParamList = {
   ScanQrCode: {scenario: ScenariosEnum};
   QrCodeInfo: undefined;
-  HandOverHarvest: undefined;
+  HandOverHarvest: {scenario: ScenariosEnum};
   SuccessPage: {scenario: ScenariosEnum};
 };
 

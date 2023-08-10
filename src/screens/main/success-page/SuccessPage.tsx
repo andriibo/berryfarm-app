@@ -25,16 +25,16 @@ const SuccessPage = () => {
       </View>
       <View style={{marginTop: '20%'}}>
         {scenario === ScenariosEnum.templates && (
-          <>
-            <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
-              {strings.toTemplates}
-            </Button>
-            <Button mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
-              {strings.hangOverAnotherHarvest}
-            </Button>
-          </>
+          <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
+            {strings.toTemplates}
+          </Button>
         )}
-        {scenario !== ScenariosEnum.templates && (
+        {(scenario === ScenariosEnum.templates || scenario === ScenariosEnum.handOverHarvest) && (
+          <Button mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
+            {strings.hangOverAnotherHarvest}
+          </Button>
+        )}
+        {scenario !== ScenariosEnum.templates && scenario !== ScenariosEnum.handOverHarvest && (
           <Button
             mode="outlined"
             onPress={() => {

@@ -33,11 +33,7 @@ const ScanQrCode = () => {
     params: {scenario},
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'ScanQrCode'>>();
   const scanText = useMemo(() => {
-    if (
-      scenario === ScenariosEnum.templates ||
-      scenario === ScenariosEnum.handOverHarvest ||
-      scenario === ScenariosEnum.getQrCodeInfo
-    ) {
+    if (scenario !== ScenariosEnum.assignQrCode && scenario !== ScenariosEnum.createWorker) {
       return strings.scanWorkerQrCodeWithCamera;
     }
 
@@ -107,9 +103,9 @@ const ScanQrCode = () => {
         dispatch(setHarvest({...harvest, qrCodeUuid: qrCode.uuid}));
       }
 
-      navigation.navigate('HandOverHarvest');
+      navigation.navigate('HandOverHarvest', {scenario});
     },
-    [dispatch, harvest, navigation],
+    [dispatch, harvest, navigation, scenario],
   );
 
   const onSuccess = useCallback(

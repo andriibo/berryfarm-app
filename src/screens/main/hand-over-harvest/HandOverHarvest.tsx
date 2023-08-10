@@ -22,9 +22,8 @@ import {useFarm} from 'src/stores/slices/auth.slice';
 import {Worker, WorkerStatus} from 'src/stores/types/worker.type';
 import {getFullname} from 'src/helpers/worker.helper';
 import {v4 as uuid} from 'uuid';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {RouteProp, useFocusEffect, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
 import {addErrorNotification, addWarnNotification} from 'src/stores/slices/notifications.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
@@ -52,6 +51,9 @@ const HandOverHarvest = () => {
   const {firestorePrefix} = useFarm();
   const isDeviceConnected = useIsDeviceConnected();
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
+  const {
+    params: {scenario},
+  } = useRoute<RouteProp<TemplatesStackParamList, 'HandOverHarvest'>>();
   const [loader, setLoader] = useState(false);
   const [loaderWeight, setLoaderWeight] = useState(false);
   const connectedDevices = useConnectedDevices();
@@ -291,9 +293,7 @@ const HandOverHarvest = () => {
         createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
         dispatch(cleanHarvest());
-        navigation.navigate('SuccessPage', {
-          scenario: ScenariosEnum.templates,
-        });
+        navigation.navigate('SuccessPage', {scenario});
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));

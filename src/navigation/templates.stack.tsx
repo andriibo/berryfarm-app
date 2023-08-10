@@ -13,7 +13,7 @@ export type TemplatesStackParamList = {
   Templates: undefined;
   ScanQrCode: {scenario: ScenariosEnum};
   QrCodeInfo: undefined;
-  HandOverHarvest: undefined;
+  HandOverHarvest: {scenario: ScenariosEnum};
   SuccessPage: {scenario: ScenariosEnum};
 };
 
