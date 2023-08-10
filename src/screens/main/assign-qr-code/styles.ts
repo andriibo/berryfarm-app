@@ -5,15 +5,13 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 30,
     justifyContent: 'space-around',
   },
   wrapper: {
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    justifyContent: 'space-around',
-    width: '90%',
+    width: '100%',
     textAlign: 'center',
   },
   item: {
@@ -26,7 +24,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   btn: {
-    width: '70%',
+    width: Dimensions.get('window').width - 50,
     marginBottom: 25,
   },
   linkCreateWorker: {
