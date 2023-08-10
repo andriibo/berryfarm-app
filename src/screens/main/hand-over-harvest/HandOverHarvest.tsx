@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {ActivityIndicator, Badge, Button, HelperText, IconButton, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from 'src/styles/colors';
@@ -15,7 +15,6 @@ import {
   createHarvest,
   getLocations,
   getProductQualityPackagesByProductId,
-  getProductQualityPackagesByProductIdAndProductQualityId,
   getProducts,
   getWorkerByUuid,
 } from 'src/stores/services/firestore.service';
@@ -43,6 +42,8 @@ import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 import NumericInput from 'react-native-numeric-input';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
+const iconArrowDown = (style: StyleProp<ViewStyle>) => <IconButton icon="chevron-down" style={style} />;
+const iconIndicator = (style: StyleProp<ViewStyle>) => <ActivityIndicator style={style} />;
 
 const HandOverHarvest = () => {
   const dispatch = useAppDispatch();
@@ -68,6 +69,7 @@ const HandOverHarvest = () => {
   const [products, setProducts] = useState<Array<any>>([]);
   const [locations, setLocations] = useState<Array<any>>([]);
   const [productQualities, setProductQualities] = useState<Array<any>>([]);
+  const [productQualitiesLoader, setProductQualitiesLoader] = useState(false);
   const [harvestPackages, setHarvestPackages] = useState<Array<any>>([]);
   const [productQualityPackages, setProductQualityPackages] = useState<Array<ProductQualityPackages>>([]);
   const [harvestPackageWeight, setHarvestPackageWeight] = useState(0);
@@ -218,19 +220,22 @@ const HandOverHarvest = () => {
       setValue('productId', value, {shouldDirty: true, shouldValidate: true});
       setProductQualityId(null);
       setHarvestPackageId(null);
-      getProductQualityPackagesByProductId(value, firestorePrefix).then(data => {
-        setProductQualityPackages(data);
-        const qualities: any[] = [];
+      setProductQualitiesLoader(true);
+      getProductQualityPackagesByProductId(value, firestorePrefix)
+        .then(data => {
+          setProductQualityPackages(data);
+          const qualities: any[] = [];
 
-        data.forEach(item => {
-          qualities.push({
-            label: item.productQuality.title,
-            value: item.productQuality.id,
+          data.forEach(item => {
+            qualities.push({
+              label: item.productQuality.title,
+              value: item.productQuality.id,
+            });
           });
-        });
 
-        setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
-      });
+          setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
+        })
+        .finally(() => setProductQualitiesLoader(false));
     },
     [firestorePrefix, setValue],
   );
@@ -239,16 +244,6 @@ const HandOverHarvest = () => {
     async (value: number) => {
       setProductQualityId(value);
       setValue('productQualityId', value, {shouldDirty: true, shouldValidate: true});
-      if (!productQualityPackages.length && productQualityId) {
-        const data = await getProductQualityPackagesByProductIdAndProductQualityId(
-          productQualityId,
-          value,
-          firestorePrefix,
-        );
-
-        setProductQualityPackages(data);
-      }
-
       const packages: any[] = [];
 
       productQualityPackages.forEach(items => {
@@ -262,7 +257,7 @@ const HandOverHarvest = () => {
 
       setHarvestPackages(packages);
     },
-    [firestorePrefix, productQualityId, productQualityPackages, setValue],
+    [productQualityPackages, setValue],
   );
 
   const onChangeHarvestPackageId = useCallback(
@@ -354,6 +349,7 @@ const HandOverHarvest = () => {
               render={() => (
                 <View>
                   <DropDownPicker
+                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                     items={products}
                     language="RU"
                     listMode="MODAL"
@@ -396,6 +392,7 @@ const HandOverHarvest = () => {
               render={() => (
                 <View>
                   <DropDownPicker
+                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                     items={locations}
                     language="RU"
                     listMode="MODAL"
@@ -425,7 +422,9 @@ const HandOverHarvest = () => {
           )}
         </View>
         <View style={{zIndex: 1001}}>
-          <Text style={[styles.label, !productId && styles.labelDisabled]} variant="headlineSmall">
+          <Text
+            style={[styles.label, (!productId || productQualitiesLoader) && styles.labelDisabled]}
+            variant="headlineSmall">
             {strings.quality}
           </Text>
           {harvest.productQuality ? (
@@ -440,8 +439,11 @@ const HandOverHarvest = () => {
               render={() => (
                 <View>
                   <DropDownPicker
+                    ArrowDownIconComponent={({style}) =>
+                      productQualitiesLoader ? iconIndicator(style) : iconArrowDown(style)
+                    }
                     containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
-                    disabled={!productId}
+                    disabled={!productId || productQualitiesLoader}
                     disabledStyle={{borderColor: colors.surfaceVariant}}
                     dropDownContainerStyle={{backgroundColor: colors.background}}
                     dropDownDirection="BOTTOM"
@@ -486,6 +488,7 @@ const HandOverHarvest = () => {
               render={() => (
                 <View>
                   <DropDownPicker
+                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                     containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
                     disabled={!productQualityId}
                     disabledStyle={{borderColor: colors.surfaceVariant}}
