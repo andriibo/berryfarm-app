@@ -16,6 +16,9 @@ export default StyleSheet.create({
     color: colors.outline,
     alignItems: 'center',
   },
+  labelDisabled: {
+    color: colors.outlineVariant,
+  },
   labelManual: {
     alignItems: 'center',
     textDecorationLine: 'underline',

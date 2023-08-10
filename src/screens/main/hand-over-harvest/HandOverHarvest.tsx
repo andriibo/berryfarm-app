@@ -425,7 +425,7 @@ const HandOverHarvest = () => {
           )}
         </View>
         <View style={{zIndex: 1001}}>
-          <Text style={styles.label} variant="headlineSmall">
+          <Text style={[styles.label, !productId && styles.labelDisabled]} variant="headlineSmall">
             {strings.quality}
           </Text>
           {harvest.productQuality ? (
@@ -442,6 +442,7 @@ const HandOverHarvest = () => {
                   <DropDownPicker
                     containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
                     disabled={!productId}
+                    disabledStyle={{borderColor: colors.surfaceVariant}}
                     dropDownContainerStyle={{backgroundColor: colors.background}}
                     dropDownDirection="BOTTOM"
                     items={productQualities}
@@ -470,7 +471,7 @@ const HandOverHarvest = () => {
           )}
         </View>
         <View style={{zIndex: 1000}}>
-          <Text style={styles.label} variant="headlineSmall">
+          <Text style={[styles.label, !productQualityId && styles.labelDisabled]} variant="headlineSmall">
             {strings.package}
           </Text>
           {harvest.harvestPackage ? (
@@ -553,7 +554,7 @@ const HandOverHarvest = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={styles.label} variant="headlineSmall">
+              <Text style={[styles.label, isWeightFromScales && styles.labelDisabled]} variant="headlineSmall">
                 {strings.weightKg}
               </Text>
               {isDeviceConnected && (
