@@ -10,6 +10,7 @@ import {HomeStackParamList} from 'src/navigation/home.stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   setConnectedDevices,
+  setDevices,
   useActiveDeviceId,
   useConnectedDevices,
   useDevices,
@@ -126,15 +127,18 @@ const ConnectBle = () => {
         ]);
       }
     } catch (err) {
-      if (err === `${device.id} ${strings.disconnected}.`) {
-        Alert.alert(strings.error, strings.unableConnectScales, [
-          {
-            text: strings.ok,
-            style: 'default',
-          },
-        ]);
-      }
+      Alert.alert(strings.error, strings.unableConnectScales, [
+        {
+          text: strings.ok,
+          style: 'default',
+        },
+      ]);
 
+      const validDevices = devices.filter(item => {
+        return item.id !== device.id;
+      });
+
+      dispatch(setDevices(validDevices));
       dispatch(setConnectedDevices([]));
       disconnectDevice(dispatch, device);
     } finally {

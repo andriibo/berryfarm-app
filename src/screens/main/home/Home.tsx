@@ -6,7 +6,7 @@ import {strings} from 'src/locales/locales';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
-import {useIsDeviceConnected, useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {setDevices, useIsDeviceConnected, useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'src/navigation/home.stack';
@@ -50,7 +50,12 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
-      <TouchableOpacity onPress={() => navigation.navigate('ConnectBle')} style={styles.deviceStateWrapper}>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(setDevices([]));
+          navigation.navigate('ConnectBle');
+        }}
+        style={styles.deviceStateWrapper}>
         <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
         <Text style={styles.deviceState}>{deviceState.title}</Text>
       </TouchableOpacity>
