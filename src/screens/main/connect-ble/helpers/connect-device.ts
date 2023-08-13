@@ -27,7 +27,7 @@ export const connectDevice = async (
     return;
   }
 
-  const deviceObject = await bleManager.connectToDevice(device.id, {autoConnect: true});
+  const deviceObject = await bleManager.connectToDevice(device.id, {autoConnect: true, timeout: 5000});
 
   await deviceObject.onDisconnected(() => {
     disconnectDevice(dispatch, device);
