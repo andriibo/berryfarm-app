@@ -20,6 +20,8 @@ import {setQrCode} from 'src/stores/slices/qrCode.slice';
 import {requestCameraPermission} from 'src/helpers/camera-permission';
 import {Loader} from 'src/components/loader';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
+import RNSystemSounds from '@dashdoc/react-native-system-sounds';
+import {isIOS} from 'src/constants/constants';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +42,10 @@ const ScanQrCode = () => {
     return strings.scanQrCodeWithCamera;
   }, [scenario]);
   const scanner = useRef<QRCodeScanner>(null);
+  const soundID = useMemo(
+    () => (isIOS ? RNSystemSounds.iOSSoundIDs.AudioToneBusy : RNSystemSounds.AndroidSoundIDs.TONE_CDMA_ABBR_ALERT),
+    [],
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -110,6 +116,7 @@ const ScanQrCode = () => {
 
   const onSuccess = useCallback(
     async (event: any) => {
+      RNSystemSounds.play(soundID);
       try {
         if (!uuidValidate(event.data)) {
           showAlert(strings.qrCodeNotFound);
@@ -147,7 +154,7 @@ const ScanQrCode = () => {
         }
       }
     },
-    [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
+    [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert, soundID],
   );
 
   if (loader) {
