@@ -5,6 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {
   INotification,
+  NotificationDict,
   NotificationType,
   removeNotification,
   useNotificationsAll,
@@ -12,13 +13,16 @@ import {
 import {IconButton} from 'react-native-paper';
 import styles from './styles';
 import {colors} from 'src/styles/colors';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 
 const NotificationColors: {[key in NotificationType]: string} = {
-  warning: '#ff9800',
-  error: '#f44336',
-  success: '#4caf50',
-  info: '#2196f3',
+  warning: colors.warning,
+  error: colors.error,
+  success: colors.success,
+  info: colors.info,
 } as const;
+
+const warningOfflineColor = colors.inverseSurface;
 
 const icons: {[key in NotificationType]: string} = {
   warning: 'alert',
@@ -31,6 +35,11 @@ const TIMEOUT = 5000;
 
 const Toast: React.FC<INotification> = ({type, message, id}) => {
   const dispatch = useAppDispatch();
+  const isInternetConnected = useIsInternetConnected();
+  const backgroundColor = useMemo(
+    () => (!isInternetConnected && type === NotificationDict.Warning ? warningOfflineColor : NotificationColors[type]),
+    [isInternetConnected, type],
+  );
   const animatedOpacity = useSharedValue(0);
   const animationStyle = useAnimatedStyle(() => ({
     opacity: withTiming(animatedOpacity.value, {
@@ -46,9 +55,7 @@ const Toast: React.FC<INotification> = ({type, message, id}) => {
   }, [animatedOpacity]);
   if (message) {
     return (
-      <Animated.View
-        style={[styles.toastWrapper, {backgroundColor: NotificationColors[type]}, animationStyle]}
-        testID="snackBar">
+      <Animated.View style={[styles.toastWrapper, {backgroundColor}, animationStyle]} testID="snackBar">
         <IconButton icon={icons[type]} iconColor={colors.white} size={25} />
         <Text style={styles.message}>{message}</Text>
         <IconButton icon="close-thick" iconColor={colors.white} onPress={dismissNotification} size={25} testID="hide" />

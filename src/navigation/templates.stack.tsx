@@ -1,13 +1,14 @@
 import {createNativeStackNavigator, NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Screens} from './screens';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {strings} from 'src/locales/locales';
 import {HeaderLeft} from 'src/components/header-left';
-import {drawerOptions} from 'src/navigation/drawer.stack';
 import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {getHeaderBackgroundColor, getTitle} from 'src/helpers/screen-options.helper';
 
 export type TemplatesStackParamList = {
   Templates: undefined;
@@ -21,19 +22,25 @@ const TemplatesStackComponent = createNativeStackNavigator<TemplatesStackParamLi
 
 const TemplatesStack = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
+  const isInternetConnected = useIsInternetConnected();
+  const backgroundColor = useMemo(() => getHeaderBackgroundColor(isInternetConnected), [isInternetConnected]);
 
   return (
-    <TemplatesStackComponent.Navigator initialRouteName="Templates">
+    <TemplatesStackComponent.Navigator
+      initialRouteName="Templates"
+      screenOptions={{
+        headerStyle: {backgroundColor},
+        headerTintColor: colors.white,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
       <TemplatesStackComponent.Screen
         component={Screens.Templates}
         name="Templates"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.templates,
+          title: getTitle(strings.templates, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
@@ -42,11 +49,6 @@ const TemplatesStack = () => {
         component={Screens.ScanQrCode}
         name="ScanQrCode"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
           title: '',
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
@@ -56,12 +58,7 @@ const TemplatesStack = () => {
         component={Screens.QrCodeInfo}
         name="QrCodeInfo"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.qrCodeInfo,
+          title: getTitle(strings.qrCodeInfo, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
@@ -70,12 +67,7 @@ const TemplatesStack = () => {
         component={Screens.HandOverHarvest}
         name="HandOverHarvest"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.hangOverHarvest,
+          title: getTitle(strings.hangOverHarvest, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
@@ -84,12 +76,7 @@ const TemplatesStack = () => {
         component={Screens.SuccessPage}
         name="SuccessPage"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.hangOverHarvest,
+          title: getTitle(strings.hangOverHarvest, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <IconButton

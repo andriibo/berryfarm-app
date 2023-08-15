@@ -1167,6 +1167,11 @@
     deepmerge "^3.2.0"
     hoist-non-react-statics "^3.3.0"
 
+"@dashdoc/react-native-system-sounds@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@dashdoc/react-native-system-sounds/-/react-native-system-sounds-1.0.1.tgz#ed3a7d971747eb48cb8e9ec1ff8afd3048323cb9"
+  integrity sha512-azKsmkwreG7fUGqtzJHNAqs7NPNaORtBwQogEvZCWcBPRnq9cD69dI8kNX6TOOylI3y9ZaB/NogzeCVaHxIWWg==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"

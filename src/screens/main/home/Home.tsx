@@ -1,12 +1,12 @@
 import React, {Fragment, useCallback, useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {IconButton, Snackbar, Surface, Text} from 'react-native-paper';
+import {IconButton, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
 import {colors} from 'src/styles/colors';
-import {setDevices, useIsDeviceConnected, useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {setDevices, useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'src/navigation/home.stack';
@@ -36,7 +36,6 @@ const HomeButton = ({title, destination}: {title: string; destination: string}) 
 };
 
 const Home = () => {
-  const isInternetConnected = useIsInternetConnected();
   const isDeviceConnected = useIsDeviceConnected();
   const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
@@ -68,9 +67,6 @@ const Home = () => {
           );
         })}
       </View>
-      <Snackbar onDismiss={() => {}} visible={!isInternetConnected} wrapperStyle={{position: 'relative'}}>
-        <Text style={styles.snackbar}>{strings.appWorksOffline}</Text>
-      </Snackbar>
     </SafeAreaView>
   );
 };

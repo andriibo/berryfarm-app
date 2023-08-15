@@ -52,8 +52,6 @@ export const strings = new LocalizedStrings({
     product: 'Продукт',
     harvestTemporarilyFixedForWorkerQrCode: 'Урожай временно зафиксирован за QR кодом работника',
     couldNotConnectToServer: 'Не удалось установить соединение с сервером. Приложение работает в автономном режиме.',
-    appWorksOffline:
-      'Приложение работает в оффлайн режиме. Данные будут синхронизированы после восстановления соединения.',
     noInternetConnection: 'Отсутствует подключение к Интеренету',
     logInOnline: 'Войдите в систему в он-лайн режиме хотя бы один раз, чтобы использовать приложение.',
     incorrectUsername: 'Неверное имя пользователя.',

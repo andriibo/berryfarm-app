@@ -65,7 +65,7 @@ const ConnectBle = () => {
   useEffect(() => {
     const subscription = bleManager.onStateChange(state => {
       if (state === 'PoweredOn') {
-        startScanBle(dispatch, devices, connectedDevices, isBleScanning, navigation).then();
+        startScanBle(dispatch, devices, isBleScanning, navigation).then();
         subscription.remove();
       }
 

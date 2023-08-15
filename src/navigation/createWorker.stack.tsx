@@ -1,10 +1,12 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Screens} from './screens';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {strings} from 'src/locales/locales';
 import {HeaderLeft} from 'src/components/header-left';
-import {drawerOptions} from 'src/navigation/drawer.stack';
+import {getHeaderBackgroundColor, getTitle} from 'src/helpers/screen-options.helper';
+import {colors} from 'src/styles/colors';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 
 export type CreateWorkerStackParamList = {
   CreateWorker: undefined;
@@ -15,18 +17,25 @@ export type CreateWorkerStackParamList = {
 const CreateWorkerStackComponent = createNativeStackNavigator<CreateWorkerStackParamList>();
 
 const CreateWorkerStack = () => {
+  const isInternetConnected = useIsInternetConnected();
+  const backgroundColor = useMemo(() => getHeaderBackgroundColor(isInternetConnected), [isInternetConnected]);
+
   return (
-    <CreateWorkerStackComponent.Navigator initialRouteName="CreateWorker">
+    <CreateWorkerStackComponent.Navigator
+      initialRouteName="CreateWorker"
+      screenOptions={{
+        headerStyle: {backgroundColor},
+        headerTintColor: colors.white,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
       <CreateWorkerStackComponent.Screen
         component={Screens.CreateWorker}
         name="CreateWorker"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.registration,
+          title: getTitle(strings.registration, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
@@ -35,11 +44,6 @@ const CreateWorkerStack = () => {
         component={Screens.ScanQrCode}
         name="ScanQrCode"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
           title: '',
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
@@ -49,12 +53,7 @@ const CreateWorkerStack = () => {
         component={Screens.SuccessPage}
         name="SuccessPage"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.registration,
+          title: getTitle(strings.registration, isInternetConnected),
           headerLeft: () => null,
         }}
       />
