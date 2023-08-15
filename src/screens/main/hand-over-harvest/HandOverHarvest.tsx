@@ -584,7 +584,11 @@ const HandOverHarvest = () => {
                       keyboardType="decimal-pad"
                       mode="outlined"
                       // @ts-ignore
-                      onChangeText={field.onChange}
+                      onChangeText={event => {
+                        const sanitizedText = event.replace(/,/g, '.');
+
+                        field.onChange(sanitizedText);
+                      }}
                       style={{width: '100%'}}
                       testID="weightTotal"
                       value={!isWeightFromScales && field.value === 0 ? '' : `${field.value}`}
