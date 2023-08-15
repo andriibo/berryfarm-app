@@ -22,13 +22,6 @@ export type DrawerStackParamList = {
 
 const DrawerComponent = createDrawerNavigator<DrawerStackParamList>();
 
-export const drawerOptions = {
-  headerStyle: {
-    backgroundColor: colors.primary,
-  },
-  headerTintColor: colors.white,
-};
-
 const DrawerStack = () => {
   useAutoBleReconnect();
 

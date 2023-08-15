@@ -1,13 +1,14 @@
 import {createNativeStackNavigator, NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Screens} from './screens';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {strings} from 'src/locales/locales';
 import {HeaderLeft} from 'src/components/header-left';
-import {drawerOptions} from 'src/navigation/drawer.stack';
 import {colors} from 'src/styles/colors';
 import {IconButton} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {getHeaderBackgroundColor, getTitle} from 'src/helpers/screen-options.helper';
 
 export type HandOverHarvestStackParamList = {
   ScanQrCode: {scenario: ScenariosEnum};
@@ -20,19 +21,25 @@ const HandOverHarvestStackComponent = createNativeStackNavigator<HandOverHarvest
 
 const HandOverHarvestStack = () => {
   const navigation = useNavigation<NativeStackNavigationProp<HandOverHarvestStackParamList>>();
+  const isInternetConnected = useIsInternetConnected();
+  const backgroundColor = useMemo(() => getHeaderBackgroundColor(isInternetConnected), [isInternetConnected]);
 
   return (
-    <HandOverHarvestStackComponent.Navigator initialRouteName="ScanQrCode">
+    <HandOverHarvestStackComponent.Navigator
+      initialRouteName="ScanQrCode"
+      screenOptions={{
+        headerStyle: {backgroundColor},
+        headerTintColor: colors.white,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
       <HandOverHarvestStackComponent.Screen
         component={Screens.ScanQrCode}
         initialParams={{scenario: ScenariosEnum.handOverHarvest}}
         name="ScanQrCode"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
           title: '',
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
@@ -42,12 +49,7 @@ const HandOverHarvestStack = () => {
         component={Screens.HandOverHarvest}
         name="HandOverHarvest"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.hangOverHarvest,
+          title: getTitle(strings.hangOverHarvest, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderLeft />,
         }}
@@ -56,12 +58,7 @@ const HandOverHarvestStack = () => {
         component={Screens.SuccessPage}
         name="SuccessPage"
         options={{
-          ...drawerOptions,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          title: strings.hangOverHarvest,
+          title: getTitle(strings.hangOverHarvest, isInternetConnected),
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <IconButton

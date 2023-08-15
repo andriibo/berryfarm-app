@@ -103,7 +103,11 @@ const Login = () => {
           style={[styles.btn]}>
           {strings.logIn}
         </Button>
-        <Snackbar onDismiss={() => {}} visible={!netState.isConnected} wrapperStyle={{position: 'relative'}}>
+        <Snackbar
+          onDismiss={() => {}}
+          style={{backgroundColor: colors.warning}}
+          visible={!netState.isConnected}
+          wrapperStyle={{position: 'relative'}}>
           <Text style={styles.snackbar}>{strings.couldNotConnectToServer}</Text>
         </Snackbar>
       </View>
