@@ -11,7 +11,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 export const startScanBle = async (
   dispatch: Dispatch,
   devices: Device[],
-  connectedDevices: Device[],
   isBleScanning?: boolean,
   navigation?: NativeStackNavigationProp<any>,
 ) => {
@@ -32,10 +31,7 @@ export const startScanBle = async (
           return;
         }
 
-        if (
-          device?.name?.includes(bleTechnowagy) &&
-          ![...connectedDevices, ...devices].find(item => item.id === device?.id)
-        ) {
+        if (device?.name?.includes(bleTechnowagy) && !devices.find(item => item.id === device?.id)) {
           devices = [...devices, device];
           dispatch(setDevices(devices));
         }
