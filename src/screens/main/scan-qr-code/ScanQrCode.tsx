@@ -104,9 +104,9 @@ const ScanQrCode = () => {
   const handleHarvest = useCallback(
     (qrCode: QrCode) => {
       if (qrCode.workerUuid) {
-        dispatch(setHarvest({...harvest, workerUuid: qrCode.workerUuid}));
+        dispatch(setHarvest({...harvest, qrCodeUuid: undefined, workerUuid: qrCode.workerUuid}));
       } else {
-        dispatch(setHarvest({...harvest, qrCodeUuid: qrCode.uuid}));
+        dispatch(setHarvest({...harvest, qrCodeUuid: qrCode.uuid, workerUuid: undefined}));
       }
 
       navigation.navigate('HandOverHarvest', {scenario});
