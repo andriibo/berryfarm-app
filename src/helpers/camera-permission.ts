@@ -1,34 +1,37 @@
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {isIOS, systemAlert} from 'src/constants/constants';
-import {PermissionsAndroid} from 'react-native';
+import {check, openSettings, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {isIOS} from 'src/constants/constants';
+import {Alert, PermissionsAndroid} from 'react-native';
 import {strings} from 'src/locales/locales';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const message = strings.toScanQrCodeWeNeedAccessToYourCamera;
+const appSystemAlert = (navigation?: NativeStackNavigationProp<any>) => {
+  Alert.alert(strings.cameraPermissionRequest, strings.toScanQrCodeWeNeedAccessToYourCamera, [
+    {
+      text: strings.cancel,
+      style: 'cancel',
+      onPress: () => navigation?.goBack(),
+    },
+    {text: strings.settings, onPress: openSettings},
+  ]);
+};
 
 export async function requestCameraPermission(navigation?: NativeStackNavigationProp<any>) {
   try {
     if (isIOS) {
       const isAlreadyGrantedIOS = await check(PERMISSIONS.IOS.CAMERA);
 
-      console.log(isAlreadyGrantedIOS);
-
       if (isAlreadyGrantedIOS === RESULTS.GRANTED) {
         return true;
       }
 
-      request(PERMISSIONS.IOS.CAMERA).then(res => {
-        console.log(res);
-
-        if (res === RESULTS.GRANTED) {
+      request(PERMISSIONS.IOS.CAMERA).then(result => {
+        if (result === RESULTS.GRANTED) {
           return true;
         }
 
-        systemAlert(strings.cameraPermissionRequest, message, navigation);
+        appSystemAlert(navigation);
       });
-    }
-
-    if (!isIOS) {
+    } else {
       const isAlreadyGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
 
       if (isAlreadyGranted) {
@@ -41,8 +44,10 @@ export async function requestCameraPermission(navigation?: NativeStackNavigation
         return true;
       }
 
-      systemAlert(strings.cameraPermissionRequest, message, navigation);
+      appSystemAlert(navigation);
     }
+
+    return false;
   } catch (err) {
     console.warn(err);
 

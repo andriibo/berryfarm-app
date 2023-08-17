@@ -79,7 +79,8 @@ export const strings = new LocalizedStrings({
     disconnected: 'отсоединен',
     unableConnectScales: 'Не удается подключиться к весам. Пожалуйста, попробуйте еще раз.',
     bluetoothPermissionRequest: 'Запрос разрешения Bluetooth',
-    locationPermissionRequest: 'Запрос на разрешение местоположения',
+    locationPermissionAppRequest: 'Запрос на разрешение местоположения в приложении',
+    locationPermissionDeviceRequest: 'Запрос на разрешение местоположения в телефоне',
     cameraPermissionRequest: 'Запрос использования камеры',
     toConnectToScalesWeNeedAccessToYourLocation:
       'Для подключения к весам нам нужен доступ к вашему местоположению. Перейдите в настройки, чтобы включить разрешение на определение местоположения.',

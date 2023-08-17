@@ -95,7 +95,9 @@ const CreateWorker = () => {
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View>
-            <Text variant="titleMedium">{strings.worker}</Text>
+            <Text style={styles.label} variant="titleMedium">
+              {strings.worker}
+            </Text>
             <Controller
               control={control}
               name="firstName"
@@ -161,7 +163,9 @@ const CreateWorker = () => {
             />
           </View>
           <View>
-            <Text variant="titleMedium">{strings.birthDate}</Text>
+            <Text style={styles.label} variant="titleMedium">
+              {strings.birthDate}
+            </Text>
             <Controller
               control={control}
               name="birthDate"

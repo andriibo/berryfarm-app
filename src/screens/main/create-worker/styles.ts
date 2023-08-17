@@ -1,4 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
+import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
@@ -12,6 +13,9 @@ export default StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     textAlign: 'center',
+  },
+  label: {
+    color: colors.outline,
   },
   btn: {
     width: Dimensions.get('window').width - 50,

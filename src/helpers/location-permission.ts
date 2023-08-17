@@ -1,13 +1,50 @@
-import {PermissionsAndroid} from 'react-native';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {isIOS, systemAlert} from 'src/constants/constants';
+import {Alert, Linking, PermissionsAndroid} from 'react-native';
+import {check, openSettings, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {androidLocation, iosLocation, isIOS} from 'src/constants/constants';
 import {strings} from 'src/locales/locales';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import DeviceInfo from 'react-native-device-info';
 
-const message = strings.toConnectToScalesWeNeedAccessToYourLocation;
+const appSystemAlert = (navigation?: NativeStackNavigationProp<any>) => {
+  Alert.alert(strings.locationPermissionAppRequest, strings.toConnectToScalesWeNeedAccessToYourLocation, [
+    {
+      text: strings.cancel,
+      style: 'cancel',
+      onPress: () => navigation?.goBack(),
+    },
+    {
+      text: strings.settings,
+      onPress: () => openSettings(),
+    },
+  ]);
+};
+
+const deviceSystemAlert = (navigation?: NativeStackNavigationProp<any>) => {
+  Alert.alert(strings.locationPermissionDeviceRequest, strings.toConnectToScalesWeNeedAccessToYourLocation, [
+    {
+      text: strings.cancel,
+      style: 'cancel',
+      onPress: () => navigation?.goBack(),
+    },
+    {
+      text: strings.settings,
+      onPress: () => {
+        isIOS ? Linking.openURL(iosLocation) : Linking.sendIntent(androidLocation);
+      },
+    },
+  ]);
+};
 
 export async function requestLocationPermission(navigation?: NativeStackNavigationProp<any>) {
   try {
+    const deviceLocationEnabled = await DeviceInfo.isLocationEnabled();
+
+    if (!deviceLocationEnabled) {
+      deviceSystemAlert(navigation);
+
+      return false;
+    }
+
     if (isIOS) {
       const isAlreadyGrantedAlwaysIOS = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
       const isAlreadyGrantedWhenInUseIOS = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -20,21 +57,14 @@ export async function requestLocationPermission(navigation?: NativeStackNavigati
 
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          systemAlert(strings.locationPermissionRequest, message, navigation);
-
-          return false;
         case RESULTS.DENIED:
-          systemAlert(strings.locationPermissionRequest, message, navigation);
+        case RESULTS.BLOCKED:
+          appSystemAlert(navigation);
 
           return false;
         case RESULTS.LIMITED:
-          return true;
         case RESULTS.GRANTED:
           return true;
-        case RESULTS.BLOCKED:
-          systemAlert(strings.locationPermissionRequest, message, navigation);
-
-          return false;
       }
     }
 
@@ -56,7 +86,7 @@ export async function requestLocationPermission(navigation?: NativeStackNavigati
         return true;
       }
 
-      systemAlert(strings.locationPermissionRequest, message, navigation);
+      appSystemAlert(navigation);
     }
 
     return false;
