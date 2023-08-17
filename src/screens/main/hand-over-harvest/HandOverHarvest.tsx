@@ -39,6 +39,7 @@ import {Stack} from 'react-native-spacing-system';
 import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.type';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 import NumericInput from 'react-native-numeric-input';
+import {sortItemsByLabel} from 'src/helpers/sort.helper';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 const iconArrowDown = (style: StyleProp<ViewStyle>) => <IconButton icon="chevron-down" style={style} />;
@@ -138,7 +139,9 @@ const HandOverHarvest = () => {
               items.push({label: product.title, value: product.id});
             });
 
-            setProducts(items);
+            const sortedProducts = sortItemsByLabel(items);
+
+            setProducts(sortedProducts);
           }),
         );
       }
@@ -152,7 +155,9 @@ const HandOverHarvest = () => {
               items.push({label: location.title, value: location.id});
             });
 
-            setLocations(items);
+            const sortedLocations = sortItemsByLabel(items);
+
+            setLocations(sortedLocations);
           }),
         );
       }
@@ -235,7 +240,11 @@ const HandOverHarvest = () => {
             });
           });
 
-          setProductQualities([...new Map(qualities.map(item => [item.value, item])).values()]);
+          const sortedProductQualities = sortItemsByLabel([
+            ...new Map(qualities.map(item => [item.value, item])).values(),
+          ]);
+
+          setProductQualities(sortedProductQualities);
         })
         .finally(() => setProductQualitiesLoader(false));
     },
@@ -257,7 +266,9 @@ const HandOverHarvest = () => {
         }
       });
 
-      setHarvestPackages(packages);
+      const sortedPackages = sortItemsByLabel(packages);
+
+      setHarvestPackages(sortedPackages);
     },
     [productQualityPackages, setValue],
   );
