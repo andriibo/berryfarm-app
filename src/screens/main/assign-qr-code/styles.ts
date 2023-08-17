@@ -14,6 +14,9 @@ export default StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
+  label: {
+    color: colors.outline,
+  },
   item: {
     marginHorizontal: 20,
     marginVertical: 10,

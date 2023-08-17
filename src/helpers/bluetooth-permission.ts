@@ -1,34 +1,42 @@
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {isIOS, systemAlert} from 'src/constants/constants';
-import {PermissionsAndroid} from 'react-native';
+import {androidBLE, iosBLE, isIOS} from 'src/constants/constants';
+import {Alert, Linking, PermissionsAndroid} from 'react-native';
 import {strings} from 'src/locales/locales';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const message = strings.toConnectToScalesWeNeedAccessToYourBluetooth;
+const deviceSystemAlert = (navigation?: NativeStackNavigationProp<any>) => {
+  Alert.alert(strings.bluetoothPermissionRequest, strings.toConnectToScalesWeNeedAccessToYourBluetooth, [
+    {
+      text: strings.cancel,
+      style: 'cancel',
+      onPress: () => navigation?.goBack(),
+    },
+    {
+      text: strings.settings,
+      onPress: () => {
+        isIOS ? Linking.openURL(iosBLE) : Linking.sendIntent(androidBLE);
+      },
+    },
+  ]);
+};
 
 export async function requestBluetoothPermission(navigation?: NativeStackNavigationProp<any>) {
   try {
     if (isIOS) {
       const isAlreadyGrantedIOS = await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
 
-      console.log(isAlreadyGrantedIOS);
-
       if (isAlreadyGrantedIOS === RESULTS.GRANTED) {
         return true;
       }
 
       request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL).then(res => {
-        console.log(res);
-
         if (res === RESULTS.GRANTED) {
           return true;
         }
 
-        systemAlert(strings.bluetoothPermissionRequest, message, navigation);
+        deviceSystemAlert(navigation);
       });
-    }
-
-    if (!isIOS) {
+    } else {
       const isAlreadyGrantedScan = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);
       const isAlreadyGrantedConnect = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
 
@@ -48,8 +56,10 @@ export async function requestBluetoothPermission(navigation?: NativeStackNavigat
         return true;
       }
 
-      systemAlert(strings.bluetoothPermissionRequest, message, navigation);
+      deviceSystemAlert(navigation);
     }
+
+    return false;
   } catch (err) {
     console.warn(err);
 

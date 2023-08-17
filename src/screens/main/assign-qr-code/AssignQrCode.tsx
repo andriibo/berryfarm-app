@@ -106,7 +106,9 @@ const AssignQrCode = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         <View>
-          <Text variant="headlineSmall">{strings.worker}</Text>
+          <Text style={styles.label} variant="headlineSmall">
+            {strings.worker}
+          </Text>
           <View style={styles.wrapper}>
             <Searchbar
               onChangeText={name => {
