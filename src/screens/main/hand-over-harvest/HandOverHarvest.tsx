@@ -10,7 +10,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {cleanHarvest, IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {
   createHarvest,
   getLocations,
@@ -284,15 +284,12 @@ const HandOverHarvest = () => {
       }
 
       try {
-        if (harvest.workerUuid) {
-          data = {...data, workerUuid: harvest.workerUuid};
-        } else {
-          data = {...data, qrCodeUuid: harvest.qrCodeUuid};
-        }
+        data = harvest.workerUuid
+          ? {...data, workerUuid: harvest.workerUuid}
+          : {...data, qrCodeUuid: harvest.qrCodeUuid};
 
         createHarvest({...data, uuid: uuid()}, firestorePrefix);
         reset();
-        dispatch(cleanHarvest());
         navigation.navigate('SuccessPage', {scenario});
       } catch (error: any) {
         if (error instanceof FirestoreServiceError) {
