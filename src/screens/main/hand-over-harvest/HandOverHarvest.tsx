@@ -234,12 +234,10 @@ const HandOverHarvest = () => {
           const qualities: any[] = [];
 
           data.forEach(item => {
-            if (!qualities.some(element => element.value === item.productQuality.id)) {
-              qualities.push({
-                label: item.productQuality.title,
-                value: item.productQuality.id,
-              });
-            }
+            qualities.push({
+              label: item.productQuality.title,
+              value: item.productQuality.id,
+            });
           });
 
           const sortedProductQualities = sortItemsByLabel([
@@ -260,7 +258,7 @@ const HandOverHarvest = () => {
       const packages: any[] = [];
 
       productQualityPackages.forEach(items => {
-        if (value === items.productQuality.id && !packages.some(element => element.value === items.harvestPackage.id)) {
+        if (value === items.productQuality.id) {
           packages.push({
             label: items.harvestPackage.title,
             value: items.harvestPackage.id,
@@ -268,7 +266,7 @@ const HandOverHarvest = () => {
         }
       });
 
-      const sortedPackages = sortItemsByLabel(packages);
+      const sortedPackages = sortItemsByLabel([...new Map(packages.map(item => [item.value, item])).values()]);
 
       setHarvestPackages(sortedPackages);
     },
