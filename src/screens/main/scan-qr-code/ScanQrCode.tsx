@@ -43,7 +43,7 @@ const ScanQrCode = () => {
   }, [scenario]);
   const scanner = useRef<QRCodeScanner>(null);
   const soundID = useMemo(
-    () => (isIOS ? RNSystemSounds.iOSSoundIDs.AudioToneBusy : RNSystemSounds.AndroidSoundIDs.TONE_CDMA_ABBR_ALERT),
+    () => (isIOS ? RNSystemSounds.iOSSoundIDs.SMSReceived_Alert1 : RNSystemSounds.AndroidSoundIDs.TONE_CDMA_ABBR_ALERT),
     [],
   );
 
