@@ -266,7 +266,7 @@ const HandOverHarvest = () => {
         }
       });
 
-      const sortedPackages = sortItemsByLabel(packages);
+      const sortedPackages = sortItemsByLabel([...new Map(packages.map(item => [item.value, item])).values()]);
 
       setHarvestPackages(sortedPackages);
     },
