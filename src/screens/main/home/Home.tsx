@@ -49,23 +49,25 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(setDevices([]));
-          navigation.navigate('ConnectBle');
-        }}
-        style={styles.deviceStateWrapper}>
-        <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
-        <Text style={styles.deviceState}>{deviceState.title}</Text>
-      </TouchableOpacity>
-      <View style={styles.container}>
-        {buttons.map(({title, destination}) => {
-          return (
-            <Fragment key={title}>
-              <HomeButton destination={destination} title={title} />
-            </Fragment>
-          );
-        })}
+      <View style={{flex: 1, marginHorizontal: '0%'}}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setDevices([]));
+            navigation.navigate('ConnectBle');
+          }}
+          style={styles.deviceStateWrapper}>
+          <IconButton icon={deviceState.icon} iconColor={deviceState.color} size={20} />
+          <Text style={styles.deviceState}>{deviceState.title}</Text>
+        </TouchableOpacity>
+        <View style={styles.container}>
+          {buttons.map(({title, destination}) => {
+            return (
+              <Fragment key={title}>
+                <HomeButton destination={destination} title={title} />
+              </Fragment>
+            );
+          })}
+        </View>
       </View>
     </SafeAreaView>
   );

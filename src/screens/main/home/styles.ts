@@ -1,8 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
-export const width = Dimensions.get('window').width / 3 + 40;
-
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -12,19 +10,19 @@ export default StyleSheet.create({
     flexWrap: 'wrap',
   },
   deviceStateWrapper: {
-    height: 30,
+    height: 20,
     flexDirection: 'row',
-    paddingLeft: '10%',
     alignItems: 'center',
+    marginLeft: '10%',
   },
   deviceState: {
     fontSize: 17,
   },
   surface: {
     padding: 8,
-    width,
+    width: Dimensions.get('window').width / 3 + 30,
     margin: 10,
-    height: '30%',
+    height: Dimensions.get('window').height / 4,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
