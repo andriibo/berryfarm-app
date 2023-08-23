@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     borderRadius: 30,
     marginHorizontal: 50,
     height: 50,
-    width: Dimensions.get('window').width - 100,
+    width: '90%',
     marginBottom: 25,
   },
   btnLabel: {

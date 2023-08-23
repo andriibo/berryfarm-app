@@ -1,7 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
-
-export const width = Dimensions.get('window').width / 3 - 20;
 
 export default StyleSheet.create({
   container: {
@@ -35,10 +33,14 @@ export default StyleSheet.create({
     fontSize: 20,
     flexShrink: 1,
   },
+  blockBtn: {
+    marginTop: '20%',
+    width: '70%',
+  },
   btn: {
     borderRadius: 30,
     height: 50,
-    width: Dimensions.get('window').width - 100,
+    width: '100%',
     marginBottom: 25,
   },
 });

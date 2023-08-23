@@ -87,7 +87,12 @@ const QrCodeInfo = () => {
           </View>
         </View>
         <View style={{alignItems: 'center'}}>
-          <Button icon="qrcode" mode="contained" onPress={navigation.goBack} style={[styles.btn]}>
+          <Button
+            contentStyle={{height: 50}}
+            icon="qrcode"
+            mode="contained"
+            onPress={navigation.goBack}
+            style={[styles.btn]}>
             {strings.scanQrCode}
           </Button>
         </View>

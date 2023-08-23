@@ -76,7 +76,6 @@ const ChooseFarm = () => {
               {farm.label}
             </Button>
           ))}
-
           <Button
             contentStyle={{height: 50}}
             disabled={!selectedFarm}

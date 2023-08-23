@@ -23,7 +23,7 @@ const SuccessPage = () => {
         <Text style={styles.titleText}>{strings.entrySaved}</Text>
         <IconButton icon="check-circle-outline" iconColor={colors.black} size={50} />
       </View>
-      <View style={{marginTop: '20%'}}>
+      <View style={styles.blockBtn}>
         {scenario === ScenariosEnum.templates && (
           <Button contentStyle={{height: 50}} mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
             {strings.toTemplates}

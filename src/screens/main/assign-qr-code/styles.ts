@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -28,7 +28,7 @@ export default StyleSheet.create({
   },
   btn: {
     height: 50,
-    width: Dimensions.get('window').width - 77,
+    width: '90%',
     marginBottom: 25,
     borderRadius: 30,
   },
@@ -45,7 +45,7 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   searchBar: {
-    width: Dimensions.get('screen').width - 80,
+    width: '90%',
     backgroundColor: colors.background,
   },
 });
