@@ -61,7 +61,7 @@ const ChooseFarm = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
-        <View style={{flex: 1, justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+        <View style={styles.wrapper}>
           <Text style={styles.subheading} variant="bodyLarge">
             {strings.selectFarm}
           </Text>

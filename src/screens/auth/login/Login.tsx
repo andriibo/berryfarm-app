@@ -77,7 +77,7 @@ const Login = () => {
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background, marginTop: -headerHeight}}>
       <View style={styles.container}>
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
-        <View style={{flex: 1, justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+        <View style={styles.wrapper}>
           <Controller
             control={control}
             name="username"

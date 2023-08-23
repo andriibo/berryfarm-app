@@ -11,6 +11,12 @@ export default StyleSheet.create({
     width: '90%',
     height: '50%',
   },
+  wrapper: {
+    flex: 1,
+    justifyContent: 'space-around',
+    width: '100%',
+    alignItems: 'center',
+  },
   subheading: {
     marginBottom: 40,
     marginTop: -30,
