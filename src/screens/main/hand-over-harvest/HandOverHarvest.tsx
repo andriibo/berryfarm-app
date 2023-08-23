@@ -497,17 +497,13 @@ const HandOverHarvest = () => {
                 <View>
                   <DropDownPicker
                     ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                    containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
-                    disabled={!productQualityId}
-                    disabledStyle={{borderColor: colors.surfaceVariant}}
-                    dropDownContainerStyle={{backgroundColor: colors.background}}
-                    dropDownDirection="BOTTOM"
                     items={harvestPackages}
                     language="RU"
                     listMode="MODAL"
                     multiple={false}
                     onChangeValue={value => onChangeHarvestPackageId(value as number)}
                     open={openDropdownHarvestPackages}
+                    searchable={true}
                     setItems={setHarvestPackages}
                     setOpen={setOpenDropdownHarvestPackages}
                     setValue={setHarvestPackageId}

@@ -22,6 +22,10 @@ export default StyleSheet.create({
     width: Dimensions.get('window').width - 100,
     marginBottom: 25,
   },
+  btnLabel: {
+    marginTop: 13,
+    height: 50,
+  },
   btnSelected: {
     backgroundColor: 'rgba(100,166,68,255)',
     borderWidth: 1,

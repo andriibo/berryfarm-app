@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   wrapper: {
     borderColor: colors.black,
-    borderRadius: 30,
+    borderRadius: 5,
     borderWidth: 1,
     width: '90%',
   },

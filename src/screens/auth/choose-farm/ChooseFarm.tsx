@@ -69,11 +69,7 @@ const ChooseFarm = () => {
             <Button
               compact={false}
               key={farm.value}
-              labelStyle={{
-                color: selectedFarm === farm.value ? colors.white : colors.black,
-                marginTop: 13,
-                height: 50,
-              }}
+              labelStyle={[styles.btnLabel, {color: selectedFarm === farm.value ? colors.white : colors.black}]}
               mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
               onPress={() => handleClick(farm.value)}
               style={[styles.btn, selectedFarm === farm.value && styles.btnSelected]}>
