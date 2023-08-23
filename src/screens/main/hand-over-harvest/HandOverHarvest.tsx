@@ -504,7 +504,7 @@ const HandOverHarvest = () => {
                     dropDownDirection="BOTTOM"
                     items={harvestPackages}
                     language="RU"
-                    listMode="SCROLLVIEW"
+                    listMode="MODAL"
                     multiple={false}
                     onChangeValue={value => onChangeHarvestPackageId(value as number)}
                     open={openDropdownHarvestPackages}
