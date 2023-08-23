@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -13,9 +13,9 @@ export default StyleSheet.create({
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    width: '70%',
+    width: '60%',
     margin: 10,
-    height: '50%',
+    height: Dimensions.get('window').height / 3 + 50,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
