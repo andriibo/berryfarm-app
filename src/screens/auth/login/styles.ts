@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -12,13 +12,19 @@ export default StyleSheet.create({
     width: '90%',
     height: '50%',
   },
+  wrapper: {
+    flex: 1,
+    justifyContent: 'space-around',
+    width: '100%',
+    alignItems: 'center',
+  },
   input: {
     width: '90%',
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
-    marginBottom: 25,
-    marginTop: 50,
+    borderRadius: 30,
+    height: 50,
+    width: '90%',
   },
   snackbar: {
     textAlign: 'center',

@@ -1,18 +1,18 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'space-around',
+    width: '100%',
+    marginHorizontal: '5%',
   },
   wrapper: {
     borderColor: colors.black,
-    borderRadius: 10,
+    borderRadius: 5,
     borderWidth: 1,
-    width: '100%',
-    textAlign: 'center',
+    width: '90%',
   },
   label: {
     color: colors.outline,
@@ -27,8 +27,10 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
+    height: 50,
+    width: '90%',
     marginBottom: 25,
+    borderRadius: 30,
   },
   linkCreateWorker: {
     margin: 10,
@@ -43,7 +45,7 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   searchBar: {
-    width: Dimensions.get('screen').width - 30,
+    width: '90%',
     backgroundColor: colors.background,
   },
 });

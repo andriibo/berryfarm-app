@@ -1,8 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
-export const width = Dimensions.get('window').width / 3 - 20;
-
 export default StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -15,9 +13,9 @@ export default StyleSheet.create({
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    width: '70%',
+    width: '60%',
     margin: 10,
-    height: '40%',
+    height: Dimensions.get('window').height / 3 + 50,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -35,8 +33,14 @@ export default StyleSheet.create({
     fontSize: 20,
     flexShrink: 1,
   },
+  blockBtn: {
+    marginTop: '20%',
+    width: '70%',
+  },
   btn: {
-    width: Dimensions.get('window').width - 100,
+    borderRadius: 30,
+    height: 50,
+    width: '100%',
     marginBottom: 25,
   },
 });

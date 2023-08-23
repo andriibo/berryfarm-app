@@ -16,7 +16,9 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   btn: {
-    width: '70%',
     marginBottom: 25,
+    borderRadius: 30,
+    height: 50,
+    width: '100%',
   },
 });

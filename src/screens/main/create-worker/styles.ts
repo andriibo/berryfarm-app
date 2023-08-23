@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
@@ -18,7 +18,9 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
+    borderRadius: 30,
+    height: 50,
+    width: '100%',
     marginBottom: 25,
   },
 });

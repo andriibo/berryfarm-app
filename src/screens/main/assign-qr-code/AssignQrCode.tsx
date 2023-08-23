@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
-import {Button, Divider, Searchbar, Text} from 'react-native-paper';
+import {Button, Searchbar, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/assign-qr-code/styles';
 import {strings} from 'src/locales/locales';
@@ -120,7 +120,6 @@ const AssignQrCode = () => {
               testID="getName"
               value={searchQuery}
             />
-            <Divider />
             <FlatList
               data={foundWorkers}
               keyExtractor={item => `${item.uuid}`}
@@ -142,8 +141,8 @@ const AssignQrCode = () => {
             )}
           </View>
         </View>
-
         <Button
+          contentStyle={{height: 50}}
           disabled={!canScanQrCode}
           icon="qrcode"
           mode="contained"

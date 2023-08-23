@@ -174,6 +174,7 @@ const CreateWorker = () => {
           </View>
           <View style={{alignItems: 'center'}}>
             <Button
+              contentStyle={{height: 50}}
               disabled={!isDirty || !isValid}
               icon="qrcode"
               mode="contained"
