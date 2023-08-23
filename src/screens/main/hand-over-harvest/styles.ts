@@ -25,7 +25,9 @@ export default StyleSheet.create({
     textDecorationStyle: 'solid',
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
+    borderRadius: 30,
+    height: 50,
+    width: Dimensions.get('window').width - 100,
   },
   snackbar: {
     textAlign: 'center',

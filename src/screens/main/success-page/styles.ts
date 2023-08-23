@@ -17,7 +17,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     width: '70%',
     margin: 10,
-    height: '40%',
+    height: '50%',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -36,6 +36,8 @@ export default StyleSheet.create({
     flexShrink: 1,
   },
   btn: {
+    borderRadius: 30,
+    height: 50,
     width: Dimensions.get('window').width - 100,
     marginBottom: 25,
   },

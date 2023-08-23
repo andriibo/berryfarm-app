@@ -25,17 +25,18 @@ const SuccessPage = () => {
       </View>
       <View style={{marginTop: '20%'}}>
         {scenario === ScenariosEnum.templates && (
-          <Button mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
+          <Button contentStyle={{height: 50}} mode="outlined" onPress={() => navigation.popToTop()} style={styles.btn}>
             {strings.toTemplates}
           </Button>
         )}
         {(scenario === ScenariosEnum.templates || scenario === ScenariosEnum.handOverHarvest) && (
-          <Button mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
+          <Button contentStyle={{height: 50}} mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
             {strings.hangOverAnotherHarvest}
           </Button>
         )}
         {scenario !== ScenariosEnum.templates && scenario !== ScenariosEnum.handOverHarvest && (
           <Button
+            contentStyle={{height: 50}}
             mode="outlined"
             onPress={() => {
               navigation.popToTop();
@@ -46,12 +47,12 @@ const SuccessPage = () => {
           </Button>
         )}
         {scenario === ScenariosEnum.createWorker && (
-          <Button mode="contained" onPress={() => navigation.popToTop()} style={styles.btn}>
+          <Button contentStyle={{height: 50}} mode="contained" onPress={() => navigation.popToTop()} style={styles.btn}>
             {strings.registerMore}
           </Button>
         )}
         {scenario === ScenariosEnum.assignQrCode && (
-          <Button mode="contained" onPress={navigation.goBack} style={styles.btn}>
+          <Button contentStyle={{height: 50}} mode="contained" onPress={navigation.goBack} style={styles.btn}>
             {strings.giveAnotherQrCode}
           </Button>
         )}

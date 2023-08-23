@@ -548,6 +548,7 @@ const HandOverHarvest = () => {
                     onChange={field.onChange}
                     rightButtonBackgroundColor={colors.primary}
                     rounded
+                    totalHeight={50}
                   />
                   <HelperText type="error" visible={Boolean(errors.qty)}>
                     {errors.qty?.message}
@@ -618,6 +619,7 @@ const HandOverHarvest = () => {
         )}
         <View style={{alignItems: 'center'}}>
           <Button
+            contentStyle={{height: 50}}
             disabled={!isDirty || !isValid || !weightTotal || loaderWeight}
             mode="contained"
             onPress={handleSubmit(handleSave)}
