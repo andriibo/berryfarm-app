@@ -77,39 +77,42 @@ const Login = () => {
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background, marginTop: -headerHeight}}>
       <View style={styles.container}>
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
-        <Controller
-          control={control}
-          name="username"
-          render={({field: {onChange}}) => (
-            <View style={styles.input}>
-              <TextInput
-                error={Boolean(errors.username)}
-                label={strings.username}
-                mode="outlined"
-                onChangeText={onChange}
-                style={{width: '100%'}}
-                testID="loginUsername"
-              />
-              <HelperText type="error" visible={Boolean(errors.username)}>
-                {errors.username?.message}
-              </HelperText>
-            </View>
-          )}
-        />
-        <Button
-          disabled={!isDirty || !isValid}
-          mode="contained"
-          onPress={handleSubmit(handleLogin)}
-          style={[styles.btn]}>
-          {strings.logIn}
-        </Button>
-        <Snackbar
-          onDismiss={() => {}}
-          style={{backgroundColor: colors.warning}}
-          visible={!netState.isConnected}
-          wrapperStyle={{position: 'relative'}}>
-          <Text style={styles.snackbar}>{strings.couldNotConnectToServer}</Text>
-        </Snackbar>
+        <View style={{flex: 1, justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+          <Controller
+            control={control}
+            name="username"
+            render={({field: {onChange}}) => (
+              <View style={styles.input}>
+                <TextInput
+                  error={Boolean(errors.username)}
+                  label={strings.username}
+                  mode="outlined"
+                  onChangeText={onChange}
+                  style={{width: '100%'}}
+                  testID="loginUsername"
+                />
+                <HelperText type="error" visible={Boolean(errors.username)}>
+                  {errors.username?.message}
+                </HelperText>
+              </View>
+            )}
+          />
+          <Button
+            contentStyle={{height: 50}}
+            disabled={!isDirty || !isValid}
+            mode="contained"
+            onPress={handleSubmit(handleLogin)}
+            style={styles.btn}>
+            {strings.logIn}
+          </Button>
+          <Snackbar
+            onDismiss={() => {}}
+            style={{backgroundColor: colors.warning}}
+            visible={!netState.isConnected}
+            wrapperStyle={{position: 'relative'}}>
+            <Text style={styles.snackbar}>{strings.couldNotConnectToServer}</Text>
+          </Snackbar>
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -16,7 +16,10 @@ export default StyleSheet.create({
     marginTop: -30,
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
+    borderRadius: 30,
+    marginHorizontal: 50,
+    height: 50,
+    width: Dimensions.get('window').width - 100,
     marginBottom: 25,
   },
   btnSelected: {

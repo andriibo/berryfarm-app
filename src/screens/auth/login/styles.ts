@@ -16,9 +16,10 @@ export default StyleSheet.create({
     width: '90%',
   },
   btn: {
-    width: Dimensions.get('window').width - 50,
-    marginBottom: 25,
-    marginTop: 50,
+    borderRadius: 30,
+    height: 50,
+    width: Dimensions.get('window').width - 100,
+    margin: 50,
   },
   snackbar: {
     textAlign: 'center',

@@ -61,25 +61,35 @@ const ChooseFarm = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <View style={styles.container}>
         <FastImage resizeMode="contain" source={require('src/assets/images/logo.png')} style={styles.image} />
-        <Text style={styles.subheading} variant="bodyLarge">
-          {strings.selectFarm}
-        </Text>
-        {farms.map(farm => (
+        <View style={{flex: 1, justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+          <Text style={styles.subheading} variant="bodyLarge">
+            {strings.selectFarm}
+          </Text>
+          {farms.map(farm => (
+            <Button
+              compact={false}
+              key={farm.value}
+              labelStyle={{
+                color: selectedFarm === farm.value ? colors.white : colors.black,
+                marginTop: 13,
+                height: 50,
+              }}
+              mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
+              onPress={() => handleClick(farm.value)}
+              style={[styles.btn, selectedFarm === farm.value && styles.btnSelected]}>
+              {farm.label}
+            </Button>
+          ))}
+
           <Button
-            compact={false}
-            key={farm.value}
-            labelStyle={{
-              color: selectedFarm === farm.value ? colors.white : colors.black,
-            }}
-            mode={selectedFarm === farm.value ? 'contained-tonal' : 'outlined'}
-            onPress={() => handleClick(farm.value)}
-            style={[styles.btn, selectedFarm === farm.value && styles.btnSelected]}>
-            {farm.label}
+            contentStyle={{height: 50}}
+            disabled={!selectedFarm}
+            mode="contained"
+            onPress={chooseFarm}
+            style={[styles.btn, styles.continue]}>
+            {strings.continue}
           </Button>
-        ))}
-        <Button disabled={!selectedFarm} mode="contained" onPress={chooseFarm} style={[styles.btn, styles.continue]}>
-          {strings.continue}
-        </Button>
+        </View>
       </View>
     </SafeAreaView>
   );

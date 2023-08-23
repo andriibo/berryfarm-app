@@ -18,6 +18,8 @@ export default StyleSheet.create({
     color: colors.outline,
   },
   btn: {
+    borderRadius: 30,
+    height: 50,
     width: Dimensions.get('window').width - 50,
     marginBottom: 25,
   },

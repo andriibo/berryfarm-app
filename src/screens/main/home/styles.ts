@@ -14,7 +14,7 @@ export default StyleSheet.create({
   deviceStateWrapper: {
     height: 30,
     flexDirection: 'row',
-    paddingLeft: 17,
+    paddingLeft: '10%',
     alignItems: 'center',
   },
   deviceState: {
