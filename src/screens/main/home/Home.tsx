@@ -49,7 +49,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
-      <View style={{flex: 1, marginHorizontal: '0%'}}>
+      <View style={{flex: 1}}>
         <TouchableOpacity
           onPress={() => {
             dispatch(setDevices([]));

@@ -3,19 +3,18 @@ import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
     flex: 1,
+    paddingHorizontal: '7%',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   wrapper: {
     backgroundColor: colors.background,
     borderColor: colors.black,
     borderRadius: 10,
     borderWidth: 1,
-    width: '60%',
-    margin: 10,
-    height: Dimensions.get('window').height / 3 + 50,
+    width: '90%',
+    height: Dimensions.get('window').height / 2,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -35,7 +34,7 @@ export default StyleSheet.create({
   },
   blockBtn: {
     marginTop: '20%',
-    width: '70%',
+    width: '100%',
   },
   btn: {
     borderRadius: 30,
