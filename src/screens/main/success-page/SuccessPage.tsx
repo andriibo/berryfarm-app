@@ -18,7 +18,7 @@ const SuccessPage = () => {
   } = useRoute<RouteProp<CreateWorkerStackParamList, 'SuccessPage'>>();
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={styles.area}>
       <View style={styles.container}>
         <View />
         <View style={styles.wrapper}>

@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/qr-code-info/styles';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {colors} from 'src/styles/colors';
 import {Badge, Button, Text} from 'react-native-paper';
 import {strings} from 'src/locales/locales';
 import {getFullname} from 'src/helpers/worker.helper';
@@ -58,7 +57,7 @@ const QrCodeInfo = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={styles.area}>
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View>

@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
+  area: {flex: 1, backgroundColor: colors.background},
   surface: {
     padding: 8,
     marginHorizontal: 20,

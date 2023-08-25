@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {colors} from 'src/styles/colors';
 
 export default StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.white},
+  area: {flex: 1, backgroundColor: colors.background},
   boldTextStyle: {
     fontSize: 20,
     color: colors.black,

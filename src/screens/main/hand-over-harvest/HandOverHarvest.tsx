@@ -321,7 +321,7 @@ const HandOverHarvest = () => {
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView edges={['bottom']} style={styles.area}>
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardDismissMode="on-drag"

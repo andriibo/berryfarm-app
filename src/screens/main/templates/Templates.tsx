@@ -7,7 +7,6 @@ import {getTemplates} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
-import {colors} from 'src/styles/colors';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {Loader} from 'src/components/loader';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
@@ -84,7 +83,7 @@ const Templates = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background, marginTop: -10}}>
+    <SafeAreaView style={[styles.area, {marginTop: -10}]}>
       <FlatList
         data={templates}
         keyExtractor={item => `${item.id}`}

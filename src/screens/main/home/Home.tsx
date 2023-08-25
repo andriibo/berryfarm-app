@@ -5,7 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import styles from 'src/screens/main/home/styles';
-import {colors} from 'src/styles/colors';
 import {setDevices, useIsDeviceConnected} from 'src/stores/slices/connect-device.slice';
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -48,7 +47,7 @@ const Home = () => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={styles.area}>
       <View style={{flex: 1}}>
         <TouchableOpacity
           onPress={() => {

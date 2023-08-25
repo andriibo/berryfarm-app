@@ -192,7 +192,7 @@ const ConnectBle = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, {marginTop: -insets.top, marginBottom: -insets.bottom}]}>
+    <SafeAreaView style={[styles.area, {marginTop: -insets.top, marginBottom: -insets.bottom}]}>
       <SectionList
         ListEmptyComponent={ListEmptyComponent}
         keyExtractor={keyExtractor}

@@ -15,7 +15,6 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {Loader} from 'src/components/loader';
-import {colors} from 'src/styles/colors';
 import {AssignQrCodeStackParamList} from 'src/navigation/assignQrCode.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {debounce} from 'lodash';
@@ -103,7 +102,7 @@ const AssignQrCode = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={styles.area}>
       <View style={styles.container}>
         <View>
           <Text style={styles.label} variant="headlineSmall">

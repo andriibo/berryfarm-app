@@ -18,7 +18,6 @@ import {v4 as uuid} from 'uuid';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setWorker} from 'src/stores/slices/worker.slice';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
-import {colors} from 'src/styles/colors';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {Loader} from 'src/components/loader';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
@@ -91,7 +90,7 @@ const CreateWorker = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+    <SafeAreaView style={styles.area}>
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View>
