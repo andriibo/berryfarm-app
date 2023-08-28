@@ -44,7 +44,6 @@ const ScanQrCode = () => {
 
   useFocusEffect(
     useCallback(() => {
-      Sound.setCategory('Playback');
       scanner.current?.reactivate();
     }, []),
   );
