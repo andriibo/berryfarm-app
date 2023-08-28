@@ -20,8 +20,7 @@ import {setQrCode} from 'src/stores/slices/qrCode.slice';
 import {requestCameraPermission} from 'src/helpers/camera-permission';
 import {Loader} from 'src/components/loader';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
-import RNSystemSounds from '@dashdoc/react-native-system-sounds';
-import {isIOS} from 'src/constants/constants';
+import Sound from 'react-native-sound';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
@@ -42,13 +41,10 @@ const ScanQrCode = () => {
     return strings.scanQrCodeWithCamera;
   }, [scenario]);
   const scanner = useRef<QRCodeScanner>(null);
-  const soundID = useMemo(
-    () => (isIOS ? RNSystemSounds.iOSSoundIDs.SMSReceived_Alert1 : RNSystemSounds.AndroidSoundIDs.TONE_CDMA_ABBR_ALERT),
-    [],
-  );
 
   useFocusEffect(
     useCallback(() => {
+      Sound.setCategory('Playback');
       scanner.current?.reactivate();
     }, []),
   );
@@ -116,8 +112,8 @@ const ScanQrCode = () => {
 
   const onSuccess = useCallback(
     async (event: any) => {
-      RNSystemSounds.play(soundID);
       try {
+        playLocalSoundFile();
         if (!uuidValidate(event.data)) {
           showAlert(strings.qrCodeNotFound);
 
@@ -154,8 +150,30 @@ const ScanQrCode = () => {
         }
       }
     },
-    [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert, soundID],
+    [assignQrCodeToWorker, dispatch, firestorePrefix, handleHarvest, navigation, scenario, showAlert],
   );
+
+  const playLocalSoundFile = () => {
+    Sound.setCategory('Playback');
+    const mySound = new Sound(require('src/assets/sounds/chord.mp3'), error => {
+      if (error) {
+        console.error('failed to load the sound', error);
+
+        return;
+      }
+
+      mySound.play(success => {
+        if (success) {
+          console.log('successfully finished playing');
+        } else {
+          console.error('playback failed due to audio decoding errors');
+        }
+      });
+    });
+
+    mySound.setVolume(0.9);
+    mySound.release();
+  };
 
   if (loader) {
     return <Loader />;

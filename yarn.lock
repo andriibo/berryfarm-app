@@ -1167,11 +1167,6 @@
     deepmerge "^3.2.0"
     hoist-non-react-statics "^3.3.0"
 
-"@dashdoc/react-native-system-sounds@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@dashdoc/react-native-system-sounds/-/react-native-system-sounds-1.0.1.tgz#ed3a7d971747eb48cb8e9ec1ff8afd3048323cb9"
-  integrity sha512-azKsmkwreG7fUGqtzJHNAqs7NPNaORtBwQogEvZCWcBPRnq9cD69dI8kNX6TOOylI3y9ZaB/NogzeCVaHxIWWg==
-
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -7685,6 +7680,11 @@ react-native-screens@^3.20.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-sound@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.11.2.tgz#e542dc5b9e16ab4b3ac7e6eaddb1fc8d98da9038"
+  integrity sha512-LmGc8lgOK3qecYMVQpyHvww/C+wgT6sWeMpVbOe4NCRGC2yKd4fo4U0KBUo9PO7AqKESO3I/2GZg1/C0+bwiiA==
 
 react-native-spacing-system@^2.0.0-rc.0:
   version "2.0.0-rc.0"
