@@ -38,6 +38,7 @@ export const strings = new LocalizedStrings({
     toMain: 'На главную',
     toTemplates: 'К шаблонам',
     qrCodeInfo: 'Информация о QR коде',
+    save: 'Сохранить',
     entrySaved: 'Запись сохранена',
     registerMore: 'Зарегестрировать еще',
     giveAnotherQrCode: 'Выдать другой QR код',

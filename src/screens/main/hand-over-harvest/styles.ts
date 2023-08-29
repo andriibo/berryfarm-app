@@ -48,14 +48,17 @@ export default StyleSheet.create({
   listItemContainerStyle: {
     height: 60,
     marginTop: 15,
+    marginBottom: 15,
   },
   listItemLabelStyle: {
     fontSize: 22,
-    height: 50,
   },
   dropDownPickerStyle: {
     backgroundColor: colors.background,
     borderRadius: 4,
     borderColor: colors.outline,
+  },
+  dropDownPickerTextStyle: {
+    fontSize: 22,
   },
 });
