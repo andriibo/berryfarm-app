@@ -66,6 +66,7 @@ const HandOverHarvest = () => {
   const [openDropdownProductQualities, setOpenDropdownProductQualities] = useState(false);
   const [openDropdownHarvestPackages, setOpenDropdownHarvestPackages] = useState(false);
   const [productId, setProductId] = useState<number | null>(null);
+  const [qty, setQty] = useState(0);
   const [locationId, setLocationId] = useState<number | null>(null);
   const [productQualityId, setProductQualityId] = useState<number | null>(null);
   const [harvestPackageId, setHarvestPackageId] = useState<number | null>(null);
@@ -130,39 +131,35 @@ const HandOverHarvest = () => {
         );
       }
 
-      if (!harvest.product) {
-        promises.push(
-          getProducts(firestorePrefix).then(data => {
-            const items: any[] = [];
+      promises.push(
+        getProducts(firestorePrefix).then(data => {
+          const items: any[] = [];
 
-            data.forEach(product => {
-              items.push({label: product.title, value: product.id});
-            });
+          data.forEach(product => {
+            items.push({label: product.title, value: product.id});
+          });
 
-            const sortedProducts = sortItemsByLabel(items);
+          const sortedProducts = sortItemsByLabel(items);
 
-            setProducts(sortedProducts);
-          }),
-        );
-      }
+          setProducts(sortedProducts);
+        }),
+      );
 
-      if (!harvest.location) {
-        promises.push(
-          getLocations(firestorePrefix).then(data => {
-            const items: any[] = [];
+      promises.push(
+        getLocations(firestorePrefix).then(data => {
+          const items: any[] = [];
 
-            data.forEach(location => {
-              items.push({label: location.title, value: location.id});
-            });
+          data.forEach(location => {
+            items.push({label: location.title, value: location.id});
+          });
 
-            const sortedLocations = sortItemsByLabel(items);
+          const sortedLocations = sortItemsByLabel(items);
 
-            setLocations(sortedLocations);
-          }),
-        );
-      }
+          setLocations(sortedLocations);
+        }),
+      );
 
-      if (harvest.product && (!harvest.productQuality || !harvest.harvestPackage)) {
+      if (harvest.product) {
         promises.push(onChangeProductId(harvest.product.id));
       }
 
@@ -178,7 +175,10 @@ const HandOverHarvest = () => {
             console.error(error);
           }
         })
-        .finally(() => setLoader(false));
+        .finally(() => {
+          setFormValues();
+          setLoader(false);
+        });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, firestorePrefix, harvest.workerUuid]),
   );
@@ -193,6 +193,14 @@ const HandOverHarvest = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]),
   );
+
+  const setFormValues = () => {
+    setProductId(harvest.product?.id ?? null);
+    setLocationId(harvest.location?.id ?? null);
+    setProductQualityId(harvest.productQuality?.id ?? null);
+    setHarvestPackageId(harvest.harvestPackage?.id ?? null);
+    setQty(harvest.qty ?? 0);
+  };
 
   const getWeightFromScales = useCallback(() => {
     try {
@@ -345,93 +353,79 @@ const HandOverHarvest = () => {
           <Text style={styles.label} variant="headlineSmall">
             {strings.product}
           </Text>
-          {harvest.product ? (
-            <>
-              <Text variant="headlineSmall">{harvest.product.title}</Text>
-              <Stack size={20} />
-            </>
-          ) : (
-            <Controller
-              control={control}
-              name="productId"
-              render={() => (
-                <View>
-                  <DropDownPicker
-                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                    itemSeparator={true}
-                    itemSeparatorStyle={styles.itemSeparatorStyle}
-                    items={products}
-                    language="RU"
-                    listItemContainerStyle={styles.listItemContainerStyle}
-                    listItemLabelStyle={styles.listItemLabelStyle}
-                    listMode="MODAL"
-                    multiple={false}
-                    onChangeValue={value => onChangeProductId(value as number)}
-                    open={openDropdownProducts}
-                    searchContainerStyle={styles.searchContainerStyle}
-                    searchTextInputStyle={styles.searchTextInputStyle}
-                    searchable={true}
-                    setItems={setProducts}
-                    setOpen={setOpenDropdownProducts}
-                    setValue={setProductId}
-                    style={styles.dropDownPickerStyle}
-                    textStyle={{fontSize: 18}}
-                    value={productId}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.productId)}>
-                    {errors.productId?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="productId"
+            render={() => (
+              <View>
+                <DropDownPicker
+                  ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                  itemSeparator={true}
+                  itemSeparatorStyle={styles.itemSeparatorStyle}
+                  items={products}
+                  language="RU"
+                  listItemContainerStyle={styles.listItemContainerStyle}
+                  listItemLabelStyle={styles.listItemLabelStyle}
+                  listMode="MODAL"
+                  multiple={false}
+                  onChangeValue={value => onChangeProductId(value as number)}
+                  open={openDropdownProducts}
+                  searchContainerStyle={styles.searchContainerStyle}
+                  searchTextInputStyle={styles.searchTextInputStyle}
+                  searchable={true}
+                  setItems={setProducts}
+                  setOpen={setOpenDropdownProducts}
+                  setValue={setProductId}
+                  style={styles.dropDownPickerStyle}
+                  textStyle={styles.dropDownPickerTextStyle}
+                  value={productId}
+                />
+                <HelperText type="error" visible={Boolean(errors.productId)}>
+                  {errors.productId?.message}
+                </HelperText>
+              </View>
+            )}
+          />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.location}
           </Text>
-          {harvest.location ? (
-            <>
-              <Text variant="headlineSmall">{harvest.location.title}</Text>
-              <Stack size={20} />
-            </>
-          ) : (
-            <Controller
-              control={control}
-              name="locationId"
-              render={() => (
-                <View>
-                  <DropDownPicker
-                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                    itemSeparator={true}
-                    itemSeparatorStyle={styles.itemSeparatorStyle}
-                    items={locations}
-                    language="RU"
-                    listItemContainerStyle={styles.listItemContainerStyle}
-                    listItemLabelStyle={styles.listItemLabelStyle}
-                    listMode="MODAL"
-                    multiple={false}
-                    onChangeValue={value =>
-                      setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true})
-                    }
-                    open={openDropdownLocations}
-                    searchContainerStyle={styles.searchContainerStyle}
-                    searchTextInputStyle={styles.searchTextInputStyle}
-                    searchable={true}
-                    setItems={setLocations}
-                    setOpen={setOpenDropdownLocations}
-                    setValue={setLocationId}
-                    style={styles.dropDownPickerStyle}
-                    textStyle={{fontSize: 18}}
-                    value={locationId}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.locationId)}>
-                    {errors.locationId?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="locationId"
+            render={() => (
+              <View>
+                <DropDownPicker
+                  ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                  itemSeparator={true}
+                  itemSeparatorStyle={styles.itemSeparatorStyle}
+                  items={locations}
+                  language="RU"
+                  listItemContainerStyle={styles.listItemContainerStyle}
+                  listItemLabelStyle={styles.listItemLabelStyle}
+                  listMode="MODAL"
+                  multiple={false}
+                  onChangeValue={value =>
+                    setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true})
+                  }
+                  open={openDropdownLocations}
+                  searchContainerStyle={styles.searchContainerStyle}
+                  searchTextInputStyle={styles.searchTextInputStyle}
+                  searchable={true}
+                  setItems={setLocations}
+                  setOpen={setOpenDropdownLocations}
+                  setValue={setLocationId}
+                  style={styles.dropDownPickerStyle}
+                  textStyle={styles.dropDownPickerTextStyle}
+                  value={locationId}
+                />
+                <HelperText type="error" visible={Boolean(errors.locationId)}>
+                  {errors.locationId?.message}
+                </HelperText>
+              </View>
+            )}
+          />
         </View>
         <View style={{zIndex: 1001}}>
           <Text
@@ -439,123 +433,103 @@ const HandOverHarvest = () => {
             variant="headlineSmall">
             {strings.quality}
           </Text>
-          {harvest.productQuality ? (
-            <>
-              <Text variant="headlineSmall">{harvest.productQuality.title}</Text>
-              <Stack size={20} />
-            </>
-          ) : (
-            <Controller
-              control={control}
-              name="productQualityId"
-              render={() => (
-                <View>
-                  <DropDownPicker
-                    ArrowDownIconComponent={({style}) =>
-                      productQualitiesLoader ? iconIndicator(style) : iconArrowDown(style)
-                    }
-                    containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
-                    disabled={!productId || productQualitiesLoader}
-                    disabledStyle={{borderColor: colors.surfaceVariant}}
-                    dropDownContainerStyle={{backgroundColor: colors.background}}
-                    dropDownDirection="BOTTOM"
-                    items={productQualities}
-                    language="RU"
-                    listMode="SCROLLVIEW"
-                    multiple={false}
-                    onChangeValue={value => onChangeProductQualityId(value as number)}
-                    open={openDropdownProductQualities}
-                    setItems={setProductQualities}
-                    setOpen={setOpenDropdownProductQualities}
-                    setValue={setProductQualityId}
-                    style={styles.dropDownPickerStyle}
-                    textStyle={{fontSize: 18}}
-                    value={productQualityId}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.productQualityId)}>
-                    {errors.productQualityId?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="productQualityId"
+            render={() => (
+              <View>
+                <DropDownPicker
+                  ArrowDownIconComponent={({style}) =>
+                    productQualitiesLoader ? iconIndicator(style) : iconArrowDown(style)
+                  }
+                  containerStyle={{backgroundColor: colors.background, zIndex: 1001}}
+                  disabled={!productId || productQualitiesLoader}
+                  disabledStyle={{borderColor: colors.surfaceVariant}}
+                  dropDownContainerStyle={{backgroundColor: colors.background}}
+                  dropDownDirection="BOTTOM"
+                  items={productQualities}
+                  language="RU"
+                  listMode="SCROLLVIEW"
+                  multiple={false}
+                  onChangeValue={value => onChangeProductQualityId(value as number)}
+                  open={openDropdownProductQualities}
+                  setItems={setProductQualities}
+                  setOpen={setOpenDropdownProductQualities}
+                  setValue={setProductQualityId}
+                  style={styles.dropDownPickerStyle}
+                  textStyle={styles.dropDownPickerTextStyle}
+                  value={productQualityId}
+                />
+                <HelperText type="error" visible={Boolean(errors.productQualityId)}>
+                  {errors.productQualityId?.message}
+                </HelperText>
+              </View>
+            )}
+          />
         </View>
         <View style={{zIndex: 1000}}>
           <Text style={[styles.label, !productQualityId && styles.labelDisabled]} variant="headlineSmall">
             {strings.package}
           </Text>
-          {harvest.harvestPackage ? (
-            <>
-              <Text variant="headlineSmall">{harvest.harvestPackage.title}</Text>
-              <Stack size={20} />
-            </>
-          ) : (
-            <Controller
-              control={control}
-              name="harvestPackageId"
-              render={() => (
-                <View>
-                  <DropDownPicker
-                    ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                    disabled={!productQualityId}
-                    itemSeparator={true}
-                    itemSeparatorStyle={styles.itemSeparatorStyle}
-                    items={harvestPackages}
-                    language="RU"
-                    listItemContainerStyle={styles.listItemContainerStyle}
-                    listItemLabelStyle={styles.listItemLabelStyle}
-                    listMode="MODAL"
-                    multiple={false}
-                    onChangeValue={value => onChangeHarvestPackageId(value as number)}
-                    open={openDropdownHarvestPackages}
-                    searchContainerStyle={styles.searchContainerStyle}
-                    searchTextInputStyle={styles.searchTextInputStyle}
-                    searchable={true}
-                    setItems={setHarvestPackages}
-                    setOpen={setOpenDropdownHarvestPackages}
-                    setValue={setHarvestPackageId}
-                    style={styles.dropDownPickerStyle}
-                    textStyle={{fontSize: 18}}
-                    value={harvestPackageId}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.harvestPackageId)}>
-                    {errors.harvestPackageId?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="harvestPackageId"
+            render={() => (
+              <View>
+                <DropDownPicker
+                  ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                  disabled={!productQualityId}
+                  itemSeparator={true}
+                  itemSeparatorStyle={styles.itemSeparatorStyle}
+                  items={harvestPackages}
+                  language="RU"
+                  listItemContainerStyle={styles.listItemContainerStyle}
+                  listItemLabelStyle={styles.listItemLabelStyle}
+                  listMode="MODAL"
+                  multiple={false}
+                  onChangeValue={value => onChangeHarvestPackageId(value as number)}
+                  open={openDropdownHarvestPackages}
+                  searchContainerStyle={styles.searchContainerStyle}
+                  searchTextInputStyle={styles.searchTextInputStyle}
+                  searchable={true}
+                  setItems={setHarvestPackages}
+                  setOpen={setOpenDropdownHarvestPackages}
+                  setValue={setHarvestPackageId}
+                  style={styles.dropDownPickerStyle}
+                  textStyle={styles.dropDownPickerTextStyle}
+                  value={harvestPackageId}
+                />
+                <HelperText type="error" visible={Boolean(errors.harvestPackageId)}>
+                  {errors.harvestPackageId?.message}
+                </HelperText>
+              </View>
+            )}
+          />
         </View>
         <View>
           <Text style={styles.label} variant="headlineSmall">
             {strings.numberOfBoxes}
           </Text>
-          {harvest.qty !== null ? (
-            <>
-              <Text variant="headlineSmall">{harvest.qty}</Text>
-              <Stack size={20} />
-            </>
-          ) : (
-            <Controller
-              control={control}
-              name="qty"
-              render={({field}) => (
-                <View>
-                  <NumericInput
-                    leftButtonBackgroundColor={colors.primary}
-                    minValue={1}
-                    onChange={field.onChange}
-                    rightButtonBackgroundColor={colors.primary}
-                    rounded
-                    totalHeight={50}
-                  />
-                  <HelperText type="error" visible={Boolean(errors.qty)}>
-                    {errors.qty?.message}
-                  </HelperText>
-                </View>
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="qty"
+            render={({field}) => (
+              <View>
+                <NumericInput
+                  leftButtonBackgroundColor={colors.primary}
+                  minValue={1}
+                  onChange={field.onChange}
+                  rightButtonBackgroundColor={colors.primary}
+                  rounded
+                  totalHeight={50}
+                  value={qty}
+                />
+                <HelperText type="error" visible={Boolean(errors.qty)}>
+                  {errors.qty?.message}
+                </HelperText>
+              </View>
+            )}
+          />
         </View>
         {!loaderWeight ? (
           <View style={{marginTop: -10}}>
@@ -623,7 +597,7 @@ const HandOverHarvest = () => {
             mode="contained"
             onPress={handleSubmit(handleSave)}
             style={styles.btn}>
-            Сохранить
+            {strings.save}
           </Button>
           <Stack size={20} />
         </View>
