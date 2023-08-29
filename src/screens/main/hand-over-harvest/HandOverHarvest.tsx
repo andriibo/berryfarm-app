@@ -358,21 +358,23 @@ const HandOverHarvest = () => {
                 <View>
                   <DropDownPicker
                     ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                    itemSeparator={true}
+                    itemSeparatorStyle={styles.itemSeparatorStyle}
                     items={products}
                     language="RU"
+                    listItemContainerStyle={styles.listItemContainerStyle}
+                    listItemLabelStyle={styles.listItemLabelStyle}
                     listMode="MODAL"
                     multiple={false}
                     onChangeValue={value => onChangeProductId(value as number)}
                     open={openDropdownProducts}
+                    searchContainerStyle={styles.searchContainerStyle}
+                    searchTextInputStyle={styles.searchTextInputStyle}
                     searchable={true}
                     setItems={setProducts}
                     setOpen={setOpenDropdownProducts}
                     setValue={setProductId}
-                    style={{
-                      backgroundColor: colors.background,
-                      borderRadius: 4,
-                      borderColor: colors.outline,
-                    }}
+                    style={styles.dropDownPickerStyle}
                     textStyle={{fontSize: 18}}
                     value={productId}
                   />
@@ -401,23 +403,25 @@ const HandOverHarvest = () => {
                 <View>
                   <DropDownPicker
                     ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                    itemSeparator={true}
+                    itemSeparatorStyle={styles.itemSeparatorStyle}
                     items={locations}
                     language="RU"
+                    listItemContainerStyle={styles.listItemContainerStyle}
+                    listItemLabelStyle={styles.listItemLabelStyle}
                     listMode="MODAL"
                     multiple={false}
                     onChangeValue={value =>
                       setValue('locationId', value as number, {shouldDirty: true, shouldValidate: true})
                     }
                     open={openDropdownLocations}
+                    searchContainerStyle={styles.searchContainerStyle}
+                    searchTextInputStyle={styles.searchTextInputStyle}
                     searchable={true}
                     setItems={setLocations}
                     setOpen={setOpenDropdownLocations}
                     setValue={setLocationId}
-                    style={{
-                      backgroundColor: colors.background,
-                      borderRadius: 4,
-                      borderColor: colors.outline,
-                    }}
+                    style={styles.dropDownPickerStyle}
                     textStyle={{fontSize: 18}}
                     value={locationId}
                   />
@@ -464,11 +468,7 @@ const HandOverHarvest = () => {
                     setItems={setProductQualities}
                     setOpen={setOpenDropdownProductQualities}
                     setValue={setProductQualityId}
-                    style={{
-                      backgroundColor: colors.background,
-                      borderRadius: 4,
-                      borderColor: colors.outline,
-                    }}
+                    style={styles.dropDownPickerStyle}
                     textStyle={{fontSize: 18}}
                     value={productQualityId}
                   />
@@ -497,21 +497,24 @@ const HandOverHarvest = () => {
                 <View>
                   <DropDownPicker
                     ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                    disabled={!productQualityId}
+                    itemSeparator={true}
+                    itemSeparatorStyle={styles.itemSeparatorStyle}
                     items={harvestPackages}
                     language="RU"
+                    listItemContainerStyle={styles.listItemContainerStyle}
+                    listItemLabelStyle={styles.listItemLabelStyle}
                     listMode="MODAL"
                     multiple={false}
                     onChangeValue={value => onChangeHarvestPackageId(value as number)}
                     open={openDropdownHarvestPackages}
+                    searchContainerStyle={styles.searchContainerStyle}
+                    searchTextInputStyle={styles.searchTextInputStyle}
                     searchable={true}
                     setItems={setHarvestPackages}
                     setOpen={setOpenDropdownHarvestPackages}
                     setValue={setHarvestPackageId}
-                    style={{
-                      backgroundColor: colors.background,
-                      borderRadius: 4,
-                      borderColor: colors.outline,
-                    }}
+                    style={styles.dropDownPickerStyle}
                     textStyle={{fontSize: 18}}
                     value={harvestPackageId}
                   />

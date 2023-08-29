@@ -34,4 +34,28 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: colors.white,
   },
+  searchContainerStyle: {
+    height: 100,
+    borderBottomColor: colors.outlineVariant,
+  },
+  searchTextInputStyle: {
+    fontSize: 22,
+    height: 50,
+  },
+  itemSeparatorStyle: {
+    backgroundColor: colors.outlineVariant,
+  },
+  listItemContainerStyle: {
+    height: 60,
+    marginTop: 15,
+  },
+  listItemLabelStyle: {
+    fontSize: 22,
+    height: 50,
+  },
+  dropDownPickerStyle: {
+    backgroundColor: colors.background,
+    borderRadius: 4,
+    borderColor: colors.outline,
+  },
 });
