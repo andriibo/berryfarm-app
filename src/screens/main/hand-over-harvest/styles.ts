@@ -47,8 +47,8 @@ export default StyleSheet.create({
   },
   listItemContainerStyle: {
     height: 60,
-    marginTop: 15,
-    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.outlineVariant,
   },
   listItemLabelStyle: {
     fontSize: 22,

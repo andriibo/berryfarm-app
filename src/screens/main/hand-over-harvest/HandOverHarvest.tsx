@@ -371,8 +371,6 @@ const HandOverHarvest = () => {
               <View>
                 <DropDownPicker
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                  itemSeparator={true}
-                  itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={products}
                   language="RU"
                   listItemContainerStyle={styles.listItemContainerStyle}
@@ -411,8 +409,6 @@ const HandOverHarvest = () => {
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                   disabled={!productId}
                   disabledStyle={{borderColor: colors.surfaceVariant}}
-                  itemSeparator={true}
-                  itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={locations}
                   language="RU"
                   listItemContainerStyle={styles.listItemContainerStyle}
@@ -460,6 +456,8 @@ const HandOverHarvest = () => {
                   disabledStyle={{borderColor: colors.surfaceVariant}}
                   dropDownContainerStyle={{backgroundColor: colors.background}}
                   dropDownDirection="BOTTOM"
+                  itemSeparator={true}
+                  itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={productQualities}
                   language="RU"
                   listMode="SCROLLVIEW"
@@ -493,8 +491,6 @@ const HandOverHarvest = () => {
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                   disabled={!productQualityId}
                   disabledStyle={{borderColor: colors.surfaceVariant}}
-                  itemSeparator={true}
-                  itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={harvestPackages}
                   language="RU"
                   listItemContainerStyle={styles.listItemContainerStyle}
