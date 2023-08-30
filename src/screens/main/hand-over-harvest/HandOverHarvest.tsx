@@ -13,7 +13,6 @@ import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {
   createHarvest,
-  getLocations,
   getProductQualityPackagesByProductId,
   getProducts,
   getWorkerByUuid,
@@ -40,6 +39,7 @@ import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.ty
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 import NumericInput from 'react-native-numeric-input';
 import {sortItemsByLabel} from 'src/helpers/sort.helper';
+import {Product} from 'src/stores/types/product.type';
 
 type HarvestRequest = Omit<CreateHarvestRequest, 'uuid'>;
 const iconArrowDown = (style: StyleProp<ViewStyle>) => <IconButton icon="chevron-down" style={style} />;
@@ -70,6 +70,7 @@ const HandOverHarvest = () => {
   const [locationId, setLocationId] = useState<number | null>(null);
   const [productQualityId, setProductQualityId] = useState<number | null>(null);
   const [harvestPackageId, setHarvestPackageId] = useState<number | null>(null);
+  const [productModels, setProductModels] = useState<Array<Product>>([]);
   const [products, setProducts] = useState<Array<any>>([]);
   const [locations, setLocations] = useState<Array<any>>([]);
   const [productQualities, setProductQualities] = useState<Array<any>>([]);
@@ -133,6 +134,7 @@ const HandOverHarvest = () => {
 
       promises.push(
         getProducts(firestorePrefix).then(data => {
+          setProductModels(data);
           const items: any[] = [];
 
           data.forEach(product => {
@@ -142,20 +144,6 @@ const HandOverHarvest = () => {
           const sortedProducts = sortItemsByLabel(items);
 
           setProducts(sortedProducts);
-        }),
-      );
-
-      promises.push(
-        getLocations(firestorePrefix).then(data => {
-          const items: any[] = [];
-
-          data.forEach(location => {
-            items.push({label: location.title, value: location.id});
-          });
-
-          const sortedLocations = sortItemsByLabel(items);
-
-          setLocations(sortedLocations);
         }),
       );
 
@@ -229,10 +217,33 @@ const HandOverHarvest = () => {
     }
   }, [activeDeviceId, connectedDevices]);
 
+  const getLocationsByProductId = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    (productId: number) => {
+      let elements: Array<{label: string; id: number}> = [];
+      const productModel = productModels.find(item => item.id === productId);
+
+      if (productModel) {
+        const items: any[] = [];
+
+        productModel.locations.forEach(location => {
+          items.push({label: location.title, value: location.id});
+        });
+
+        elements = sortItemsByLabel(items);
+      }
+
+      setLocations(elements);
+    },
+    [productModels],
+  );
+
   const onChangeProductId = useCallback(
     async (value: number) => {
       setProductId(value);
       setValue('productId', value, {shouldDirty: true, shouldValidate: true});
+      getLocationsByProductId(value);
+      setLocationId(null);
       setProductQualityId(null);
       setHarvestPackageId(null);
       setProductQualitiesLoader(true);
@@ -256,7 +267,7 @@ const HandOverHarvest = () => {
         })
         .finally(() => setProductQualitiesLoader(false));
     },
-    [firestorePrefix, setValue],
+    [firestorePrefix, getLocationsByProductId, setValue],
   );
 
   const onChangeProductQualityId = useCallback(
@@ -388,7 +399,7 @@ const HandOverHarvest = () => {
           />
         </View>
         <View>
-          <Text style={styles.label} variant="headlineSmall">
+          <Text style={[styles.label, !productId && styles.labelDisabled]} variant="headlineSmall">
             {strings.location}
           </Text>
           <Controller
@@ -398,6 +409,8 @@ const HandOverHarvest = () => {
               <View>
                 <DropDownPicker
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
+                  disabled={!productId}
+                  disabledStyle={{borderColor: colors.surfaceVariant}}
                   itemSeparator={true}
                   itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={locations}
@@ -479,6 +492,7 @@ const HandOverHarvest = () => {
                 <DropDownPicker
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
                   disabled={!productQualityId}
+                  disabledStyle={{borderColor: colors.surfaceVariant}}
                   itemSeparator={true}
                   itemSeparatorStyle={styles.itemSeparatorStyle}
                   items={harvestPackages}
@@ -571,6 +585,7 @@ const HandOverHarvest = () => {
 
                         field.onChange(sanitizedText);
                       }}
+                      outlineColor={isWeightFromScales ? colors.outlineVariant : colors.outline}
                       style={{width: '100%'}}
                       testID="weightTotal"
                       value={!isWeightFromScales && field.value === 0 ? '' : `${field.value}`}

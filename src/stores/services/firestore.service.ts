@@ -345,7 +345,6 @@ export const initData = async (prefix: string) => {
     await getWorkers(prefix);
     await getQrCodes(prefix);
     await getTemplates(prefix);
-    await getLocations(prefix);
     await getProducts(prefix);
     await getProductQualityPackages(prefix);
   } catch (error: any) {
