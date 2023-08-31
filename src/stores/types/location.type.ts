@@ -1,6 +1,7 @@
 export enum LocationStatus {
   active = 'active',
   inactive = 'inactive',
+  deleted = 'deleted',
 }
 
 export type Location = {
