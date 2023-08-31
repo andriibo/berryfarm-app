@@ -5,6 +5,8 @@ import {ProductQuality} from 'src/stores/types/productQuality.type';
 export enum ProductQualityPackagesStatus {
   active = 'active',
   inactive = 'inactive',
+  deleted = 'deleted',
+  archived = 'archived',
 }
 
 export type ProductQualityPackages = {
