@@ -12,7 +12,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {setHarvestTemplate, useHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
@@ -24,7 +24,7 @@ import Sound from 'react-native-sound';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
-  const harvest = useHarvest();
+  const harvestTemplate = useHarvestTemplate();
   const worker = useWorker();
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
@@ -46,7 +46,7 @@ const ScanQrCode = () => {
     useCallback(() => {
       scanner.current?.reactivate();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [harvest]),
+    }, [harvestTemplate]),
   );
 
   useEffect(() => {
@@ -100,14 +100,14 @@ const ScanQrCode = () => {
   const handleHarvest = useCallback(
     (qrCode: QrCode) => {
       if (qrCode.workerUuid) {
-        dispatch(setHarvest({...harvest, qrCodeUuid: undefined, workerUuid: qrCode.workerUuid}));
+        dispatch(setHarvestTemplate({...harvestTemplate, qrCodeUuid: undefined, workerUuid: qrCode.workerUuid}));
       } else {
-        dispatch(setHarvest({...harvest, qrCodeUuid: qrCode.uuid, workerUuid: undefined}));
+        dispatch(setHarvestTemplate({...harvestTemplate, qrCodeUuid: qrCode.uuid, workerUuid: undefined}));
       }
 
       navigation.navigate('HandOverHarvest', {scenario});
     },
-    [dispatch, harvest, navigation, scenario],
+    [dispatch, harvestTemplate, navigation, scenario],
   );
 
   const onSuccess = useCallback(

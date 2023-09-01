@@ -13,7 +13,7 @@ import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {setHarvest} from 'src/stores/slices/harvest.slice';
+import {setHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
 
@@ -62,7 +62,7 @@ const Templates = () => {
 
   const scanQrCode = useCallback(
     (template: HarvestTemplate) => {
-      const harvest = {
+      const harvestTemplate = {
         qty: template.qty,
         harvestPackage: template.harvestPackage,
         location: template.location,
@@ -70,7 +70,7 @@ const Templates = () => {
         productQuality: template.productQuality,
       };
 
-      dispatch(setHarvest(harvest));
+      dispatch(setHarvestTemplate(harvestTemplate));
       navigation.navigate('ScanQrCode', {
         scenario: ScenariosEnum.templates,
       });

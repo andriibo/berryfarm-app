@@ -8,7 +8,7 @@ import {authReducer, cleanUser} from './slices/auth.slice';
 import {connectDeviceReducer} from 'src/stores/slices/connect-device.slice';
 import {cleanWorker, workerReducer} from 'src/stores/slices/worker.slice';
 import {cleanFarm} from 'src/stores/slices/auth.slice';
-import {cleanHarvest, harvestReducer} from 'src/stores/slices/harvest.slice';
+import {cleanHarvestTemplate, harvestTemplateReducer} from 'src/stores/slices/harvest-template.slice';
 import {cleanQrCode, qrCodeReducer} from 'src/stores/slices/qrCode.slice';
 import {notificationsReducer} from 'src/stores/slices/notifications.slice';
 
@@ -21,7 +21,7 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
   worker: workerReducer,
-  harvest: harvestReducer,
+  harvestTemplate: harvestTemplateReducer,
   qrCode: qrCodeReducer,
   notifications: notificationsReducer,
   connectDevice: connectDeviceReducer,
@@ -42,7 +42,7 @@ export const callLogOut = async () => {
   store.dispatch(cleanUser());
   store.dispatch(cleanFarm());
   store.dispatch(cleanWorker());
-  store.dispatch(cleanHarvest());
+  store.dispatch(cleanHarvestTemplate());
   store.dispatch(cleanQrCode());
 
   const keys = await AsyncStorage.getAllKeys();
