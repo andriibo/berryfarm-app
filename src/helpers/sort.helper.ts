@@ -1,4 +1,4 @@
-export const sortItemsByLabel = (items: Array<{label: string; id: number}>) =>
+export const sortItemsByLabel = (items: Array<{label: string; value: number}>) =>
   items.sort((a, b) =>
     a.label.localeCompare(b.label, undefined, {
       numeric: true,

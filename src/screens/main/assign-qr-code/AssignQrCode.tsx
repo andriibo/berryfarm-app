@@ -144,6 +144,7 @@ const AssignQrCode = () => {
           contentStyle={{height: 50}}
           disabled={!canScanQrCode}
           icon="qrcode"
+          labelStyle={{fontSize: 18}}
           mode="contained"
           onPress={() =>
             navigation.navigate('ScanQrCode', {

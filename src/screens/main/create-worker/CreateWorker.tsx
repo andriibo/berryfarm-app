@@ -176,6 +176,7 @@ const CreateWorker = () => {
               contentStyle={{height: 50}}
               disabled={!isDirty || !isValid}
               icon="qrcode"
+              labelStyle={{fontSize: 18}}
               mode="contained"
               onPress={handleSubmit(handleCreateWorker)}
               style={[styles.btn]}>

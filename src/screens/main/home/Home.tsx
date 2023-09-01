@@ -9,7 +9,7 @@ import {setDevices, useIsDeviceConnected} from 'src/stores/slices/connect-device
 import {deviceLabelStyle} from 'src/helpers/device-label-style';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'src/navigation/home.stack';
-import {cleanHarvest} from 'src/stores/slices/harvest.slice';
+import {cleanHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
 
 const buttons = [
@@ -42,7 +42,7 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(cleanHarvest());
+      dispatch(cleanHarvestTemplate());
     }, [dispatch]),
   );
 

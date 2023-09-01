@@ -11,13 +11,13 @@ export default StyleSheet.create({
     flexWrap: 'wrap',
   },
   deviceStateWrapper: {
-    height: 20,
+    height: 24,
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: '10%',
   },
   deviceState: {
-    fontSize: 17,
+    fontSize: 18,
   },
   surface: {
     padding: 8,

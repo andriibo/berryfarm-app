@@ -100,6 +100,7 @@ const Login = () => {
           <Button
             contentStyle={{height: 50}}
             disabled={!isDirty || !isValid}
+            labelStyle={{fontSize: 18}}
             mode="contained"
             onPress={handleSubmit(handleLogin)}
             style={styles.btn}>
