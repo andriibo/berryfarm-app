@@ -12,7 +12,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScenariosEnum} from 'src/enums/scenarios.enum';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {useAppDispatch} from 'src/stores/hooks/hooks';
-import {IHarvest, setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {CreateWorkerStackParamList} from 'src/navigation/createWorker.stack';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {validate as uuidValidate} from 'uuid';
@@ -24,7 +24,7 @@ import Sound from 'react-native-sound';
 
 const ScanQrCode = () => {
   const dispatch = useAppDispatch();
-  const harvest = useHarvest() as IHarvest;
+  const harvest = useHarvest();
   const worker = useWorker();
   const {firestorePrefix} = useFarm();
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
@@ -45,7 +45,8 @@ const ScanQrCode = () => {
   useFocusEffect(
     useCallback(() => {
       scanner.current?.reactivate();
-    }, []),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [harvest]),
   );
 
   useEffect(() => {
