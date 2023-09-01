@@ -89,6 +89,7 @@ const QrCodeInfo = () => {
           <Button
             contentStyle={{height: 50}}
             icon="qrcode"
+            labelStyle={{fontSize: 18}}
             mode="contained"
             onPress={navigation.goBack}
             style={[styles.btn]}>

@@ -10,7 +10,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {IHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
+import {setHarvest, useHarvest} from 'src/stores/slices/harvest.slice';
 import {
   createHarvest,
   getProductQualityPackagesByProductId,
@@ -33,7 +33,7 @@ import {
   useWeight,
 } from 'src/stores/slices/connect-device.slice';
 import {Buffer} from 'buffer';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker, {ItemType} from 'react-native-dropdown-picker';
 import {Stack} from 'react-native-spacing-system';
 import {ProductQualityPackages} from 'src/stores/types/productQualityPackages.type';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
@@ -48,7 +48,7 @@ const iconIndicator = (style: StyleProp<ViewStyle>) => <ActivityIndicator style=
 const HandOverHarvest = () => {
   const dispatch = useAppDispatch();
   const [worker, setWorker] = useState<Worker | null>(null);
-  const harvest = useHarvest() as IHarvest;
+  const harvest = useHarvest();
   const {firestorePrefix} = useFarm();
   const isDeviceConnected = useIsDeviceConnected();
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
@@ -71,11 +71,11 @@ const HandOverHarvest = () => {
   const [productQualityId, setProductQualityId] = useState<number | null>(null);
   const [harvestPackageId, setHarvestPackageId] = useState<number | null>(null);
   const [productModels, setProductModels] = useState<Array<Product>>([]);
-  const [products, setProducts] = useState<Array<any>>([]);
-  const [locations, setLocations] = useState<Array<any>>([]);
-  const [productQualities, setProductQualities] = useState<Array<any>>([]);
+  const [products, setProducts] = useState<Array<ItemType<number>>>([]);
+  const [locations, setLocations] = useState<Array<ItemType<number>>>([]);
+  const [productQualities, setProductQualities] = useState<Array<ItemType<number>>>([]);
   const [productQualitiesLoader, setProductQualitiesLoader] = useState(false);
-  const [harvestPackages, setHarvestPackages] = useState<Array<any>>([]);
+  const [harvestPackages, setHarvestPackages] = useState<Array<ItemType<number>>>([]);
   const [productQualityPackages, setProductQualityPackages] = useState<Array<ProductQualityPackages>>([]);
   const [harvestPackageWeight, setHarvestPackageWeight] = useState(0);
 
@@ -148,7 +148,26 @@ const HandOverHarvest = () => {
       );
 
       if (harvest.product) {
-        promises.push(onChangeProductId(harvest.product.id));
+        getLocationsByProductId(harvest.product.id);
+        promises.push(
+          getProductQualityPackagesByProductId(harvest.product.id, firestorePrefix).then(data => {
+            setProductQualityPackages(data);
+            const qualities: any[] = [];
+
+            data.forEach(item => {
+              qualities.push({
+                label: item.productQuality.title,
+                value: item.productQuality.id,
+              });
+            });
+
+            const sortedProductQualities = sortItemsByLabel([
+              ...new Map(qualities.map(item => [item.value, item])).values(),
+            ]);
+
+            setProductQualities(sortedProductQualities);
+          }),
+        );
       }
 
       if (harvest.harvestPackage) {
@@ -156,6 +175,10 @@ const HandOverHarvest = () => {
       }
 
       Promise.all(promises)
+        .then(() => {
+          setTemplateListValues();
+          setTemplateFormValues();
+        })
         .catch(error => {
           if (error instanceof FirestoreServiceError) {
             dispatch(addErrorNotification(error.message));
@@ -164,11 +187,10 @@ const HandOverHarvest = () => {
           }
         })
         .finally(() => {
-          setFormValues();
           setLoader(false);
         });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, firestorePrefix, harvest.workerUuid]),
+    }, [dispatch, firestorePrefix, harvest.harvestPackage, harvest.product, harvest.workerUuid]),
   );
 
   useFocusEffect(
@@ -182,12 +204,30 @@ const HandOverHarvest = () => {
     }, [dispatch]),
   );
 
-  const setFormValues = () => {
+  const setTemplateFormValues = useCallback(() => {
     setProductId(harvest.product?.id ?? null);
     setLocationId(harvest.location?.id ?? null);
     setProductQualityId(harvest.productQuality?.id ?? null);
     setHarvestPackageId(harvest.harvestPackage?.id ?? null);
     setQty(harvest.qty ?? 0);
+  }, [harvest]);
+
+  const setTemplateListValues = () => {
+    if (harvest.product && !products.length) {
+      setProducts([{label: harvest.product.title, value: harvest.product.id}]);
+    }
+
+    if (harvest.location && !locations.length) {
+      setLocations([{label: harvest.location.title, value: harvest.location.id}]);
+    }
+
+    if (harvest.productQuality && !productQualities.length) {
+      setProductQualities([{label: harvest.productQuality.title, value: harvest.productQuality.id}]);
+    }
+
+    if (harvest.harvestPackage && !harvestPackages.length) {
+      setHarvestPackages([{label: harvest.harvestPackage.title, value: harvest.harvestPackage.id}]);
+    }
   };
 
   const getWeightFromScales = useCallback(() => {
@@ -220,22 +260,23 @@ const HandOverHarvest = () => {
   const getLocationsByProductId = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-shadow
     (productId: number) => {
-      let elements: Array<{label: string; id: number}> = [];
+      let items: any[] = [];
       const productModel = productModels.find(item => item.id === productId);
 
       if (productModel) {
-        const items: any[] = [];
-
         productModel.locations.forEach(location => {
           items.push({label: location.title, value: location.id});
         });
 
-        elements = sortItemsByLabel(items);
+        items = sortItemsByLabel(items);
       }
 
-      setLocations(elements);
+      setLocations(items);
+      if (!items.some(element => element.value === locationId)) {
+        setLocationId(null);
+      }
     },
-    [productModels],
+    [locationId, productModels],
   );
 
   const onChangeProductId = useCallback(
@@ -243,9 +284,6 @@ const HandOverHarvest = () => {
       setProductId(value);
       setValue('productId', value, {shouldDirty: true, shouldValidate: true});
       getLocationsByProductId(value);
-      setLocationId(null);
-      setProductQualityId(null);
-      setHarvestPackageId(null);
       setProductQualitiesLoader(true);
       getProductQualityPackagesByProductId(value, firestorePrefix)
         .then(data => {
@@ -271,9 +309,15 @@ const HandOverHarvest = () => {
   );
 
   const onChangeProductQualityId = useCallback(
-    async (value: number) => {
-      setProductQualityId(value);
+    (value: number) => {
+      if (!productQualities.some(element => element.value === productQualityId)) {
+        setProductQualityId(null);
+      } else {
+        setProductQualityId(value);
+      }
+
       setValue('productQualityId', value, {shouldDirty: true, shouldValidate: true});
+
       const packages: any[] = [];
 
       productQualityPackages.forEach(items => {
@@ -289,12 +333,17 @@ const HandOverHarvest = () => {
 
       setHarvestPackages(sortedPackages);
     },
-    [productQualityPackages, setValue],
+    [productQualities, productQualityId, productQualityPackages, setValue],
   );
 
   const onChangeHarvestPackageId = useCallback(
-    async (value: number) => {
-      setHarvestPackageId(value);
+    (value: number) => {
+      if (!harvestPackages.some(element => element.value === harvestPackageId)) {
+        setHarvestPackageId(null);
+      } else {
+        setHarvestPackageId(value);
+      }
+
       setValue('harvestPackageId', value, {shouldDirty: true, shouldValidate: true});
       productQualityPackages.forEach(item => {
         if (productQualityId === item.productQuality.id && harvestPackageId === item.harvestPackage.id) {
@@ -302,7 +351,33 @@ const HandOverHarvest = () => {
         }
       });
     },
-    [harvestPackageId, productQualityId, productQualityPackages, setValue],
+    [harvestPackageId, harvestPackages, productQualityId, productQualityPackages, setValue],
+  );
+
+  const modifyHarvestTemplate = useCallback(
+    (data: HarvestRequest) => {
+      const harvestPackage = harvestPackages.find(
+        element => element.value === data.harvestPackageId,
+      ) as ItemType<number>;
+      const location = locations.find(element => element.value === data.locationId) as ItemType<number>;
+      const product = products.find(element => element.value === data.productId) as ItemType<number>;
+      const productQuality = productQualities.find(
+        element => element.value === data.productQualityId,
+      ) as ItemType<number>;
+
+      return {
+        qty: data.qty,
+        harvestPackage: {
+          id: harvestPackage.value as number,
+          title: harvestPackage.label as string,
+          weight: harvestPackageWeight,
+        },
+        location: {id: location.value as number, title: location.label as string},
+        product: {id: product.value as number, title: product.label as string},
+        productQuality: {id: productQuality.value as number, title: productQuality.label as string},
+      };
+    },
+    [harvestPackageWeight, harvestPackages, locations, productQualities, products],
   );
 
   const handleSave = useCallback(
@@ -319,6 +394,9 @@ const HandOverHarvest = () => {
           : {...data, qrCodeUuid: harvest.qrCodeUuid};
 
         createHarvest({...data, uuid: uuid()}, firestorePrefix);
+        const harvestTemplate = modifyHarvestTemplate(data);
+
+        dispatch(setHarvest(harvestTemplate));
         reset();
         navigation.navigate('SuccessPage', {scenario});
       } catch (error: any) {
@@ -330,7 +408,7 @@ const HandOverHarvest = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, firestorePrefix, harvest, navigation, harvestPackageWeight],
+    [dispatch, modifyHarvestTemplate, firestorePrefix, harvest, navigation, harvestPackageWeight],
   );
 
   const {weightTotal} = getValues();
@@ -479,7 +557,9 @@ const HandOverHarvest = () => {
           />
         </View>
         <View style={{zIndex: 1000}}>
-          <Text style={[styles.label, !productQualityId && styles.labelDisabled]} variant="headlineSmall">
+          <Text
+            style={[styles.label, (!productId || !productQualityId) && styles.labelDisabled]}
+            variant="headlineSmall">
             {strings.package}
           </Text>
           <Controller
@@ -489,7 +569,7 @@ const HandOverHarvest = () => {
               <View>
                 <DropDownPicker
                   ArrowDownIconComponent={({style}) => iconArrowDown(style)}
-                  disabled={!productQualityId}
+                  disabled={!productId || !productQualityId}
                   disabledStyle={{borderColor: colors.surfaceVariant}}
                   items={harvestPackages}
                   language="RU"
@@ -528,10 +608,14 @@ const HandOverHarvest = () => {
                 <NumericInput
                   leftButtonBackgroundColor={colors.primary}
                   minValue={1}
-                  onChange={field.onChange}
+                  onChange={value => {
+                    field.onChange(value);
+                    setQty(value);
+                  }}
                   rightButtonBackgroundColor={colors.primary}
                   rounded
-                  totalHeight={50}
+                  step={1}
+                  totalHeight={55}
                   value={qty}
                 />
                 <HelperText type="error" visible={Boolean(errors.qty)}>
@@ -582,7 +666,7 @@ const HandOverHarvest = () => {
                         field.onChange(sanitizedText);
                       }}
                       outlineColor={isWeightFromScales ? colors.outlineVariant : colors.outline}
-                      style={{width: '100%'}}
+                      style={{width: '100%', fontSize: 22}}
                       testID="weightTotal"
                       value={!isWeightFromScales && field.value === 0 ? '' : `${field.value}`}
                     />
@@ -605,6 +689,7 @@ const HandOverHarvest = () => {
           <Button
             contentStyle={{height: 50}}
             disabled={!isDirty || !isValid || !weightTotal || loaderWeight}
+            labelStyle={{fontSize: 18}}
             mode="contained"
             onPress={handleSubmit(handleSave)}
             style={styles.btn}>

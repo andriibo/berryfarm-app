@@ -25,7 +25,7 @@ export default StyleSheet.create<Styles>({
   },
   message: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     color: colors.white,
     marginHorizontal: 12,
     paddingTop: 15,

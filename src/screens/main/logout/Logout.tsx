@@ -5,6 +5,7 @@ import {callLogOut} from 'src/stores/store';
 import {View} from 'react-native';
 import {Divider} from 'react-native-paper';
 import styles from './styles';
+import {colors} from 'src/styles/colors';
 
 const Logout = (props: any) => {
   const handleSignOut = async () => {
@@ -17,7 +18,11 @@ const Logout = (props: any) => {
         <DrawerItemList {...props} />
         <View style={styles.logout}>
           <Divider style={{marginBottom: 20}} />
-          <DrawerItem label={strings.logout} onPress={handleSignOut} />
+          <DrawerItem
+            label={strings.logout}
+            labelStyle={{fontSize: 18, color: colors.onSurface}}
+            onPress={handleSignOut}
+          />
         </View>
       </DrawerContentScrollView>
     </View>

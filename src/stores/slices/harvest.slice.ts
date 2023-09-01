@@ -12,7 +12,7 @@ export type IHarvest = {
   qrCodeUuid?: string;
   harvestPackage: HarvestPackage | null;
   location: Omit<Location, 'status'> | null;
-  product: Omit<Product, 'status'> | null;
+  product: Omit<Product, 'locations' | 'status'> | null;
   productQuality: ProductQuality | null;
 };
 

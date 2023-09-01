@@ -33,6 +33,7 @@ export default StyleSheet.create({
     marginBottom: 25,
   },
   btnLabel: {
+    fontSize: 18,
     marginTop: 13,
     height: 50,
   },

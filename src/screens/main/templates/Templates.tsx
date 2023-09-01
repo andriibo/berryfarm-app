@@ -21,7 +21,7 @@ const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (t
   <TouchableOpacity onPress={() => scanQrCode(template)}>
     <Surface elevation={4} style={styles.surface}>
       <View style={styles.titleWrapper}>
-        <Text variant="headlineLarge">{template.product.title}</Text>
+        <Text variant="headlineLarge">{template.product?.title}</Text>
         <Text variant="headlineLarge">{template.location?.title}</Text>
       </View>
       <View style={styles.titleWrapper}>

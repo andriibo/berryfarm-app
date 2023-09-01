@@ -29,6 +29,7 @@ const SuccessPage = () => {
           {scenario === ScenariosEnum.templates && (
             <Button
               contentStyle={{height: 50}}
+              labelStyle={{fontSize: 18}}
               mode="outlined"
               onPress={() => navigation.popToTop()}
               style={styles.btn}>
@@ -36,13 +37,19 @@ const SuccessPage = () => {
             </Button>
           )}
           {(scenario === ScenariosEnum.templates || scenario === ScenariosEnum.handOverHarvest) && (
-            <Button contentStyle={{height: 50}} mode="contained" onPress={() => navigation.pop(2)} style={styles.btn}>
+            <Button
+              contentStyle={{height: 50}}
+              labelStyle={{fontSize: 18}}
+              mode="contained"
+              onPress={() => navigation.pop(2)}
+              style={styles.btn}>
               {strings.hangOverAnotherHarvest}
             </Button>
           )}
           {scenario !== ScenariosEnum.templates && scenario !== ScenariosEnum.handOverHarvest && (
             <Button
               contentStyle={{height: 50}}
+              labelStyle={{fontSize: 18}}
               mode="outlined"
               onPress={() => {
                 navigation.popToTop();
@@ -55,6 +62,7 @@ const SuccessPage = () => {
           {scenario === ScenariosEnum.createWorker && (
             <Button
               contentStyle={{height: 50}}
+              labelStyle={{fontSize: 18}}
               mode="contained"
               onPress={() => navigation.popToTop()}
               style={styles.btn}>
@@ -62,7 +70,12 @@ const SuccessPage = () => {
             </Button>
           )}
           {scenario === ScenariosEnum.assignQrCode && (
-            <Button contentStyle={{height: 50}} mode="contained" onPress={navigation.goBack} style={styles.btn}>
+            <Button
+              contentStyle={{height: 50}}
+              labelStyle={{fontSize: 18}}
+              mode="contained"
+              onPress={navigation.goBack}
+              style={styles.btn}>
               {strings.giveAnotherQrCode}
             </Button>
           )}

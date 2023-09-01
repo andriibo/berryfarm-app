@@ -34,7 +34,8 @@ const DrawerStack = () => {
         drawerActiveTintColor: colors.black,
         drawerInactiveTintColor: '#333',
         drawerLabelStyle: {
-          fontSize: 15,
+          fontSize: 18,
+          color: colors.onSurface,
         },
       }}>
       <DrawerComponent.Screen
