@@ -8,7 +8,6 @@ import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {sprintf} from 'sprintf-js';
 import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {Location, LocationStatus} from 'src/stores/types/location.type';
 import {ProductQualityPackages, ProductQualityPackagesStatus} from 'src/stores/types/productQualityPackages.type';
 import {Product, ProductStatus} from 'src/stores/types/product.type';
 
@@ -18,7 +17,6 @@ const workersCollection = '%sworkers';
 const harvestCollection = '%sharvest';
 const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
-const locationsCollection = '%slocations';
 const productQualityPackagesCollection = '%sproduct_quality_packages';
 const productsCollection = '%sproducts';
 
@@ -72,28 +70,6 @@ export const getTemplates = async (prefix: string) => {
   });
 
   return templates;
-};
-
-export const getLocations = async (prefix: string) => {
-  const collection = sprintf(locationsCollection, prefix);
-
-  const snapshot = await firestore()
-    .collection(collection)
-    .where('status', '==', LocationStatus.active)
-    .get()
-    .catch(error => {
-      throw new FirestoreServiceError(error);
-    });
-
-  const locations: Location[] = [];
-
-  snapshot.docs.forEach(doc => {
-    if (doc.data()) {
-      locations.push(doc.data() as Location);
-    }
-  });
-
-  return locations;
 };
 
 export const getProductQualityPackages = async (prefix: string) => {
