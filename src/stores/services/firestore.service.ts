@@ -10,7 +10,7 @@ import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {ProductQualityPackages, ProductQualityPackagesStatus} from 'src/stores/types/productQualityPackages.type';
 import {Product, ProductStatus} from 'src/stores/types/product.type';
-import {Zone} from 'src/stores/types/zone.type';
+import {Zone, ZoneStatus} from 'src/stores/types/zone.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -58,6 +58,7 @@ export const getZones = async (prefix: string) => {
 
   const snapshot = await firestore()
     .collection(collection)
+    .where('status', '==', ZoneStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);
