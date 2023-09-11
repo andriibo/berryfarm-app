@@ -10,7 +10,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {validation} from 'src/helpers/verification-rules';
 import {FirestoreServiceError} from 'src/stores/errors';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
-import {setHarvestTemplate, useHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
+import {useHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
 import {
   createHarvest,
   getProductQualityPackagesByProductId,
@@ -360,32 +360,6 @@ const HandOverHarvest = () => {
     [harvestPackageId, harvestPackages, productQualityId, productQualityPackages, setValue],
   );
 
-  const modifyHarvestTemplate = useCallback(
-    (data: HarvestRequest) => {
-      const harvestPackage = harvestPackages.find(
-        element => element.value === data.harvestPackageId,
-      ) as ItemType<number>;
-      const location = locations.find(element => element.value === data.locationId) as ItemType<number>;
-      const product = products.find(element => element.value === data.productId) as ItemType<number>;
-      const productQuality = productQualities.find(
-        element => element.value === data.productQualityId,
-      ) as ItemType<number>;
-
-      return {
-        qty: data.qty,
-        harvestPackage: {
-          id: harvestPackage.value as number,
-          title: harvestPackage.label as string,
-          weight: harvestPackageWeight,
-        },
-        location: {id: location.value as number, title: location.label as string},
-        product: {id: product.value as number, title: product.label as string},
-        productQuality: {id: productQuality.value as number, title: productQuality.label as string},
-      };
-    },
-    [harvestPackageWeight, harvestPackages, locations, productQualities, products],
-  );
-
   const handleSave = useCallback(
     async (data: HarvestRequest) => {
       if (data.weightTotal * data.qty <= harvestPackageWeight) {
@@ -400,9 +374,6 @@ const HandOverHarvest = () => {
           : {...data, qrCodeUuid: harvestTemplate.qrCodeUuid};
 
         createHarvest({...data, uuid: uuid()}, firestorePrefix);
-        const modifiedHarvestTemplate = modifyHarvestTemplate(data);
-
-        dispatch(setHarvestTemplate(modifiedHarvestTemplate));
         reset();
         navigation.navigate('SuccessPage', {scenario});
       } catch (error: any) {
@@ -414,7 +385,7 @@ const HandOverHarvest = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, modifyHarvestTemplate, firestorePrefix, navigation, harvestPackageWeight],
+    [dispatch, firestorePrefix, navigation, harvestPackageWeight],
   );
 
   const {weightTotal} = getValues();
