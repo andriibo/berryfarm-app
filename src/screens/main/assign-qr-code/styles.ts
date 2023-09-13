@@ -13,7 +13,7 @@ export default StyleSheet.create({
     marginHorizontal: '5%',
   },
   wrapper: {
-    borderColor: colors.black,
+    borderColor: colors.onSurfaceVariant,
     borderRadius: 5,
     borderWidth: 1,
     width: '90%',
@@ -50,6 +50,7 @@ export default StyleSheet.create({
   },
   searchBar: {
     width: '90%',
+    color: colors.onSurfaceVariant,
     backgroundColor: colors.background,
   },
 });

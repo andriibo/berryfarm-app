@@ -37,10 +37,12 @@ export default StyleSheet.create({
   searchContainerStyle: {
     height: 100,
     borderBottomColor: colors.outlineVariant,
+    color: colors.onSurfaceVariant,
   },
   searchTextInputStyle: {
     fontSize: 22,
     height: 50,
+    color: colors.onSurfaceVariant,
   },
   itemSeparatorStyle: {
     backgroundColor: colors.outlineVariant,
@@ -52,6 +54,7 @@ export default StyleSheet.create({
   },
   listItemLabelStyle: {
     fontSize: 22,
+    color: colors.onSurfaceVariant,
   },
   dropDownPickerStyle: {
     backgroundColor: colors.background,
@@ -60,5 +63,6 @@ export default StyleSheet.create({
   },
   dropDownPickerTextStyle: {
     fontSize: 22,
+    color: colors.onSurfaceVariant,
   },
 });

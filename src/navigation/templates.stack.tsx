@@ -11,6 +11,7 @@ import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
 import {getHeaderBackgroundColor, getTitle} from 'src/helpers/screen-options.helper';
 
 export type TemplatesStackParamList = {
+  Blocks: undefined;
   Templates: undefined;
   ScanQrCode: {scenario: ScenariosEnum};
   QrCodeInfo: undefined;
@@ -27,7 +28,7 @@ const TemplatesStack = () => {
 
   return (
     <TemplatesStackComponent.Navigator
-      initialRouteName="Templates"
+      initialRouteName="Blocks"
       screenOptions={{
         headerStyle: {backgroundColor},
         headerTintColor: colors.white,
@@ -36,6 +37,15 @@ const TemplatesStack = () => {
           fontWeight: 'bold',
         },
       }}>
+      <TemplatesStackComponent.Screen
+        component={Screens.Blocks}
+        name="Blocks"
+        options={{
+          title: getTitle(strings.blocks, isInternetConnected),
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerLeft: () => <HeaderLeft />,
+        }}
+      />
       <TemplatesStackComponent.Screen
         component={Screens.Templates}
         name="Templates"

@@ -35,7 +35,7 @@ const DrawerStack = () => {
         drawerInactiveTintColor: '#333',
         drawerLabelStyle: {
           fontSize: 18,
-          color: colors.onSurface,
+          color: colors.onSurfaceVariant,
         },
       }}>
       <DrawerComponent.Screen
@@ -67,7 +67,7 @@ const DrawerStack = () => {
         name="TemplatesStack"
         options={{
           headerShown: false,
-          title: strings.templates,
+          title: strings.blocks,
         }}
       />
       <DrawerComponent.Screen

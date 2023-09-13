@@ -10,6 +10,7 @@ import {HandOverHarvest} from 'src/screens/main/hand-over-harvest';
 import {InternetNotConnected} from 'src/screens/auth/internet-not-connected';
 import {QrCodeInfo} from 'src/screens/main/qr-code-info';
 import {ConnectBle} from 'src/screens/main/connect-ble';
+import {Blocks} from 'src/screens/main/blocks';
 
 export const Screens = {
   ChooseFarm,
@@ -18,6 +19,7 @@ export const Screens = {
   Home,
   CreateWorker,
   AssignQrCode,
+  Blocks,
   Templates,
   HandOverHarvest,
   ScanQrCode,

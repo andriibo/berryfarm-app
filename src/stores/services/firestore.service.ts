@@ -75,15 +75,32 @@ export const getZones = async (prefix: string) => {
   return zones;
 };
 
-export const getTemplates = async (prefix: string) => {
+export const getTemplates = async (prefix: string, locationIds: Array<number> = []) => {
   const collection = sprintf(harvestTemplatesCollection, prefix);
+  let snapshot;
 
-  const snapshot = await firestore()
-    .collection(collection)
-    .get()
-    .catch(error => {
-      throw new FirestoreServiceError(error);
+  if (locationIds.length) {
+    const queries: Array<FirebaseFirestoreTypes.QueryFilterConstraint> = [];
+
+    locationIds.forEach(locationId => {
+      queries.push(firebase.firestore.Filter('location.id', '==', locationId));
     });
+    queries.push(firebase.firestore.Filter('location', '==', null));
+    snapshot = await firestore()
+      .collection(collection)
+      .where(firebase.firestore.Filter.or(...queries))
+      .get()
+      .catch(error => {
+        throw new FirestoreServiceError(error);
+      });
+  } else {
+    snapshot = await firestore()
+      .collection(collection)
+      .get()
+      .catch(error => {
+        throw new FirestoreServiceError(error);
+      });
+  }
 
   const templates: HarvestTemplate[] = [];
 

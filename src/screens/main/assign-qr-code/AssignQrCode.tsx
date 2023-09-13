@@ -18,6 +18,7 @@ import {Loader} from 'src/components/loader';
 import {AssignQrCodeStackParamList} from 'src/navigation/assignQrCode.stack';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {debounce} from 'lodash';
+import {colors} from 'src/styles/colors';
 
 const Item = ({handleSelectWorker, worker}: {handleSelectWorker: (worker: Worker) => void; worker: Worker}) => {
   return (
@@ -110,6 +111,7 @@ const AssignQrCode = () => {
           </Text>
           <View style={styles.wrapper}>
             <Searchbar
+              iconColor={colors.onSurfaceVariant}
               onChangeText={name => {
                 setSearchQuery(name);
                 changeTextDebouncer(name);

@@ -11,6 +11,7 @@ import {cleanFarm} from 'src/stores/slices/auth.slice';
 import {cleanHarvestTemplate, harvestTemplateReducer} from 'src/stores/slices/harvest-template.slice';
 import {cleanQrCode, qrCodeReducer} from 'src/stores/slices/qrCode.slice';
 import {notificationsReducer} from 'src/stores/slices/notifications.slice';
+import {cleanZone, zoneReducer} from 'src/stores/slices/zone.slice';
 
 const persistConfig = {
   key: 'root',
@@ -20,6 +21,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
+  zone: zoneReducer,
   worker: workerReducer,
   harvestTemplate: harvestTemplateReducer,
   qrCode: qrCodeReducer,
@@ -41,6 +43,7 @@ export const callLogOut = async () => {
   await persistConfig.storage.clear();
   store.dispatch(cleanUser());
   store.dispatch(cleanFarm());
+  store.dispatch(cleanZone());
   store.dispatch(cleanWorker());
   store.dispatch(cleanHarvestTemplate());
   store.dispatch(cleanQrCode());
