@@ -94,7 +94,7 @@ const CreateWorker = () => {
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View>
-            <Text style={styles.label} variant="titleMedium">
+            <Text style={styles.label} variant="titleLarge">
               {strings.worker}
             </Text>
             <Controller
@@ -162,7 +162,7 @@ const CreateWorker = () => {
             />
           </View>
           <View>
-            <Text style={styles.label} variant="titleMedium">
+            <Text style={styles.label} variant="titleLarge">
               {strings.birthDate}
             </Text>
             <Controller

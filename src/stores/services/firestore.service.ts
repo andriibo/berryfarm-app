@@ -10,6 +10,7 @@ import {QrCode} from 'src/stores/types/qrCode.type';
 import {CreateHarvestRequest} from 'src/stores/types/createHarvestRequest';
 import {ProductQualityPackages, ProductQualityPackagesStatus} from 'src/stores/types/productQualityPackages.type';
 import {Product, ProductStatus} from 'src/stores/types/product.type';
+import {Zone, ZoneStatus} from 'src/stores/types/zone.type';
 
 const farmsCollection = 'farms';
 const usersCollection = '%susers';
@@ -19,6 +20,7 @@ const harvestTemplatesCollection = '%sharvest_templates';
 const qrCodesCollection = '%sqr_codes';
 const productQualityPackagesCollection = '%sproduct_quality_packages';
 const productsCollection = '%sproducts';
+const zonesCollection = '%szones';
 
 export const getFarmByDoc = async (document: FarmsEnum) => {
   const snapshot = await firestore()
@@ -51,15 +53,54 @@ export const getFarms = async () => {
   return farms;
 };
 
-export const getTemplates = async (prefix: string) => {
-  const collection = sprintf(harvestTemplatesCollection, prefix);
+export const getZones = async (prefix: string) => {
+  const collection = sprintf(zonesCollection, prefix);
 
   const snapshot = await firestore()
     .collection(collection)
+    .where('status', '==', ZoneStatus.active)
     .get()
     .catch(error => {
       throw new FirestoreServiceError(error);
     });
+
+  const zones: Zone[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      zones.push(doc.data() as Zone);
+    }
+  });
+
+  return zones;
+};
+
+export const getTemplates = async (prefix: string, locationIds: Array<number> = []) => {
+  const collection = sprintf(harvestTemplatesCollection, prefix);
+  let snapshot;
+
+  if (locationIds.length) {
+    const queries: Array<FirebaseFirestoreTypes.QueryFilterConstraint> = [];
+
+    locationIds.forEach(locationId => {
+      queries.push(firebase.firestore.Filter('location.id', '==', locationId));
+    });
+    queries.push(firebase.firestore.Filter('location', '==', null));
+    snapshot = await firestore()
+      .collection(collection)
+      .where(firebase.firestore.Filter.or(...queries))
+      .get()
+      .catch(error => {
+        throw new FirestoreServiceError(error);
+      });
+  } else {
+    snapshot = await firestore()
+      .collection(collection)
+      .get()
+      .catch(error => {
+        throw new FirestoreServiceError(error);
+      });
+  }
 
   const templates: HarvestTemplate[] = [];
 
@@ -317,12 +358,15 @@ export const getWorkers = async (prefix: string) => {
 
 export const initData = async (prefix: string) => {
   try {
-    await getFarms();
-    await getWorkers(prefix);
-    await getQrCodes(prefix);
-    await getTemplates(prefix);
-    await getProducts(prefix);
-    await getProductQualityPackages(prefix);
+    await Promise.all([
+      getFarms(),
+      getWorkers(prefix),
+      getQrCodes(prefix),
+      getZones(prefix),
+      getTemplates(prefix),
+      getProducts(prefix),
+      getProductQualityPackages(prefix),
+    ]);
   } catch (error: any) {
     throw new FirestoreServiceError(error);
   }

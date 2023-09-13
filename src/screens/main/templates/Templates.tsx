@@ -16,40 +16,73 @@ import {useAppDispatch} from 'src/stores/hooks/hooks';
 import {setHarvestTemplate} from 'src/stores/slices/harvest-template.slice';
 import {addErrorNotification} from 'src/stores/slices/notifications.slice';
 import {TemplatesStackParamList} from 'src/navigation/templates.stack';
+import {colors} from 'src/styles/colors';
+import {useZone} from 'src/stores/slices/zone.slice';
+import {getTitle} from 'src/helpers/screen-options.helper';
+import {useIsInternetConnected} from 'src/stores/slices/connect-device.slice';
+import {sortTemplatesByLocation} from 'src/helpers/sort.helper';
 
-const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => (
-  <TouchableOpacity onPress={() => scanQrCode(template)}>
-    <Surface elevation={4} style={styles.surface}>
-      <View style={styles.titleWrapper}>
-        <Text variant="headlineLarge">{template.product?.title}</Text>
-        <Text variant="headlineLarge">{template.location?.title}</Text>
-      </View>
-      <View style={styles.titleWrapper}>
-        <Text variant="titleLarge">{template.productQuality?.title}</Text>
-      </View>
-      <View style={styles.titleWrapper}>
-        <Text variant="titleLarge">{template.harvestPackage?.title}</Text>
-        {template.qty && (
-          <Text variant="titleLarge">
-            {template.qty} {strings.items}
+const Item = ({template, scanQrCode}: {template: HarvestTemplate; scanQrCode: (template: HarvestTemplate) => void}) => {
+  const zone = useZone();
+  const locationColor = zone.locations.some(location => location.id === template.location?.id)
+    ? colors.primary
+    : colors.onSurfaceVariant;
+
+  return (
+    <TouchableOpacity onPress={() => scanQrCode(template)}>
+      <Surface elevation={2} style={styles.surface}>
+        <View style={styles.titleWrapper}>
+          <Text variant="headlineMedium">{template.product?.title}</Text>
+          <Text style={{color: locationColor}} variant="headlineMedium">
+            {template.location?.title}
           </Text>
-        )}
-      </View>
-    </Surface>
-  </TouchableOpacity>
-);
+        </View>
+        <View style={styles.titleWrapper}>
+          <Text variant="titleLarge">{template.productQuality?.title}</Text>
+        </View>
+        <View style={styles.titleWrapper}>
+          <Text variant="titleLarge">{template.harvestPackage?.title}</Text>
+          {template.qty && (
+            <Text variant="titleLarge">
+              {template.qty} {strings.items}
+            </Text>
+          )}
+        </View>
+      </Surface>
+    </TouchableOpacity>
+  );
+};
 
 const Templates = () => {
   const dispatch = useAppDispatch();
+  const isInternetConnected = useIsInternetConnected();
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
   const {firestorePrefix} = useFarm();
   const [templates, setTemplates] = useState<Array<HarvestTemplate>>([]);
   const [loader, setLoader] = useState(false);
+  const zone = useZone();
+
+  useEffect(() => {
+    const title = getTitle(
+      zone.id !== 0 ? `${strings.templates} - ${zone.title}` : strings.templates,
+      isInternetConnected,
+    );
+
+    navigation.setOptions({
+      title,
+    });
+  }, [isInternetConnected, navigation, zone]);
 
   useEffect(() => {
     setLoader(true);
-    getTemplates(firestorePrefix)
-      .then(setTemplates)
+    const locationIds = zone.locations.map(a => a.id);
+
+    getTemplates(firestorePrefix, locationIds)
+      .then(data => {
+        const sortedItems = sortTemplatesByLocation(data);
+
+        setTemplates(sortedItems);
+      })
       .catch(error => {
         if (error instanceof FirestoreServiceError) {
           dispatch(addErrorNotification(error.message));
@@ -58,7 +91,7 @@ const Templates = () => {
         }
       })
       .finally(() => setLoader(false));
-  }, [dispatch, firestorePrefix]);
+  }, [dispatch, firestorePrefix, zone]);
 
   const scanQrCode = useCallback(
     (template: HarvestTemplate) => {
@@ -83,12 +116,14 @@ const Templates = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.area, {marginTop: -10}]}>
-      <FlatList
-        data={templates}
-        keyExtractor={item => `${item.id}`}
-        renderItem={({item}) => <Item scanQrCode={scanQrCode} template={item} />}
-      />
+    <SafeAreaView style={styles.area}>
+      <View style={{flex: 1, marginTop: '2%'}}>
+        <FlatList
+          data={templates}
+          keyExtractor={item => `${item.id}`}
+          renderItem={({item}) => <Item scanQrCode={scanQrCode} template={item} />}
+        />
+      </View>
     </SafeAreaView>
   );
 };

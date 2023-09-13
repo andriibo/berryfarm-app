@@ -6,14 +6,16 @@ export default StyleSheet.create({
   surface: {
     padding: 8,
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginVertical: 10,
     borderRadius: 5,
     justifyContent: 'center',
-    backgroundColor: colors.secondaryContainer,
+    backgroundColor: colors.background,
   },
   titleWrapper: {
     margin: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    color: colors.onSurfaceVariant,
+    flexWrap: 'wrap',
   },
 });

@@ -20,7 +20,7 @@ const Logout = (props: any) => {
           <Divider style={{marginBottom: 20}} />
           <DrawerItem
             label={strings.logout}
-            labelStyle={{fontSize: 18, color: colors.onSurface}}
+            labelStyle={{fontSize: 18, color: colors.onSurfaceVariant}}
             onPress={handleSignOut}
           />
         </View>
