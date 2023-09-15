@@ -109,15 +109,25 @@ const HandOverHarvest = () => {
   }, []);
 
   useEffect(() => {
+    if (harvestTemplate.product) {
+      getLocationsByProductId(harvestTemplate.product.id);
+    }
+
+    if (harvestTemplate.harvestPackage && productQualityId) {
+      onChangeProductQualityId(productQualityId);
+    }
+
     if (weightFromScales !== null) {
       setValue('weightTotal', weightFromScales, {shouldDirty: true, shouldValidate: true});
       setIsWeightFromScales(true);
     }
-  }, [setValue, weightFromScales]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [harvestTemplate, setValue, weightFromScales, productModels, productQualityId]);
 
   useFocusEffect(
     useCallback(() => {
       setLoader(true);
+      setTemplateListValues();
       const promises = [];
 
       if (harvestTemplate.workerUuid) {
@@ -148,7 +158,6 @@ const HandOverHarvest = () => {
       );
 
       if (harvestTemplate.product) {
-        getLocationsByProductId(harvestTemplate.product.id);
         promises.push(
           getProductQualityPackagesByProductId(harvestTemplate.product.id, firestorePrefix).then(data => {
             setProductQualityPackages(data);
@@ -176,7 +185,6 @@ const HandOverHarvest = () => {
 
       Promise.all(promises)
         .then(() => {
-          setTemplateListValues();
           setTemplateFormValues();
         })
         .catch(error => {
@@ -190,13 +198,7 @@ const HandOverHarvest = () => {
           setLoader(false);
         });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      dispatch,
-      firestorePrefix,
-      harvestTemplate.harvestPackage,
-      harvestTemplate.product,
-      harvestTemplate.workerUuid,
-    ]),
+    }, [dispatch, firestorePrefix, harvestTemplate]),
   );
 
   useFocusEffect(
@@ -309,9 +311,16 @@ const HandOverHarvest = () => {
 
           setProductQualities(sortedProductQualities);
         })
+        .catch(error => {
+          if (error instanceof FirestoreServiceError) {
+            dispatch(addErrorNotification(error.message));
+          } else {
+            console.error(error);
+          }
+        })
         .finally(() => setProductQualitiesLoader(false));
     },
-    [firestorePrefix, getLocationsByProductId, setValue],
+    [dispatch, firestorePrefix, getLocationsByProductId, setValue],
   );
 
   const onChangeProductQualityId = useCallback(
