@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Dimensions, ScrollView, TouchableOpacity, View} from 'react-native';
 import {IconButton, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -18,6 +18,8 @@ import {strings} from 'src/locales/locales';
 import {cleanZone, setZone} from 'src/stores/slices/zone.slice';
 import {colors} from 'src/styles/colors';
 
+const iconSize = Dimensions.get('window').width / 8;
+
 const BlockButton = ({block}: {block: Zone}) => {
   const navigation = useNavigation<NativeStackNavigationProp<TemplatesStackParamList>>();
   const dispatch = useAppDispatch();
@@ -30,7 +32,7 @@ const BlockButton = ({block}: {block: Zone}) => {
       }}>
       <Surface elevation={4} style={styles.surface}>
         <View style={styles.titleWrapper}>
-          <IconButton icon={'map-marker-circle'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+          <IconButton icon={'map-marker-circle'} iconColor={colors.primary} size={iconSize} style={{marginTop: 26}} />
         </View>
         <Text style={styles.titleText}>{block.title}</Text>
       </Surface>
@@ -71,7 +73,10 @@ const Blocks = () => {
 
   return (
     <SafeAreaView style={styles.area}>
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled">
         {zones.map(block => {
           return (
             <Fragment key={block.id}>
@@ -86,13 +91,18 @@ const Blocks = () => {
           }}>
           <Surface elevation={4} style={[styles.surface]}>
             <View style={styles.titleWrapper}>
-              <IconButton icon={'text-box-outline'} iconColor={colors.primary} size={70} style={{marginTop: 30}} />
+              <IconButton
+                icon={'text-box-outline'}
+                iconColor={colors.primary}
+                size={iconSize}
+                style={{marginTop: 30}}
+              />
             </View>
             <Text style={styles.titleText}>{strings.allTemplates}</Text>
           </Surface>
         </TouchableOpacity>
         {zones.length % 2 === 0 && <View style={styles.surfaceBlank} />}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

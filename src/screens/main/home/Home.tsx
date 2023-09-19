@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react';
-import {StatusBar, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StatusBar, TouchableOpacity, View} from 'react-native';
 import {IconButton, Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {strings} from 'src/locales/locales';
@@ -16,12 +16,15 @@ const Home = () => {
   const deviceState = useMemo(() => deviceLabelStyle(isDeviceConnected), [isDeviceConnected]);
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const iconSize = useMemo(() => Dimensions.get('window').width / 8, []);
 
   useFocusEffect(
     useCallback(() => {
       dispatch(cleanHarvestTemplate());
     }, [dispatch]),
   );
+
+  console.log(Dimensions.get('window').width / 8);
 
   return (
     <SafeAreaView style={styles.area}>
@@ -40,7 +43,7 @@ const Home = () => {
           <TouchableOpacity onPress={() => navigation.navigate('CreateWorkerStack' as never)}>
             <Surface elevation={4} style={styles.surface}>
               <View style={styles.titleWrapper}>
-                <IconButton icon={'account-plus'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+                <IconButton icon={'account-plus'} iconColor={colors.primary} size={iconSize} style={{marginTop: 26}} />
               </View>
               <Text style={styles.titleText}>{strings.registration}</Text>
             </Surface>
@@ -48,7 +51,7 @@ const Home = () => {
           <TouchableOpacity onPress={() => navigation.navigate('AssignQrCodeStack' as never)}>
             <Surface elevation={4} style={styles.surface}>
               <View style={styles.titleWrapper}>
-                <IconButton icon={'qrcode-plus'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+                <IconButton icon={'qrcode-plus'} iconColor={colors.primary} size={iconSize} style={{marginTop: 26}} />
               </View>
               <Text style={styles.titleText}>{strings.assignQrCode}</Text>
             </Surface>
@@ -56,7 +59,12 @@ const Home = () => {
           <TouchableOpacity onPress={() => navigation.navigate('TemplatesStack' as never)}>
             <Surface elevation={4} style={styles.surface}>
               <View style={styles.titleWrapper}>
-                <IconButton icon={'map-marker-outline'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+                <IconButton
+                  icon={'map-marker-outline'}
+                  iconColor={colors.primary}
+                  size={iconSize}
+                  style={{marginTop: 26}}
+                />
               </View>
               <Text style={styles.titleText}>{strings.blocks}</Text>
             </Surface>
@@ -64,7 +72,12 @@ const Home = () => {
           <TouchableOpacity onPress={() => navigation.navigate('HandOverHarvestStack' as never)}>
             <Surface elevation={4} style={styles.surface}>
               <View style={styles.titleWrapper}>
-                <IconButton icon={'bucket-outline'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+                <IconButton
+                  icon={'bucket-outline'}
+                  iconColor={colors.primary}
+                  size={iconSize}
+                  style={{marginTop: 26}}
+                />
               </View>
               <Text style={styles.titleText}>{strings.hangOverHarvest}</Text>
             </Surface>
@@ -72,7 +85,7 @@ const Home = () => {
           <TouchableOpacity onPress={() => navigation.navigate('GetQrCodeInfoStack' as never)}>
             <Surface elevation={4} style={styles.surface}>
               <View style={styles.titleWrapper}>
-                <IconButton icon={'qrcode'} iconColor={colors.primary} size={70} style={{marginTop: 26}} />
+                <IconButton icon={'qrcode'} iconColor={colors.primary} size={iconSize} style={{marginTop: 26}} />
               </View>
               <Text style={styles.titleText}>{strings.qrCodeInfo}</Text>
             </Surface>
