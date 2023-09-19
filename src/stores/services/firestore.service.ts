@@ -75,7 +75,28 @@ export const getZones = async (prefix: string) => {
   return zones;
 };
 
-export const getTemplates = async (prefix: string, locationIds: Array<number> = []) => {
+export const getAllTemplates = async (prefix: string) => {
+  const collection = sprintf(harvestTemplatesCollection, prefix);
+
+  const snapshot = await firestore()
+    .collection(collection)
+    .get()
+    .catch(error => {
+      throw new FirestoreServiceError(error);
+    });
+
+  const templates: HarvestTemplate[] = [];
+
+  snapshot.docs.forEach(doc => {
+    if (doc.data()) {
+      templates.push(doc.data() as HarvestTemplate);
+    }
+  });
+
+  return templates;
+};
+
+export const getTemplatesByLocationIds = async (prefix: string, locationIds: Array<number> = []) => {
   const collection = sprintf(harvestTemplatesCollection, prefix);
   let snapshot;
 
@@ -96,6 +117,7 @@ export const getTemplates = async (prefix: string, locationIds: Array<number> = 
   } else {
     snapshot = await firestore()
       .collection(collection)
+      .where('location', '==', null)
       .get()
       .catch(error => {
         throw new FirestoreServiceError(error);
@@ -363,7 +385,7 @@ export const initData = async (prefix: string) => {
       getWorkers(prefix),
       getQrCodes(prefix),
       getZones(prefix),
-      getTemplates(prefix),
+      getAllTemplates(prefix),
       getProducts(prefix),
       getProductQualityPackages(prefix),
     ]);

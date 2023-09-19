@@ -3,7 +3,7 @@ import {TouchableOpacity, View, FlatList} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from 'src/screens/main/templates/styles';
-import {getTemplates} from 'src/stores/services/firestore.service';
+import {getTemplatesByLocationIds} from 'src/stores/services/firestore.service';
 import {useFarm} from 'src/stores/slices/auth.slice';
 import {HarvestTemplate} from 'src/stores/types/harvestTemplate.type';
 import {strings} from 'src/locales/locales';
@@ -75,9 +75,9 @@ const Templates = () => {
 
   useEffect(() => {
     setLoader(true);
-    const locationIds = zone.locations.map(a => a.id);
+    const locationIds = zone.locations.map(location => location.id);
 
-    getTemplates(firestorePrefix, locationIds)
+    getTemplatesByLocationIds(firestorePrefix, locationIds)
       .then(data => {
         const sortedItems = sortTemplatesByLocation(data);
 
@@ -117,7 +117,7 @@ const Templates = () => {
 
   return (
     <SafeAreaView style={styles.area}>
-      <View style={{flex: 1, marginTop: '2%'}}>
+      <View style={{flex: 1, paddingVertical: '2%'}}>
         <FlatList
           data={templates}
           keyExtractor={item => `${item.id}`}
