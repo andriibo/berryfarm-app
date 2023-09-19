@@ -24,8 +24,6 @@ const Home = () => {
     }, [dispatch]),
   );
 
-  console.log(Dimensions.get('window').width / 8);
-
   return (
     <SafeAreaView style={styles.area}>
       <StatusBar hidden={true} />
