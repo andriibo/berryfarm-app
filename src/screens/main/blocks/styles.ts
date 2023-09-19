@@ -4,11 +4,11 @@ import {colors} from 'src/styles/colors';
 export default StyleSheet.create({
   area: {flex: 1, backgroundColor: colors.background},
   container: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginTop: '5%',
+    paddingVertical: '5%',
   },
   surface: {
     justifyContent: 'space-around',
